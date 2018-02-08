@@ -1,0 +1,16 @@
+{
+  "name": "boot",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "ng serve --proxy-config proxy.conf.json",
+    "mavenbuild": "ng build --progress false"
+  },
+  "private": true,
+  "dependencies": {
+    "eits-ng-starter-2018-01": "^0.6.0"
+  },
+  "devDependencies": {
+    "eits-ng-starter-2018-01-dev": "^0.6.0"
+  }
+}
