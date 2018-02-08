@@ -23,4 +23,28 @@ public class AppSettings
 	 * Tempo de expiração do token de redefinição de senha.
 	 */
 	private int passwordTokenExpirationHours;
+
+	public String getExternalUrl() {
+		return externalUrl;
+	}
+
+	public void setExternalUrl(String externalUrl) {
+		this.externalUrl = externalUrl;
+	}
+
+	public String getMailFrom() {
+		return mailFrom;
+	}
+
+	public void setMailFrom(String mailFrom) {
+		this.mailFrom = mailFrom;
+	}
+
+	public int getPasswordTokenExpirationHours() {
+		return passwordTokenExpirationHours;
+	}
+
+	public void setPasswordTokenExpirationHours(int passwordTokenExpirationHours) {
+		this.passwordTokenExpirationHours = passwordTokenExpirationHours;
+	}
 }

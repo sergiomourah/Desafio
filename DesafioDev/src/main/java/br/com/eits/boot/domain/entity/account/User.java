@@ -227,8 +227,73 @@ public class User extends AbstractEntity implements Serializable, UserDetails
 	{
 		return this.email;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+
+	public OffsetDateTime getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(OffsetDateTime lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public String getPasswordResetToken() {
+		return passwordResetToken;
+	}
+
+	public void setPasswordResetToken(String passwordResetToken) {
+		this.passwordResetToken = passwordResetToken;
+	}
+
+	public OffsetDateTime getPasswordResetTokenExpiration() {
+		return passwordResetTokenExpiration;
+	}
+
+	public void setPasswordResetTokenExpiration(OffsetDateTime passwordResetTokenExpiration) {
+		this.passwordResetTokenExpiration = passwordResetTokenExpiration;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
 	/*-------------------------------------------------------------------
 	 *						GETTERS AND SETTERS
 	 *-------------------------------------------------------------------*/
+	
 }
