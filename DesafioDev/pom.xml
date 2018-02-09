@@ -398,7 +398,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
 		</dependency>
-
 		<!-- DataSource -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
