@@ -1,4 +1,4 @@
-/*package br.com.eits.boot.domain.entity.ordemdeservico;
+package br.com.eits.boot.domain.entity.ordemdeservico;
 
 import java.time.LocalDate;
 
@@ -73,4 +73,4 @@ public class OrdemDeServico {
 	private SolicitacaoPagamento solicitacaoPagamento;
 	
 	
-}*/
+}

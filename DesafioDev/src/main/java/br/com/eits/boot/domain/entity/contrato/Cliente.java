@@ -1,4 +1,4 @@
-/*package br.com.eits.boot.domain.entity.contrato;
+package br.com.eits.boot.domain.entity.contrato;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,4 +28,3 @@ public class Cliente {
 	@Column(length = 144)
 	private String nome;
 }
-*/

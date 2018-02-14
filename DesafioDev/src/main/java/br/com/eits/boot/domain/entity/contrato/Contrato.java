@@ -2,6 +2,7 @@ package br.com.eits.boot.domain.entity.contrato;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,11 +22,14 @@ import org.directwebremoting.annotations.DataTransferObject;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+@Data
 @Entity
-@Table(name ="contrato")
+@Table
+@DataTransferObject
 public class Contrato implements Serializable{
 	
 	/**
@@ -40,15 +45,13 @@ public class Contrato implements Serializable{
 	@Column(nullable = false, length = 10,  unique = true)
 	private String numeroContrato;
 	
-	/*@Column(columnDefinition="TEXT")
+	@Column(columnDefinition="TEXT")
 	private String descricao;
 	
 	@NotEmpty
-	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private LocalDate dataContrato;
 	
-	@Temporal(TemporalType.DATE)
 	private LocalDate dataPrevisaoEncerramento;
 	
 	@NotNull
@@ -58,7 +61,8 @@ public class Contrato implements Serializable{
 	
 	private Cliente cliente;
 	
-	@JoinTable(name="ordem_servico", joinColumns=@JoinColumn("id"))
-	private OrdemDeServico ordemservico;*/
+	//@OneToMany
+	//@JoinColumn()
+	private OrdemDeServico ordemservico;
 
 }

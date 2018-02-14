@@ -1,4 +1,4 @@
-/*package br.com.eits.boot.domain.entity.ordemdeservico;
+package br.com.eits.boot.domain.entity.ordemdeservico;
 
 import java.time.LocalDate;
 
@@ -33,4 +33,3 @@ public class SolicitacaoPagamento {
 	@Column(nullable = false, precision = 9, scale = 2)
 	private Float valorPagamento;
 }
-*/

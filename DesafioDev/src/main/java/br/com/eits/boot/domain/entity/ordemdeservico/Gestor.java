@@ -1,4 +1,4 @@
-/*package br.com.eits.boot.domain.entity.ordemdeservico;
+package br.com.eits.boot.domain.entity.ordemdeservico;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,4 +28,3 @@ public class Gestor {
 	@Column(length = 144)
 	private String nome;	
 }
-*/
