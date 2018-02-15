@@ -1,10 +1,11 @@
 package br.com.eits.boot.domain.entity.ordemdeservico;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,29 +15,33 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.directwebremoting.annotations.DataTransferObject;
-import org.hibernate.envers.Audited;
 
+import br.com.eits.boot.domain.entity.account.User;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 
 @Data
 @Entity
 @Table
 @DataTransferObject
-public class SolicitacaoPagamento implements Serializable{
+public class HistoricoOrdemDeServico {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Id
-	@Column(nullable = false)
-	private LocalDate dataVencimento;
+	private LocalDate data;
+	
+	private String observacao;
 	
 	@NotNull
-	@Column(nullable = false, columnDefinition = "numeric(9,2)")
-	private Float valorPagamento;
+	@Column(nullable = false, name = "acao")
+	@Enumerated(EnumType.ORDINAL)
+	private StatusOrdemDeServico status;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="user_id", nullable = false)
+	private User user;
 	
 	@NotNull
 	@ManyToOne
@@ -51,20 +56,36 @@ public class SolicitacaoPagamento implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getDataVencimento() {
-		return dataVencimento;
+	public LocalDate getData() {
+		return data;
 	}
 
-	public void setDataVencimento(LocalDate dataVencimento) {
-		this.dataVencimento = dataVencimento;
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
 
-	public Float getValorPagamento() {
-		return valorPagamento;
+	public String getObservacao() {
+		return observacao;
 	}
 
-	public void setValorPagamento(Float valorPagamento) {
-		this.valorPagamento = valorPagamento;
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+
+	public StatusOrdemDeServico getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusOrdemDeServico status) {
+		this.status = status;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public OrdemDeServico getOrdemdeservico() {
@@ -74,4 +95,5 @@ public class SolicitacaoPagamento implements Serializable{
 	public void setOrdemdeservico(OrdemDeServico ordemdeservico) {
 		this.ordemdeservico = ordemdeservico;
 	}
+	
 }

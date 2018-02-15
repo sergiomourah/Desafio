@@ -1,5 +1,8 @@
 package br.com.eits.boot.domain.entity.contrato;
 
+import org.directwebremoting.annotations.DataTransferObject;
+
+@DataTransferObject(type = "enum")
 public enum StatusContrato {
 
 	//ENUMS

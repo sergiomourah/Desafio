@@ -15,9 +15,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Audited
 @Table
-@EqualsAndHashCode(callSuper=true)
 @DataTransferObject
 public class Gestor {
 
@@ -26,5 +24,21 @@ public class Gestor {
 	private Long id;
 	
 	@Column(length = 144)
-	private String nome;	
+	private String nome;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}	
 }

@@ -11,6 +11,7 @@
     "eits-ng-starter-2018-01": "^0.6.0"
   },
   "devDependencies": {
+    "@angular/cli": "^1.6.8",
     "eits-ng-starter-2018-01-dev": "^0.6.0"
   }
 }

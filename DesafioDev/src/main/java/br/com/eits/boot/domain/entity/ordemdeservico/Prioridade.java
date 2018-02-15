@@ -1,5 +1,8 @@
 package br.com.eits.boot.domain.entity.ordemdeservico;
 
+import org.directwebremoting.annotations.DataTransferObject;
+
+@DataTransferObject(type = "enum")
 public enum Prioridade {
 	
 	//ENUMS
