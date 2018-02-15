@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GeneratedModule } from '../generated/generated.module';
 import { BROKER_CONFIGURATION } from '../generated/services-wrapper';
+import { AppService } from './app.service';
 
 
 @NgModule({
@@ -22,8 +23,8 @@ import { BROKER_CONFIGURATION } from '../generated/services-wrapper';
     useValue: {
       path: '/broker',
       realTime: false
-    }
-  }],
+    },   
+  }, AppService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

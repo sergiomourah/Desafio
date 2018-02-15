@@ -14,5 +14,7 @@ import br.com.eits.boot.domain.entity.contrato.Contrato;
 
 public interface IContratoRepository extends JpaRepository<Contrato, Long>
 {
-  
+	@Query("FROM User user " +
+			"WHERE filter(:filter, user.id, user.name, user.email) = TRUE ")
+	Page<User> listByFilters( @Param("filter") String filter, Pageable pageable );
 }

@@ -4,6 +4,8 @@ import static br.com.eits.common.application.i18n.MessageSourceHolder.translate;
 
 import org.directwebremoting.annotations.RemoteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,46 @@ public class ContratoService {
 	{		
 		contrato = this.contratoRepository.save( contrato );
 		return contrato;
+	}
+	
+	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
+	public Contrato updateContrato(Contrato contrato )
+	{		
+		contrato = this.contratoRepository.save(contrato);
+		return contrato;
+	}
+	
+	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
+	public Contrato updateContratoToEncerrar(Contrato contrato )
+	{		
+		contrato = this.contratoRepository.save(contrato);
+		return contrato;
+	}
+	
+	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
+	public Contrato updateContratoToSuspender(Contrato contrato )
+	{		
+		contrato = this.contratoRepository.save(contrato);
+		return contrato;
+	}
+	
+	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
+	public Contrato updateContratoToReabrir(Contrato contrato )
+	{		
+		contrato = this.contratoRepository.save(contrato);
+		return contrato;
+	}
+	
+	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
+	public void removeContrato(long id)
+	{	
+		this.contratoRepository.deleteById(id);
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<User> listUsersByFilters( String filter, PageRequest pageable )
+	{
+		return this.contratoRepository.listByFilters( filter, pageable );
 	}
 	
 	/**
