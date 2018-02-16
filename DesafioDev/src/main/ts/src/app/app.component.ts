@@ -1,5 +1,6 @@
+import { Contrato } from './../generated/entities';
 import { Component } from '@angular/core';
-import { AppService } from './app.service';
+import { ContratoService } from '../generated/services';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,4 @@ import { AppService } from './app.service';
 })
 export class AppComponent {
   title = 'app';
-
-  getContrato(){
-    var appserv: AppService
-    appserv.InsertContrato()
-    alert("Contrato incluído com sucesso!");
-  }
 }

@@ -2,6 +2,7 @@ package br.com.eits.boot.domain.entity.contrato;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.directwebremoting.annotations.DataTransferObject;
 import org.hibernate.envers.Audited;
@@ -55,6 +57,7 @@ public class Contrato implements Serializable{
 	
 	@NotEmpty
 	@Column(nullable = false)
+	@Size(min = 8, max = 30)
 	private LocalDate dataContrato;
 	
 	private LocalDate dataPrevisaoEncerramento;
@@ -76,7 +79,7 @@ public class Contrato implements Serializable{
 	@OneToMany(mappedBy = "contrato", targetEntity = HistoricoContrato.class, 
 		    fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 			private List<HistoricoContrato> historicosContrato;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -151,7 +154,5 @@ public class Contrato implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-	
-	
+	}		
 }

@@ -1,22 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { GeneratedModule } from '../generated/generated.module';
 import { BROKER_CONFIGURATION } from '../generated/services-wrapper';
-import { AppService } from './app.service';
+import { ContratoComponent } from './contrato/contrato.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ContratoComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GeneratedModule
+    GeneratedModule,
+    HttpModule,
   ],
   providers: [{
     provide: BROKER_CONFIGURATION,
@@ -24,7 +27,7 @@ import { AppService } from './app.service';
       path: '/broker',
       realTime: false
     },   
-  }, AppService],
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,6 @@
 package br.com.eits.boot.domain.repository.contrato;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -14,7 +15,12 @@ import br.com.eits.boot.domain.entity.contrato.Contrato;
 
 public interface IContratoRepository extends JpaRepository<Contrato, Long>
 {
-	@Query("FROM User user " +
+	/*@Query("FROM User user " +
 			"WHERE filter(:filter, user.id, user.name, user.email) = TRUE ")
-	Page<User> listByFilters( @Param("filter") String filter, Pageable pageable );
+	public Page<Contrato> listByFilters( @Param("numeroContrato") String numeroContrato,
+									 @Param("nomeCliente") String nomeCliente,
+									 @Param("statusContrato") Integer statusContrato,
+									 @Param("dataAbertura") LocalDate dataAbertura,
+									 @Param("dataEncerramento") LocalDate dataEncerramento,
+			                         Pageable pageable );*/
 }
