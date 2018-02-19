@@ -19,10 +19,12 @@ import org.directwebremoting.annotations.DataTransferObject;
 import br.com.eits.boot.domain.entity.account.User;
 import br.com.eits.boot.domain.entity.ordemdeservico.StatusOrdemDeServico;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
 @Table
+@EqualsAndHashCode
 @DataTransferObject
 public class HistoricoContrato {
 	

@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table
+@EqualsAndHashCode
 @DataTransferObject
 public class Cliente {
 

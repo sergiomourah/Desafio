@@ -18,6 +18,7 @@ import org.springframework.util.Assert;
 import br.com.eits.boot.domain.entity.account.User;
 import br.com.eits.boot.domain.entity.account.UserRole;
 import br.com.eits.boot.domain.entity.contrato.Contrato;
+import br.com.eits.boot.domain.entity.contrato.StatusContrato;
 import br.com.eits.boot.domain.repository.contrato.IContratoRepository;
 
 
@@ -36,7 +37,6 @@ public class ContratoService {
 	@Autowired
 	private MessageSource messageSource;
 	
-	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public Contrato insertContrato(Contrato contrato )
 	{
 		//Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
@@ -44,7 +44,6 @@ public class ContratoService {
 		return contrato;
 	}
 	
-	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public Contrato updateContrato(Contrato contrato )
 	{
 		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
@@ -52,31 +51,30 @@ public class ContratoService {
 		return contrato;
 	}
 	
-	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public Contrato updateContratoToEncerrar(Contrato contrato )
 	{	
-		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
+		//Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
+		contrato.setStatus(StatusContrato.ENCERRADO);//2 - Encerrar Contrato;
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
 	}
 	
-	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public Contrato updateContratoToSuspender(Contrato contrato )
 	{
 		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
+		contrato.setStatus(StatusContrato.SUSPENSO);//2 - Suspender Contrato;
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
 	}
 	
-	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public Contrato updateContratoToReabrir(Contrato contrato )
 	{
 		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
+		contrato.setStatus(StatusContrato.ABERTO);//2 - Suspender Contrato;
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
 	}
 	
-	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public void removeContrato(long id)
 	{	
 		Assert.notNull( id, this.messageSource.getMessage( "id.null", null, LocaleContextHolder.getLocale() ) );

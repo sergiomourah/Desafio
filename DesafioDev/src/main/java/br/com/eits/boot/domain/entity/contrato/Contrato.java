@@ -36,6 +36,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table
+@EqualsAndHashCode
 @DataTransferObject
 public class Contrato implements Serializable{
 	
@@ -57,7 +58,6 @@ public class Contrato implements Serializable{
 	
 	@NotEmpty
 	@Column(nullable = false)
-	@Size(min = 8, max = 30)
 	private LocalDate dataContrato;
 	
 	private LocalDate dataPrevisaoEncerramento;
@@ -79,80 +79,5 @@ public class Contrato implements Serializable{
 	@OneToMany(mappedBy = "contrato", targetEntity = HistoricoContrato.class, 
 		    fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 			private List<HistoricoContrato> historicosContrato;
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNumeroContrato() {
-		return numeroContrato;
-	}
-
-	public void setNumeroContrato(String numeroContrato) {
-		this.numeroContrato = numeroContrato;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public LocalDate getDataContrato() {
-		return dataContrato;
-	}
-
-	public void setDataContrato(LocalDate dataContrato) {
-		this.dataContrato = dataContrato;
-	}
-
-	public LocalDate getDataPrevisaoEncerramento() {
-		return dataPrevisaoEncerramento;
-	}
-
-	public void setDataPrevisaoEncerramento(LocalDate dataPrevisaoEncerramento) {
-		this.dataPrevisaoEncerramento = dataPrevisaoEncerramento;
-	}
-
-	public StatusContrato getStatus() {
-		return status;
-	}
-
-	public void setStatus(StatusContrato status) {
-		this.status = status;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public List<OrdemDeServico> getOrdensDeServico() {
-		return ordensDeServico;
-	}
-
-	public void setOrdensDeServico(List<OrdemDeServico> ordensDeServico) {
-		this.ordensDeServico = ordensDeServico;
-	}
-
-	public List<HistoricoContrato> getHistoricosContrato() {
-		return historicosContrato;
-	}
-
-	public void setHistoricosContrato(List<HistoricoContrato> historicosContrato) {
-		this.historicosContrato = historicosContrato;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}		
+			
 }

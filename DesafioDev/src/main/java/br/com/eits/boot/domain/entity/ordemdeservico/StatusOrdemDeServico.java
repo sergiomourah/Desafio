@@ -6,11 +6,11 @@ import org.directwebremoting.annotations.DataTransferObject;
 public enum StatusOrdemDeServico {
 
 	//ENUMS
-	ABERTA,
-	APROVADA,
-	CANCELADA,
-	HOMOLOGADA,
-	CONCLUIDA;
+	ABERTA, // 0
+	APROVADA, // 1
+	CANCELADA,// 2
+	HOMOLOGADA,// 3
+	CONCLUIDA;// 4
 	
 	public static final String ABERTA_VALUE     = "ABERTA";
 	public static final String APROVADA_VALUE   = "APROVADA";

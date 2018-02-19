@@ -1,5 +1,6 @@
 package br.com.eits.boot.domain.entity.ordemdeservico;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,9 +33,15 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table
+@EqualsAndHashCode
 @DataTransferObject
-public class OrdemDeServico {
+public class OrdemDeServico implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3557400488032567864L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -56,7 +63,6 @@ public class OrdemDeServico {
 	@NotEmpty
 	@Column(nullable = false, length = 144)
 	private String descricaoProblema;
-	
 	@Column(length = 144)
 	private String descricaoSolucao;
 	
@@ -130,7 +136,7 @@ public class OrdemDeServico {
 	}
 
 	public String getDescricaoProblema() {
-		return descricaoProblema;
+		return descricaoProblema;// 0
 	}
 
 	public void setDescricaoProblema(String descricaoProblema) {
@@ -176,7 +182,7 @@ public class OrdemDeServico {
 	public void setStatus(StatusOrdemDeServico status) {
 		this.status = status;
 	}
-
+	
 	public Gestor getGestor() {
 		return gestor;
 	}
@@ -185,7 +191,7 @@ public class OrdemDeServico {
 		this.gestor = gestor;
 	}
 
-	public List<SolicitacaoPagamento> getSolicitacoesPagamento() {
+	public List<SolicitacaoPagamento> getSolicitacoesPagamento(){
 		return solicitacoesPagamento;
 	}
 
@@ -199,5 +205,40 @@ public class OrdemDeServico {
 
 	public void setHistoricosOrdemDeServico(List<HistoricoOrdemDeServico> historicosOrdemDeServico) {
 		this.historicosOrdemDeServico = historicosOrdemDeServico;
+	}
+	
+	/**
+     * Verifica se status da ordem de serviço está como 0 "ABERTO"
+     */
+	public boolean validarAlterarOrdemDeServico(int status) {
+		if (status == 0)
+			return true;
+		else return false;
+	}
+	
+	/**
+     * Verifica se status da ordem de serviço está como 1 "APROVADA"
+     */
+	public boolean validarHomologacaoOrdemDeServico(int status) {
+		if (status == 1)
+			return true;
+		else return false;
+	}
+	
+	/**
+     * Verifica se status da ordem de serviço está como 3 "HOMOLOGADA"
+     */
+	public boolean validarSolicitacaoDePagamento(int status) {
+		if (status == 3)
+			return true;
+		else return false;
+	}
+	/**
+     * Verifica se já existe solicitação de pagamento emitida.
+     */
+	public boolean validarConclusaoOrdemDeServico(List<SolicitacaoPagamento> listSolicitacao) {
+		if (listSolicitacao.size() > 0 )
+			return true;
+		else return false;
 	}
 }

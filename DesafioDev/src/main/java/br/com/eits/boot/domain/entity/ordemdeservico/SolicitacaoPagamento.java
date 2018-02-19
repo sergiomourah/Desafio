@@ -23,8 +23,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table
+@EqualsAndHashCode
 @DataTransferObject
 public class SolicitacaoPagamento implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7072496275412625721L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
