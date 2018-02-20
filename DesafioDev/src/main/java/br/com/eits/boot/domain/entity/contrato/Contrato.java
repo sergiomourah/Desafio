@@ -1,9 +1,7 @@
 package br.com.eits.boot.domain.entity.contrato;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,20 +14,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.directwebremoting.annotations.DataTransferObject;
-import org.hibernate.envers.Audited;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
+import br.com.eits.common.domain.entity.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,29 +32,27 @@ import lombok.EqualsAndHashCode;
 @Table
 @EqualsAndHashCode
 @DataTransferObject
-public class Contrato implements Serializable{
+public class Contrato extends AbstractEntity implements Serializable{
+	
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2393832018054635434L;
+
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@NotEmpty
+	@NotNull
 	@Column(nullable = false, length = 10,  unique = true)
 	private String numeroContrato;
 	
 	@Column(columnDefinition="TEXT")
 	private String descricao;
 	
-	@NotEmpty
+	@NotNull
 	@Column(nullable = false)
-	private LocalDate dataContrato;
+	private LocalDateTime dataContrato;
 	
-	private LocalDate dataPrevisaoEncerramento;
+	private LocalDateTime dataPrevisaoEncerramento;
 	
 	@NotNull
 	@Column(nullable = false)
@@ -78,6 +70,5 @@ public class Contrato implements Serializable{
 	
 	@OneToMany(mappedBy = "contrato", targetEntity = HistoricoContrato.class, 
 		    fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-			private List<HistoricoContrato> historicosContrato;
-			
+			private List<HistoricoContrato> historicosContrato;			
 }

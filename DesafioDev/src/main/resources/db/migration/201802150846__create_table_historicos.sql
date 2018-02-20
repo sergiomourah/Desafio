@@ -1,7 +1,7 @@
 create table historico_contrato (
- 	id                              bigint                        NOT NULL PRIMARY KEY,
+ 	id                              bigserial                        NOT NULL PRIMARY KEY,
  	user_id                         bigint                        NOT NULL,
- 	contrato_id                     bigint                        NOT NULL,
+ 	contrato_id                     bigserial                        NOT NULL,
  	data                            date                          NOT NULL,
  	acao                            integer                       NOT NULL,
  	observacao                      text                          NULL,
@@ -10,9 +10,9 @@ create table historico_contrato (
 );
 
 create table historico_ordem_de_servico (
- 	id                              bigint                        NOT NULL PRIMARY KEY,
+ 	id                              bigserial                        NOT NULL PRIMARY KEY,
  	user_id                         bigint                        NOT NULL,
- 	ordemdeservico_id               bigint                        NOT NULL,
+ 	ordemdeservico_id               bigserial                        NOT NULL,
  	data                            date                          NOT NULL,
  	acao                            integer                       NOT NULL,
  	observacao                      text                          NULL,

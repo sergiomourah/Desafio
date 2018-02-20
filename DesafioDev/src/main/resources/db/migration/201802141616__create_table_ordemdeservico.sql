@@ -5,9 +5,9 @@ create table gestor (
 
 
 create table ordem_de_servico (
-	id                        bigint                   NOT NULL PRIMARY KEY,
-	contrato_id               bigint                   NOT NULL,
-	gestor_id                 bigint                   NOT NULL,
+	id                        bigserial                   NOT NULL PRIMARY KEY,
+	contrato_id               bigserial                   NOT NULL,
+	gestor_id                 bigserial                   NOT NULL,
   	numero_ordem_de_servico   varchar(10)              NOT NULL UNIQUE,
   	prioridade                integer                  NOT NULL,
   	data_abertura             date                     NULL,
@@ -23,8 +23,8 @@ create table ordem_de_servico (
 
 
 create table solicitacao_pagamento (
-	id                        bigint                   NOT NULL PRIMARY KEY,
-	ordemdeservico_id         bigint                   NOT NULL,
+	id                        bigserial                   NOT NULL PRIMARY KEY,
+	ordemdeservico_id         bigserial                   NOT NULL,
 	data_vencimento           date                     NOT NULL,
 	valor_pagamento           numeric(9,2)             NOT NULL,
 	CONSTRAINT fk_id_ordem_de_servico FOREIGN KEY (ordemdeservico_id) REFERENCES ordem_de_servico(id)

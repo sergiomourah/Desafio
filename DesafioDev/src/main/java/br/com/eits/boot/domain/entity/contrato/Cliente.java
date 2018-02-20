@@ -1,5 +1,7 @@
 package br.com.eits.boot.domain.entity.contrato;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 import org.directwebremoting.annotations.DataTransferObject;
 import org.hibernate.envers.Audited;
 
+import br.com.eits.common.domain.entity.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,11 +21,12 @@ import lombok.EqualsAndHashCode;
 @Table
 @EqualsAndHashCode
 @DataTransferObject
-public class Cliente {
+public class Cliente extends AbstractEntity implements Serializable{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3930887222070290941L;
 	
 	@Column(length = 144)
 	private String nome;
@@ -30,16 +34,17 @@ public class Cliente {
 	public Long getId() {
 		return id;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public Cliente()
+	{
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
+	/**
+	 * 
+	 * @param id
+	 */
+	public Cliente( Long id )
+	{
+		super( id );
 	}
 }

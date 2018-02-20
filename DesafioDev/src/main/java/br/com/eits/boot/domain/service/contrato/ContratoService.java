@@ -39,21 +39,26 @@ public class ContratoService {
 	
 	public Contrato insertContrato(Contrato contrato )
 	{
-		//Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getNumeroContrato(), this.messageSource.getMessage("contrato.required.numeroContrato", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getDataContrato(), this.messageSource.getMessage("contrato.required.dataContrato", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getCliente(), this.messageSource.getMessage("contrato.required.cliente", null, LocaleContextHolder.getLocale()));
 		contrato = this.contratoRepository.save( contrato );
 		return contrato;
 	}
 	
 	public Contrato updateContrato(Contrato contrato )
 	{
-		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getNumeroContrato(), this.messageSource.getMessage("contrato.required.numeroContrato", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getDataContrato(), this.messageSource.getMessage("contrato.required.dataContrato", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getCliente(), this.messageSource.getMessage("contrato.required.cliente", null, LocaleContextHolder.getLocale()));
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
 	}
 	
 	public Contrato updateContratoToEncerrar(Contrato contrato )
 	{	
-		//Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
 		contrato.setStatus(StatusContrato.ENCERRADO);//2 - Encerrar Contrato;
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
@@ -61,7 +66,6 @@ public class ContratoService {
 	
 	public Contrato updateContratoToSuspender(Contrato contrato )
 	{
-		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
 		contrato.setStatus(StatusContrato.SUSPENSO);//2 - Suspender Contrato;
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
@@ -69,7 +73,6 @@ public class ContratoService {
 	
 	public Contrato updateContratoToReabrir(Contrato contrato )
 	{
-		Assert.notNull(contrato, this.messageSource.getMessage("contrato.null", null, LocaleContextHolder.getLocale()));
 		contrato.setStatus(StatusContrato.ABERTO);//2 - Suspender Contrato;
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
@@ -77,7 +80,7 @@ public class ContratoService {
 	
 	public void removeContrato(long id)
 	{	
-		Assert.notNull( id, this.messageSource.getMessage( "id.null", null, LocaleContextHolder.getLocale() ) );
+		Assert.notNull(id, this.messageSource.getMessage( "contrato.id", null, LocaleContextHolder.getLocale() ) );
 		this.contratoRepository.deleteById(id);
 	}
 	

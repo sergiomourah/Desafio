@@ -1,6 +1,8 @@
 package br.com.eits.boot.test.domain.entity.ordemdeservico;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import org.junit.Test;
 
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
 import br.com.eits.boot.domain.entity.ordemdeservico.SolicitacaoPagamento;
+import br.com.eits.boot.domain.entity.ordemdeservico.StatusOrdemDeServico;
 import br.com.eits.boot.test.domain.AbstractUnitTests;
 
 public class OrdemDeServicoTests  extends AbstractUnitTests{
@@ -29,8 +32,8 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	public void validarAlterarOrdemDeServicoMustPass()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();
-		boolean result = ordemdeservico.validarAlterarOrdemDeServico(0);
-		assertEquals(true, result);
+		boolean result = ordemdeservico.validarAlterarOrdemDeServico(StatusOrdemDeServico.ABERTA);
+		assertTrue(result);
 	}
 	/**
      * Teste com falha com status 1 "APROVADA"
@@ -39,8 +42,8 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	public void validarAlterarOrdemDeServicoMustFail()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();
-		boolean result = ordemdeservico.validarAlterarOrdemDeServico(1);
-		assertEquals(true, result);
+		boolean result = ordemdeservico.validarAlterarOrdemDeServico(StatusOrdemDeServico.APROVADA);
+		assertFalse(result);
 	}
 	/**
      * validar Homologação de  ordem de serviço somente com ordens com status 1 "APROVADA".
@@ -49,8 +52,8 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	public void validarHomologacaoOrdemDeServicoMustPass()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();
-		boolean result = ordemdeservico.validarHomologacaoOrdemDeServico(1);
-		assertEquals(true, result);
+		boolean result = ordemdeservico.validarHomologacaoOrdemDeServico(StatusOrdemDeServico.APROVADA);
+		assertTrue(result);
 	}
 	/**
      * Teste com falha com status 0 "ABERTA"
@@ -59,8 +62,8 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	public void validarHomologacaoOrdemDeServicoMustFail()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();
-		boolean result = ordemdeservico.validarHomologacaoOrdemDeServico(0);
-		assertEquals(true, result);
+		boolean result = ordemdeservico.validarHomologacaoOrdemDeServico(StatusOrdemDeServico.ABERTA);
+		assertFalse(result);
 	}
 	/**
      * validar solicitacao de pagamento de  ordem de serviço somente com ordens com status 3 "HOMOLOGAÇÃO".
@@ -69,8 +72,8 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	public void validarSolicitacaoPagamentoMustPass()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();
-		boolean result = ordemdeservico.validarSolicitacaoDePagamento(3);
-		assertEquals(true, result);
+		boolean result = ordemdeservico.validarSolicitacaoDePagamento(StatusOrdemDeServico.HOMOLOGADA);
+		assertTrue(result);
 	}
 	/**
      * Teste com falha com status 1 "APROVADA"
@@ -79,8 +82,8 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	public void validarSolicitacaoPagamentoMustFail()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();
-		boolean result = ordemdeservico.validarSolicitacaoDePagamento(1);
-		assertEquals(true, result);
+		boolean result = ordemdeservico.validarSolicitacaoDePagamento(StatusOrdemDeServico.APROVADA);
+		assertFalse(result);
 	}
 	
 	/**
@@ -101,7 +104,7 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 		ordemdeservico.setSolicitacoesPagamento(listSolicitacao);
 		//Acionar método validar
 		boolean result = ordemdeservico.validarConclusaoOrdemDeServico(listSolicitacao);
-		assertEquals(true, result);
+		assertTrue(result);
 	}
 	/**
      * Teste com falha com status 1 "APROVADA"
@@ -117,6 +120,6 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 		ordemdeservico.setSolicitacoesPagamento(listSolicitacao);
 		//Acionar método validar
 		boolean result = ordemdeservico.validarConclusaoOrdemDeServico(listSolicitacao);
-		assertEquals(true, result);
+		assertFalse(result);
 	}
 }

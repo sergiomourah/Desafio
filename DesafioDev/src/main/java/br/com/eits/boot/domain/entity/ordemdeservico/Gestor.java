@@ -1,5 +1,7 @@
 package br.com.eits.boot.domain.entity.ordemdeservico;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.Table;
 import org.directwebremoting.annotations.DataTransferObject;
 import org.hibernate.envers.Audited;
 
+import br.com.eits.common.domain.entity.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +21,12 @@ import lombok.EqualsAndHashCode;
 @Table
 @EqualsAndHashCode
 @DataTransferObject
-public class Gestor {
+public class Gestor extends AbstractEntity implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5392443927274071455L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,20 +34,17 @@ public class Gestor {
 	
 	@Column(length = 144)
 	private String nome;
-
-	public Long getId() {
-		return id;
+	
+	public Gestor()
+	{
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	/**
+	 * 
+	 * @param id
+	 */
+	public Gestor( Long id )
+	{
+		super( id );
 	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}	
 }
