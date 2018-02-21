@@ -48,4 +48,15 @@ public class HistoricoContrato extends AbstractEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="contrato_id", nullable = false)
 	private Contrato contrato;
+	
+	public HistoricoContrato(LocalDate data, 
+			                 String observacao, 
+			                 StatusContrato status, 
+			                 Contrato contrato)
+	{
+		this.data = data;
+		this.observacao = observacao;
+		this.status = status;
+		this.contrato = contrato;
+	}
 }

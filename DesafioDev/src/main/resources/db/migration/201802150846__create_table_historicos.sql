@@ -17,5 +17,5 @@ create table historico_ordem_de_servico (
  	acao                            integer                       NOT NULL,
  	observacao                      text                          NULL,
  	CONSTRAINT fk_id_user FOREIGN KEY (user_id) REFERENCES "user"(id),
- 	CONSTRAINT fk_id_ordemdeservico FOREIGN KEY (ordemdeservico_id) REFERENCES "user"(id)
+ 	CONSTRAINT fk_id_ordemdeservico FOREIGN KEY (ordemdeservico_id) REFERENCES ordem_de_servico(id)
 );

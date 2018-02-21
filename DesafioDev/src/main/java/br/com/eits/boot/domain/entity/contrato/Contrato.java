@@ -1,6 +1,7 @@
 package br.com.eits.boot.domain.entity.contrato;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,9 +51,9 @@ public class Contrato extends AbstractEntity implements Serializable{
 	
 	@NotNull
 	@Column(nullable = false)
-	private LocalDateTime dataContrato;
+	private LocalDate dataContrato;
 	
-	private LocalDateTime dataPrevisaoEncerramento;
+	private LocalDate dataPrevisaoEncerramento;
 	
 	@NotNull
 	@Column(nullable = false)

@@ -7,12 +7,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 import br.com.eits.boot.application.configuration.settings.AppSettings;
+import br.com.eits.boot.application.security.RequestContext;
 import br.com.eits.boot.domain.repository.IAccountMailRepository;
 import org.directwebremoting.annotations.RemoteProxy;
+import org.flywaydb.core.api.android.ContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

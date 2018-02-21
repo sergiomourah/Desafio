@@ -9,9 +9,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
 
+import br.com.eits.boot.domain.entity.contrato.Cliente;
 import br.com.eits.boot.domain.entity.contrato.Contrato;
 import br.com.eits.boot.domain.entity.ordemdeservico.Gestor;
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
@@ -246,7 +249,7 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		Assert.assertNotNull(ordemdeservico.getDescricaoProblema());
 	}
 	
-	/**
+	/**null
 	 * Aprovar a Ordem de Servico
 	 */
 	@Test
@@ -255,6 +258,7 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/account/users.sql",
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql",
+		"/dataset/gestor/gestor.sql",
 		"/dataset/ordemdeservico/ordemdeservico.sql"
 	})
 	public void updateOrdemDeServicoToAprovarMustPass()
@@ -273,12 +277,14 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/account/users.sql",
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql",
+		"/dataset/gestor/gestor.sql",
 		"/dataset/ordemdeservico/ordemdeservico.sql"
 	})
 	public void updateOrdemDeServicoToCancelarMustPass()
 	{
 		OrdemDeServico ordemdeservico = this.ordemDeServicoService.findOrdemDeServicoById(5001);
-		ordemdeservico = this.ordemDeServicoService.updateOrdemDeServicoToCancelar(ordemdeservico);
+		final String motivo = "Cliente suspendeu o contrato";
+		ordemdeservico = this.ordemDeServicoService.updateOrdemDeServicoToCancelar(ordemdeservico, motivo);
 		Assert.assertEquals(StatusOrdemDeServico.CANCELADA, ordemdeservico.getStatus());
 	}
 	/**
@@ -290,6 +296,7 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/account/users.sql",
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql",
+		"/dataset/gestor/gestor.sql",
 		"/dataset/ordemdeservico/ordemdeservico.sql"
 	})
 	public void updateOrdemDeServicoToHomologarMustPass()
@@ -307,6 +314,7 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/account/users.sql",
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql",
+		"/dataset/gestor/gestor.sql",
 		"/dataset/ordemdeservico/ordemdeservico.sql"
 	})
 	public void updateOrdemDeServicoToConcluirMustPass()
@@ -352,11 +360,44 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		final OrdemDeServico ordemdeservico = this.ordemDeServicoService.findOrdemDeServicoById(1000000);
 		
 		Assert.assertNull( ordemdeservico );
-		Assert.assertEquals( "5684", ordemdeservico.getNumeroOrdemDeServico() );
 		
 		Assert.fail("Nenhum registro foi encontrado.");
 	}
+	/**
+	 * Buscar gestor por nome
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listGestorByNomeMustPass()
+	{
+		PageRequest pageable = new PageRequest(1, 1);
+		final Page<Gestor> gestor = this.ordemDeServicoService.listGestorByNome("Sergio", pageable);
+		
+		Assert.assertNotNull( gestor );	
+	}
 	
+	/**
+	 * Buscar gestor por nome inexistente
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listGestorByNomeMustFail()
+	{
+		PageRequest pageable = new PageRequest(0, 0);
+		final Page<Gestor> gestor = this.ordemDeServicoService.listGestorByNome("xxxxxxx", pageable);
+		
+		Assert.assertNull( gestor );	
+	}
 	
 	/**
 	 * Remove Ordem de Serviço pelo id

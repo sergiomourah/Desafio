@@ -1,5 +1,6 @@
 package br.com.eits.boot.domain.entity.ordemdeservico;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -17,6 +18,9 @@ import javax.validation.constraints.NotNull;
 import org.directwebremoting.annotations.DataTransferObject;
 
 import br.com.eits.boot.domain.entity.account.User;
+import br.com.eits.boot.domain.entity.contrato.Contrato;
+import br.com.eits.boot.domain.entity.contrato.StatusContrato;
+import br.com.eits.common.domain.entity.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,11 +29,12 @@ import lombok.EqualsAndHashCode;
 @Table
 @EqualsAndHashCode
 @DataTransferObject
-public class HistoricoOrdemDeServico {
+public class HistoricoOrdemDeServico extends AbstractEntity implements Serializable{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6006653923782412401L;
 	
 	private LocalDate data;
 	
@@ -49,52 +54,15 @@ public class HistoricoOrdemDeServico {
 	@ManyToOne
 	@JoinColumn(name="ordemdeservico_id", nullable = false)
 	private OrdemDeServico ordemdeservico;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDate getData() {
-		return data;
-	}
-
-	public void setData(LocalDate data) {
+	
+	public HistoricoOrdemDeServico(LocalDate data, 
+            String observacao, 
+            StatusOrdemDeServico status, 
+            OrdemDeServico ordemdeservico)
+	{
 		this.data = data;
-	}
-
-	public String getObservacao() {
-		return observacao;
-	}
-
-	public void setObservacao(String observacao) {
 		this.observacao = observacao;
-	}
-
-	public StatusOrdemDeServico getStatus() {
-		return status;
-	}
-
-	public void setStatus(StatusOrdemDeServico status) {
 		this.status = status;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public OrdemDeServico getOrdemdeservico() {
-		return ordemdeservico;
-	}
-
-	public void setOrdemdeservico(OrdemDeServico ordemdeservico) {
 		this.ordemdeservico = ordemdeservico;
 	}
 	
