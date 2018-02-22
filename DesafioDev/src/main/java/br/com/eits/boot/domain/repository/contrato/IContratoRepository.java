@@ -21,7 +21,7 @@ public interface IContratoRepository extends JpaRepository<Contrato, Long>
 			   "and (contrato.dataContrato <= :dataAberturaFinal or cast(:dataAberturaFinal as date) is null) " +
 			   "and (exists(from HistoricoContrato historico " +
 			   "           where historico.contrato = contrato " +
-			   "           and historico.status = 2 " +
+			   "           and historico.status = 2 " +//Filtrar somente historico com status 2 - ENCERRADO
 			   "           and (historico.data >= :dataEncerramentoInicial) " +
 			   "           and (historico.data <= :dataEncerramentoFinal )) " +
 			   "           or cast(:dataEncerramentoInicial as date) is null or cast(:dataEncerramentoFinal as date) is null) ")

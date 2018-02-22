@@ -23,6 +23,7 @@ import br.com.eits.boot.domain.entity.contrato.HistoricoContrato;
 import br.com.eits.boot.domain.entity.ordemdeservico.Gestor;
 import br.com.eits.boot.domain.entity.ordemdeservico.HistoricoOrdemDeServico;
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
+import br.com.eits.boot.domain.entity.ordemdeservico.Prioridade;
 import br.com.eits.boot.domain.entity.ordemdeservico.SolicitacaoPagamento;
 import br.com.eits.boot.domain.entity.ordemdeservico.StatusOrdemDeServico;
 import br.com.eits.boot.domain.repository.ordemdeservico.IHistoricoOrdemDeServicoRepository;
@@ -157,18 +158,35 @@ public class OrdemDeServicoService {
 			this.ordemdeservicoRepository.deleteById(id);
 		}
 		
-		/*@Transactional(readOnly = true)
-		public Page<OrdemdeServico> listOrdemDeServicosByFilters( String numeroContrato,
-												  String nomeCliente,
-												  Integer statusContrato,
-												  LocalDate dataAbertura,
-												  LocalDate dataEncerramento,
-				                                  PageRequest pageable )
+		@Transactional(readOnly = true)
+		public Page<OrdemDeServico> listOrdemDeServicosByFilters( String numeroContrato,
+																  String numeroOrdem,
+																  String nomeCliente,
+																  StatusOrdemDeServico statusOrdem,
+																  Float valorOrdemInicial,
+																  Float valorOrdemFinal,
+																  LocalDate dataAberturaInicial,
+																  LocalDate dataAberturaFinal,
+																  LocalDate dataConclusaoInicial,
+																  LocalDate dataConclusaoFinal,
+																  Prioridade prioridadeOrdem,
+								                                  PageRequest pageable )
 		{
-			Page<OrdemDeServico> ordensdeservico = this.ordemdeservicoRepository.listByFilters(numeroContrato, nomeCliente,
-					statusContrato, dataAbertura, dataEncerramento, pageable);
+			Page<OrdemDeServico> ordensdeservico = 
+					this.ordemdeservicoRepository.listByFilters(numeroContrato, 
+							                                    numeroOrdem,
+							                                    nomeCliente,
+							                                    statusOrdem,
+							                                    valorOrdemInicial,
+							                                    valorOrdemFinal,
+							                                    dataAberturaInicial,
+							                                    dataAberturaFinal,
+							                                    dataConclusaoInicial,
+							                                    dataConclusaoFinal,
+							                                    prioridadeOrdem,
+					                                            pageable);
 			return ordensdeservico;
-		}*/
+		}
 		
 		/**
 		 * @param id

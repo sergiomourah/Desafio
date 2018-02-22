@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import br.com.eits.boot.domain.entity.contrato.Cliente;
 import br.com.eits.boot.domain.entity.contrato.Contrato;
+import br.com.eits.boot.domain.entity.contrato.StatusContrato;
 import br.com.eits.boot.domain.entity.ordemdeservico.Gestor;
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
 import br.com.eits.boot.domain.entity.ordemdeservico.Prioridade;
@@ -397,6 +399,44 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		final Page<Gestor> gestor = this.ordemDeServicoService.listGestorByNome("xxxxxxx", pageable);
 		
 		Assert.assertNull( gestor );	
+	}
+	/**
+	 * Buscar ordem de serviço preenchendo todos os filtros
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/gestor/gestor.sql",
+		"/dataset/contrato/contrato.sql",
+		"/dataset/ordemdeservico/ordemdeservico.sql"
+	})
+	public void listOrdemDeServicoByFiltersMustPass()
+	{
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
+		LocalDate dataConclusaoInicial = LocalDate.parse(datas[2],formatter);
+		LocalDate dataConclusaoFinal = LocalDate.parse(datas[3],formatter);
+		final Page<OrdemDeServico> ordensdeservico = 
+				this.ordemDeServicoService.listOrdemDeServicosByFilters("59231", 
+						                                                "5688", 
+						                                                "%Tiago%", 
+						                                                StatusOrdemDeServico.CONCLUIDA, 
+						                                                400F, 
+						                                                600F, 
+						                                                dataAberturaInicial, 
+						                                                dataAberturaFinal, 
+						                                                dataConclusaoInicial, 
+						                                                dataConclusaoFinal, 
+						                                                Prioridade.BAIXA, null);
+
+						                                   
+
+		
+		Assert.assertEquals(1, ordensdeservico.getContent().size());
 	}
 	
 	/**
