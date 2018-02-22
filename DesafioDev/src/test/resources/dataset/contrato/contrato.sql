@@ -11,15 +11,15 @@ SET search_path TO public;
 TRUNCATE contrato CASCADE;
 
 INSERT INTO contrato (id, numero_contrato, cliente_id, descricao, data_contrato, data_previsao_encerramento, status)
-values (10001, '59230', 1, 'CONTRATO PARA TESTE', NOW(), NOW(), 0);
+values (10001, '59230', 1, 'CONTRATO PARA TESTE', '20180222', '20180222', 0);
 
 INSERT INTO contrato (id, numero_contrato, cliente_id, descricao, data_contrato, data_previsao_encerramento, status)
-values (10002, '59231', 1, 'CONTRATO PARA TESTE1', NOW(), NOW(), 0);
+values (10002, '59231', 2, 'CONTRATO PARA TESTE1', '20180222', '20180222', 0);
 
 INSERT INTO contrato (id, numero_contrato, cliente_id, descricao, data_contrato, data_previsao_encerramento, status)
-values (10003, '59232', 1, 'CONTRATO PARA TESTE2', NOW(), NOW(), 1);
+values (10003, '59232', 2, 'CONTRATO PARA TESTE2', '20180222', '20180222', 1);
 
 INSERT INTO contrato (id, numero_contrato, cliente_id, descricao, data_contrato, data_previsao_encerramento, status)
-values (10004, '59233', 1, 'CONTRATO PARA TESTE3', NOW(), CURRENT_DATE + INTERVAL '3 day' , 2);
+values (10004, '59233', 1, 'CONTRATO PARA TESTE3', '20180222', CURRENT_DATE + INTERVAL '3 day' , 2);
 
-insert into historico_contrato (id, user_id, contrato_id, data, acao) values (5000, 9999, 10004, CURRENT_DATE + INTERVAL '3 day', 2)
+insert into historico_contrato (id, user_id, contrato_id, data, acao) values (5000, 9999, 10004, '20180225', 2)

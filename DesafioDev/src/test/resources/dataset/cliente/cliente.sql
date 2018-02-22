@@ -10,5 +10,7 @@ SET search_path TO public;
 
 TRUNCATE cliente CASCADE;
 
-insert into cliente (id, nome) values (1, 'Sergio Moura')
+insert into cliente (id, nome) values (1, 'Sergio Moura');
+
+insert into cliente (id, nome) values (2, 'Tiago Lopes')
 

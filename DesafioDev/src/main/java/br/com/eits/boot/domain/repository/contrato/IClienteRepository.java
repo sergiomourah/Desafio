@@ -10,6 +10,6 @@ import br.com.eits.boot.domain.entity.contrato.Cliente;
 
 public interface IClienteRepository extends JpaRepository<Cliente, Long>{
 
-	@Query("from Cliente cliente where cliente.nome like :nome ")
+	@Query("from Cliente cliente where cliente.nome like :nome or :nome is null ")
 	public Page<Cliente> listClienteByNome( @Param("nome") String nome, Pageable pageable);
 }

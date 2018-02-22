@@ -19,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import br.com.eits.boot.domain.entity.contrato.Cliente;
 import br.com.eits.boot.domain.entity.contrato.Contrato;
 import br.com.eits.boot.domain.entity.contrato.StatusContrato;
+import br.com.eits.boot.domain.entity.ordemdeservico.StatusOrdemDeServico;
 import br.com.eits.boot.domain.service.contrato.ContratoService;
 import br.com.eits.boot.test.domain.AbstractIntegrationTests;
 
@@ -261,11 +262,9 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	})
 	public void listClienteByNomeMustPass()
 	{
-		PageRequest pageable = new PageRequest(1, 1);
-		final Page<Cliente> clientes = this.contratoService.listClienteByNome("Sergio", pageable);
+		final Page<Cliente> clientes = this.contratoService.listClienteByNome("%Sergio%", null);
 		
-		Assert.assertNotNull( clientes );
-		Assert.assertTrue(clientes.getContent().size() > 0); 
+		Assert.assertEquals(1, clientes.getContent().size()); 
 	}
 	
 	/**
@@ -287,7 +286,7 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	}
 	
 	/**
-	 * Buscar contrato por filtros
+	 * Buscar contrato preenchendo todos os filtros
 	 */
 	@Test
 	@WithUserDetails("admin@email.com")
@@ -298,28 +297,181 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	})
 	public void listContratoByFiltersMustPass()
 	{
-		String [] datas = {"18/02/2018", "22/02/2018", "17/02/2018", "27/02/2018"};
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
 		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
 		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
 		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
-		PageRequest pageable = new PageRequest(1, 1);
 		final Page<Contrato> contratos = 
 				this.contratoService.listContratoByFilters("59233", 
-						                                   "Sergio", 
+						                                   "%Sergio%", 
 						                                   StatusContrato.ENCERRADO, 
-						                                   null, 
-						                                   null, 
-						                                   null, 
-						                                   null,
-						                                   pageable);
+						                                   dataAberturaInicial, 
+						                                   dataAberturaFinal, 
+						                                   dataEncerramentoInicial, 
+						                                   dataEncerramentoFinal,
+						                                   null);
 
 		
 		Assert.assertEquals(1, contratos.getContent().size());
 	}
 	
-	
+	/**
+	 * Buscar contrato pelo filtro Nº Contrato
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listContratoByFiltersMustPassNumeroContrato()
+	{
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
+		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
+		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
+		final Page<Contrato> contratos = 
+				this.contratoService.listContratoByFilters("59233", 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null,
+						                                   null);
+
+		
+		Assert.assertEquals(1, contratos.getContent().size());
+	}
+	/**
+	 * Buscar contrato pelo nome do cliente
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listContratoByFiltersMustPassNomeCliente()
+	{
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
+		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
+		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
+		final Page<Contrato> contratos = 
+				this.contratoService.listContratoByFilters(null, 
+						                                   "%Sergio%", 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null,
+						                                   null);
+
+		
+		Assert.assertEquals(2, contratos.getContent().size());
+	}
+	/**
+	 * Buscar contrato pelo Status
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listContratoByFiltersMustPassStatus()
+	{
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
+		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
+		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
+		final Page<Contrato> contratos = 
+				this.contratoService.listContratoByFilters(null, 
+						                                   null, 
+						                                   StatusContrato.ABERTO, 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null,
+						                                   null);
+
+		
+		Assert.assertEquals(2, contratos.getContent().size());
+	}
+	/**
+	 * Buscar contrato pelo periodo de data de contrato
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listContratoByFiltersMustPassDataContrato()
+	{
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
+		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
+		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
+		final Page<Contrato> contratos = 
+				this.contratoService.listContratoByFilters(null, 
+						                                   null, 
+						                                   null, 
+						                                   dataAberturaInicial, 
+						                                   dataAberturaFinal, 
+						                                   null, 
+						                                   null,
+						                                   null);
+
+		
+		Assert.assertEquals(4, contratos.getContent().size());
+	}
+	/**
+	 * Buscar contrato pelo periodo de data de encerramento
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listContratoByFiltersMustPassDataEncerramento()
+	{
+		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
+		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
+		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
+		final Page<Contrato> contratos = 
+				this.contratoService.listContratoByFilters(null, 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   null, 
+						                                   dataEncerramentoInicial, 
+						                                   dataEncerramentoFinal,
+						                                   null);
+
+		
+		Assert.assertEquals(1, contratos.getContent().size());
+	}
 	/**
 	 * Remove contrato pelo id
 	 */

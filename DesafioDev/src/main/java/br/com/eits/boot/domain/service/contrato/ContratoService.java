@@ -125,7 +125,7 @@ public class ContratoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<Contrato> listContratoByFilters( String numeroContrato,
+	public Page<Contrato> listContratoByFilters(String numeroContrato,
 											  String nomeCliente,
 											  StatusContrato statusContrato,
 											  LocalDate dataAberturaInicial,

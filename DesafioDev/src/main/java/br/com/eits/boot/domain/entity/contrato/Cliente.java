@@ -31,9 +31,6 @@ public class Cliente extends AbstractEntity implements Serializable{
 	@Column(length = 144)
 	private String nome;
 	
-	public Long getId() {
-		return id;
-	}
 	
 	public Cliente()
 	{
