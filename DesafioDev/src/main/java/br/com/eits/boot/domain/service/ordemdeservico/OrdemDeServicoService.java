@@ -1,8 +1,11 @@
 package br.com.eits.boot.domain.service.ordemdeservico;
 
 import static br.com.eits.common.application.i18n.MessageSourceHolder.translate;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.directwebremoting.annotations.RemoteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import br.com.eits.boot.domain.entity.account.User;
 import br.com.eits.boot.domain.entity.account.UserRole;
 import br.com.eits.boot.domain.entity.contrato.Cliente;
 import br.com.eits.boot.domain.entity.contrato.HistoricoContrato;
+import br.com.eits.boot.domain.entity.contrato.StatusContrato;
 import br.com.eits.boot.domain.entity.ordemdeservico.Gestor;
 import br.com.eits.boot.domain.entity.ordemdeservico.HistoricoOrdemDeServico;
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
@@ -51,7 +55,9 @@ public class OrdemDeServicoService {
 		@Autowired
 		private MessageSource messageSource;
 			
-		
+		/**
+		 * Inserir Nova Ordem de Serviço
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico insertOrdemDeServico(OrdemDeServico ordemdeservico )
 		{
@@ -67,16 +73,23 @@ public class OrdemDeServicoService {
 			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), null, StatusOrdemDeServico.ABERTA, ordemdeservico));
 			return ordemdeservico;
 		}
-		
+		/**
+		 * Inseri uma solicitação de pagamento com o status homologada
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public SolicitacaoPagamento insertSolicitacaoPagamento(SolicitacaoPagamento solicitacaopagamento )
 		{
+			//Validar Status
+			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.solicitarpagamento", null, LocaleContextHolder.getLocale()), 
+					solicitacaopagamento.getOrdemdeservico().validarSolicitacaoDePagamento(solicitacaopagamento.getOrdemdeservico().getStatus()));
 			Assert.notNull(solicitacaopagamento.getValorPagamento(), this.messageSource.getMessage("solicitacaoPagamento.required.valorPagamento", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(solicitacaopagamento.getDataVencimento(), this.messageSource.getMessage("solicitacaoPagamento.required.dataVencimento", null, LocaleContextHolder.getLocale()));
 			solicitacaopagamento = this.solicitacaopagamentoRepository.save( solicitacaopagamento );
 			return solicitacaopagamento;
 		}
-		
+		/**
+		 * Grava automaticamente o registro do historico em toda evolução e alteração de status.
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public HistoricoOrdemDeServico insertHistoricoOrdemDeServico(HistoricoOrdemDeServico historico )
 		{
@@ -91,11 +104,13 @@ public class OrdemDeServicoService {
 			historico = this.historicoOrdemDeServicoRepository.save( historico );
 			return historico;
 		}
-		
+		/**
+		 * Altera a Ordem de Serviço selecionada
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServico(OrdemDeServico ordemdeservico )
 		{
-
+			
 			Assert.notNull(ordemdeservico.getNumeroOrdemDeServico(), this.messageSource.getMessage("ordemdeservico.required.numeroOrdem", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getPrioridade(), this.messageSource.getMessage("ordemdeservico.required.prioridade", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getDataAbertura(), this.messageSource.getMessage("ordemdeservico.required.dataAbertura", null, LocaleContextHolder.getLocale()));
@@ -106,10 +121,15 @@ public class OrdemDeServicoService {
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);
 			return ordemdeservico;
 		}
-		
+		/**
+		 * Aprova a Ordem de Serviço com o status "ABERTA"
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToAprovar(OrdemDeServico ordemdeservico )
 		{	
+			//Validar Status
+			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.aprovar", null, LocaleContextHolder.getLocale()), 
+					ordemdeservico.validarAprovarOrdemDeServico(ordemdeservico.getStatus()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.APROVADA);// Aprovar
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);	
@@ -117,10 +137,15 @@ public class OrdemDeServicoService {
 			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), "", StatusOrdemDeServico.APROVADA, ordemdeservico));
 			return ordemdeservico;
 		}
-		
+		/**
+		 *  Cancela a Ordem de Serviço
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToCancelar(OrdemDeServico ordemdeservico, String motivo )
 		{	
+			//Validar Status
+			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.cancelar", null, LocaleContextHolder.getLocale()), 
+					ordemdeservico.validarCancelarOrdemDeServico(ordemdeservico.getStatus()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.CANCELADA);// Cancelar
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);	
@@ -128,10 +153,15 @@ public class OrdemDeServicoService {
 			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), motivo, StatusOrdemDeServico.CANCELADA, ordemdeservico));
 			return ordemdeservico;
 		}
-		
+		/**
+		 * Homologa a Ordem de Serviço com o status "APROVADA"
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToHomologar(OrdemDeServico ordemdeservico )
 		{	
+			//Validar Status
+			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.homologar", null, LocaleContextHolder.getLocale()), 
+					ordemdeservico.validarHomologacaoOrdemDeServico(ordemdeservico.getStatus()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.HOMOLOGADA);// Homologada
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);
@@ -139,10 +169,17 @@ public class OrdemDeServicoService {
 			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), "", StatusOrdemDeServico.HOMOLOGADA, ordemdeservico));
 			return ordemdeservico;
 		}
-		
+		/**
+		 * Conclui a Ordem de Serviço com o solicitações de pagamento
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToConcluir(OrdemDeServico ordemdeservico )
 		{	
+			Page<SolicitacaoPagamento> lista = this.listSolicitacaoPagamentoByOrdemDeServicoId(ordemdeservico.getId(), null);
+			ordemdeservico.setSolicitacoesPagamento(lista.getContent());
+			//Validar Status
+			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.conclusao", null, LocaleContextHolder.getLocale()), 
+					ordemdeservico.validarConclusaoOrdemDeServico(ordemdeservico.getSolicitacoesPagamento()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.CONCLUIDA);// Concluir
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);			
@@ -150,14 +187,23 @@ public class OrdemDeServicoService {
 			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), "", StatusOrdemDeServico.CONCLUIDA, ordemdeservico));
 			return ordemdeservico;
 		}
-		
+		/**
+		 * Exclui a Ordem de Serviço com o status "ABERTA"
+		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public void removeOrdemDeServico(long id)
 		{	
+			//Buscar Ordem de Serviço
+			final OrdemDeServico ordemdeservico = this.findOrdemDeServicoById(id);
+			//Validar Status
+			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.excluir", null, LocaleContextHolder.getLocale()), 
+					ordemdeservico.getStatus() == StatusOrdemDeServico.ABERTA);
 			Assert.notNull( id, this.messageSource.getMessage( "ordemdeservico.id", null, LocaleContextHolder.getLocale() ) );
 			this.ordemdeservicoRepository.deleteById(id);
 		}
-		
+		/**
+		 * Lista as Ordens de Serviço
+		 */
 		@Transactional(readOnly = true)
 		public Page<OrdemDeServico> listOrdemDeServicosByFilters( String numeroContrato,
 																  String numeroOrdem,
@@ -198,11 +244,31 @@ public class OrdemDeServicoService {
 			return this.ordemdeservicoRepository.findById( id )
 					.orElseThrow( () -> new IllegalArgumentException( translate( "repository.notFoundById", id ) ) );
 		}
-		
+		/**
+		 * Busca o gestor filtrando pelo nome
+		 */
 		@Transactional(readOnly = true)
 		public Page<Gestor> listGestorByNome( String nome,
 				                              PageRequest pageable)
 		{
 			return this.ordemdeservicoRepository.listGestorByNome(nome, pageable);
+		}
+		/**
+		 * Lista as solicitações de pagamento da Ordem de Serviço
+		 */
+		@Transactional(readOnly = true)
+		public Page<SolicitacaoPagamento> listSolicitacaoPagamentoByOrdemDeServicoId( Long Id,
+				                                                          PageRequest pageable)
+		{
+			return this.solicitacaopagamentoRepository.listSolicitacaoPagamentoByOrdemId(Id, pageable);
+		}
+		/**
+		 * Lista os históricos da Ordem de Serviço
+		 */		
+		@Transactional(readOnly = true)
+		public Page<HistoricoOrdemDeServico> listHistoricoOrdemDeServicoByOrdemDeServicoId( Long Id,
+				                                                          PageRequest pageable)
+		{
+			return this.historicoOrdemDeServicoRepository.listHistoricoOrdemDeServicoByOrdemDeServicoId(Id, pageable);
 		}
 }

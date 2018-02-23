@@ -55,6 +55,11 @@ public class HistoricoOrdemDeServico extends AbstractEntity implements Serializa
 	@JoinColumn(name="ordemdeservico_id", nullable = false)
 	private OrdemDeServico ordemdeservico;
 	
+	public HistoricoOrdemDeServico()
+	{
+		
+	}
+	
 	public HistoricoOrdemDeServico(LocalDate data, 
             String observacao, 
             StatusOrdemDeServico status, 

@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.directwebremoting.annotations.DataTransferObject;
-import org.hibernate.envers.Audited;
 
 import br.com.eits.common.domain.entity.AbstractEntity;
 import lombok.Data;

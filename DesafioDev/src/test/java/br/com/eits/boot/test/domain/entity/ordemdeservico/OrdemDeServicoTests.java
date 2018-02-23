@@ -10,10 +10,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.jdbc.Sql;
 
 import br.com.eits.boot.domain.entity.ordemdeservico.OrdemDeServico;
 import br.com.eits.boot.domain.entity.ordemdeservico.SolicitacaoPagamento;
 import br.com.eits.boot.domain.entity.ordemdeservico.StatusOrdemDeServico;
+import br.com.eits.boot.domain.service.ordemdeservico.OrdemDeServicoService;
 import br.com.eits.boot.test.domain.AbstractUnitTests;
 
 public class OrdemDeServicoTests  extends AbstractUnitTests{
@@ -109,7 +114,7 @@ public class OrdemDeServicoTests  extends AbstractUnitTests{
 	/**
      * Teste com falha com status 1 "APROVADA"
      */
-	@Test
+	@Test()
 	public void validarConclusaoOrdemDePagamentoMustFail()
 	{
 		final OrdemDeServico ordemdeservico = new OrdemDeServico();	

@@ -10,23 +10,16 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.directwebremoting.annotations.DataTransferObject;
-import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.eits.boot.domain.entity.contrato.Contrato;
-import br.com.eits.boot.domain.entity.contrato.HistoricoContrato;
 import br.com.eits.common.domain.entity.AbstractEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -103,6 +96,15 @@ public class OrdemDeServico extends AbstractEntity implements Serializable{
 	}
 	
 	/**
+     * Verifica se status da ordem de serviço está como 0 "ABERTA"
+     */
+	public boolean validarAprovarOrdemDeServico(StatusOrdemDeServico status) {
+		if (status == StatusOrdemDeServico.ABERTA)
+			return true;
+		else return false;
+	}
+	
+	/**
      * Verifica se status da ordem de serviço está como 1 "APROVADA"
      */
 	public boolean validarHomologacaoOrdemDeServico(StatusOrdemDeServico status) {
@@ -124,6 +126,15 @@ public class OrdemDeServico extends AbstractEntity implements Serializable{
      */
 	public boolean validarConclusaoOrdemDeServico(List<SolicitacaoPagamento> listSolicitacao) {
 		if (listSolicitacao.size() > 0 )
+			return true;
+		else return false;
+	}
+	
+	/**
+     * Verifica se status da ordem de serviço não está como 4 "CONCLUÍDA".
+     */
+	public boolean validarCancelarOrdemDeServico(StatusOrdemDeServico status) {
+		if (status != StatusOrdemDeServico.CONCLUIDA)
 			return true;
 		else return false;
 	}

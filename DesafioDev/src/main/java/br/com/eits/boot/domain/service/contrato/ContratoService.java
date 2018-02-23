@@ -1,9 +1,12 @@
 package br.com.eits.boot.domain.service.contrato;
 
 import static br.com.eits.common.application.i18n.MessageSourceHolder.translate;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import javax.validation.constraints.AssertTrue;
 
 import org.directwebremoting.annotations.RemoteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +51,9 @@ public class ContratoService {
 	
 	@Autowired
 	private MessageSource messageSource;
-	
+	/**
+	 * Inserir Novo Contrato
+	 */
 	public Contrato insertContrato(Contrato contrato )
 	{
 		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
@@ -61,13 +66,16 @@ public class ContratoService {
 		this.insertHistoricoContrato(new HistoricoContrato(LocalDate.now(), "", StatusContrato.ABERTO, contrato));
 		return contrato;
 	}
-	
+	/**
+	 * Método que grava o registro de histórico do contrato em toda evolução e alteração de status.
+	 */
 	@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 	public HistoricoContrato insertHistoricoContrato(HistoricoContrato historico )
 	{
 		//Buscar User logado.
 		final User user = RequestContext.currentUser().get();
 		historico.setUser(user);
+		//Validar campos obrigatórios
 		Assert.notNull(historico.getData(), this.messageSource.getMessage("historico.required.data", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(historico.getStatus(), this.messageSource.getMessage("historico.required.status", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(historico.getUser(), this.messageSource.getMessage("historico.required.user", null, LocaleContextHolder.getLocale()));
@@ -76,9 +84,15 @@ public class ContratoService {
 		historico = this.historicoContratoRepository.save( historico );
 		return historico;
 	}
-	
+	/**
+	 * Altera informações de um  Contrato selecionado
+	 */
 	public Contrato updateContrato(Contrato contrato )
 	{
+		//Validar status
+		assertTrue(this.messageSource.getMessage("contrato.validation.alterar", null, LocaleContextHolder.getLocale()), 
+				contrato.getStatus() == StatusContrato.ABERTO);
+		//Validar campos obrigatórios
 		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getNumeroContrato(), this.messageSource.getMessage("contrato.required.numeroContrato", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getDataContrato(), this.messageSource.getMessage("contrato.required.dataContrato", null, LocaleContextHolder.getLocale()));
@@ -87,9 +101,14 @@ public class ContratoService {
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;
 	}
-	
+	/**
+	 * Encerra o Contrato com o status aberto
+	 */
 	public Contrato updateContratoToEncerrar(Contrato contrato )
 	{	
+		//Validar Status
+		assertTrue(this.messageSource.getMessage("contrato.validation.encerrar", null, LocaleContextHolder.getLocale()), 
+				contrato.getStatus() == StatusContrato.ABERTO);
 		contrato.setStatus(StatusContrato.ENCERRADO);//2 - Encerrar Contrato;
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);
@@ -97,9 +116,14 @@ public class ContratoService {
 		this.insertHistoricoContrato(new HistoricoContrato(LocalDate.now(), "", StatusContrato.ENCERRADO, contrato));
 		return contrato;
 	}
-	
+	/**
+	 * Suspende o Contrato com o status aberto
+	 */
 	public Contrato updateContratoToSuspender(Contrato contrato , String motivo)
 	{
+		//Validar Status
+		assertTrue(this.messageSource.getMessage("contrato.validation.alterar", null, LocaleContextHolder.getLocale()), 
+				contrato.getStatus() == StatusContrato.ABERTO);
 		contrato.setStatus(StatusContrato.SUSPENSO);//2 - Suspender Contrato;
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);
@@ -107,9 +131,14 @@ public class ContratoService {
 		this.insertHistoricoContrato(new HistoricoContrato(LocalDate.now(), motivo, StatusContrato.SUSPENSO, contrato));
 		return contrato;
 	}
-	
+	/**
+	 * Reabre o contrato com o status suspenso
+	 */
 	public Contrato updateContratoToReabrir(Contrato contrato )
 	{
+		//Validar Status
+		assertTrue(this.messageSource.getMessage("contrato.validation.reabrir", null, LocaleContextHolder.getLocale()), 
+				contrato.getStatus() == StatusContrato.SUSPENSO);
 		contrato.setStatus(StatusContrato.ABERTO);//2 - Reabrir Contrato;
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);	
@@ -117,13 +146,22 @@ public class ContratoService {
 		this.insertHistoricoContrato(new HistoricoContrato(LocalDate.now(), "", StatusContrato.ABERTO, contrato));
 		return contrato;
 	}
-	
+	/**
+	 * Exclui o contrato com o status aberto
+	 */
 	public void removeContrato(long id)
 	{	
+		//Buscar contrato
+		final Contrato contrato = this.findContratoById(id);
+		//Validar Status
+		assertTrue(this.messageSource.getMessage("contrato.validation.remover", null, LocaleContextHolder.getLocale()), 
+				contrato.getStatus() != StatusContrato.ENCERRADO);
 		Assert.notNull(id, this.messageSource.getMessage( "contrato.id", null, LocaleContextHolder.getLocale() ) );
 		this.contratoRepository.deleteById(id);
 	}
-	
+	/**
+	 * Lista o contrato
+	 */
 	@Transactional(readOnly = true)
 	public Page<Contrato> listContratoByFilters(String numeroContrato,
 											  String nomeCliente,
@@ -156,11 +194,22 @@ public class ContratoService {
 		return this.contratoRepository.findById( id )
 				.orElseThrow( () -> new IllegalArgumentException( translate( "repository.notFoundById", id ) ) );
 	}
-	
+	/**
+	 * Lista o cliente filtrando pelo nome
+	 */
 	@Transactional(readOnly = true)
 	public Page<Cliente> listClienteByNome( String nome,
 			                              PageRequest pageable)
 	{
 		return this.clienteRepository.listClienteByNome(nome, pageable);
+	}
+	/**
+	 * Lista os históricos filtrando pelo contrato
+	 */
+	@Transactional(readOnly = true)
+	public Page<HistoricoContrato> listHistoricoContratoByContratoId( Long Id,
+			                                                          PageRequest pageable)
+	{
+		return this.historicoContratoRepository.listHistoricoContratoByContratoId(Id, pageable);
 	}
 }

@@ -30,6 +30,11 @@ import lombok.EqualsAndHashCode;
 @DataTransferObject
 public class HistoricoContrato extends AbstractEntity implements Serializable {
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6852215807276622785L;
+
 	private LocalDate data;
 	
 	private String observacao;
@@ -48,6 +53,11 @@ public class HistoricoContrato extends AbstractEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="contrato_id", nullable = false)
 	private Contrato contrato;
+	
+	public HistoricoContrato()
+	{
+		
+	}
 	
 	public HistoricoContrato(LocalDate data, 
 			                 String observacao, 

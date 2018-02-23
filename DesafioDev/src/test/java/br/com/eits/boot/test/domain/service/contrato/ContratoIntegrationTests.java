@@ -1,5 +1,6 @@
 package br.com.eits.boot.test.domain.service.contrato;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.Assert.assertNull;
 
 import java.awt.print.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import br.com.eits.boot.domain.entity.contrato.Cliente;
 import br.com.eits.boot.domain.entity.contrato.Contrato;
+import br.com.eits.boot.domain.entity.contrato.HistoricoContrato;
 import br.com.eits.boot.domain.entity.contrato.StatusContrato;
 import br.com.eits.boot.domain.entity.ordemdeservico.StatusOrdemDeServico;
 import br.com.eits.boot.domain.service.contrato.ContratoService;
@@ -142,16 +144,13 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	@Test
 	@WithUserDetails("admin@email.com")
 	@Sql({
-		"/dataset/account/users.sql"
-	})
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})	
 	public void updateContratoMustPass()
 	{
-		Contrato contrato = new Contrato();
-		contrato.setNumeroContrato("100");
-		contrato.setDescricao("Contrato Teste");
-		contrato.setDataContrato(LocalDate.now());
-		contrato.setStatus(StatusContrato.ABERTO);
-		contrato.setCliente(new Cliente(1L));
+		Contrato contrato = this.contratoService.findContratoById(10001);
 		contrato = this.contratoService.updateContrato(contrato);
 		Assert.assertNotNull(contrato);
 		Assert.assertNotNull(contrato.getId());
@@ -270,7 +269,7 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	/**
 	 * Buscar cliente por nome inexistente
 	 */
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=AssertionError.class)
 	@WithUserDetails("admin@email.com")
 	@Sql({
 		"/dataset/account/users.sql",
@@ -279,10 +278,25 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	})
 	public void listClienteByNomeMustFail()
 	{
-		PageRequest pageable = new PageRequest(0, 0);
-		final Page<Cliente> clientes = this.contratoService.listClienteByNome("xxxxxxx", pageable);
+		final Page<Cliente> clientes = this.contratoService.listClienteByNome("xxxxxxx", null);
 		
 		Assert.assertNull( clientes );	
+	}
+	/**
+	 * Buscar Historico do Contrato por Contrato ID
+	 */
+	@Test
+	@WithUserDetails("admin@email.com")
+	@Sql({
+		"/dataset/account/users.sql",
+		"/dataset/cliente/cliente.sql",
+		"/dataset/contrato/contrato.sql"
+	})
+	public void listHistoricoContratoByContratoIdMustPass()
+	{
+		final Page<HistoricoContrato> historicos = this.contratoService.listHistoricoContratoByContratoId(10004L, null);
+		
+		Assert.assertEquals(2, historicos.getContent().size()); 
 	}
 	
 	/**
@@ -327,14 +341,8 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql"
 	})
-	public void listContratoByFiltersMustPassNumeroContrato()
+	public void listContratoByNumeroContratoMustPass()
 	{
-		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
-		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
-		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
-		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
 		final Page<Contrato> contratos = 
 				this.contratoService.listContratoByFilters("59233", 
 						                                   null, 
@@ -358,14 +366,8 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql"
 	})
-	public void listContratoByFiltersMustPassNomeCliente()
+	public void listContratoByNomeClienteMustPass()
 	{
-		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
-		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
-		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
-		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
 		final Page<Contrato> contratos = 
 				this.contratoService.listContratoByFilters(null, 
 						                                   "%Sergio%", 
@@ -389,14 +391,8 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql"
 	})
-	public void listContratoByFiltersMustPassStatus()
+	public void listContratoByStatusMustPass()
 	{
-		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
-		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
-		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
-		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
 		final Page<Contrato> contratos = 
 				this.contratoService.listContratoByFilters(null, 
 						                                   null, 
@@ -420,14 +416,12 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql"
 	})
-	public void listContratoByFiltersMustPassDataContrato()
+	public void listContratoByDataContratoMustPass()
 	{
-		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		String [] datas = { "20180218", "20180223" };
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
 		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
-		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
-		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
 		final Page<Contrato> contratos = 
 				this.contratoService.listContratoByFilters(null, 
 						                                   null, 
@@ -451,14 +445,12 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 		"/dataset/cliente/cliente.sql",
 		"/dataset/contrato/contrato.sql"
 	})
-	public void listContratoByFiltersMustPassDataEncerramento()
+	public void listContratoByDataEncerramentoMustPass()
 	{
-		String [] datas = { "20180218", "20180223", "20180217", "20180227" };
+		String [] datas = { "20180217", "20180227" };
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-		LocalDate dataAberturaInicial = LocalDate.parse(datas[0],formatter);
-		LocalDate dataAberturaFinal = LocalDate.parse(datas[1],formatter);
-		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[2],formatter);
-		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[3],formatter);
+		LocalDate dataEncerramentoInicial = LocalDate.parse(datas[0],formatter);
+		LocalDate dataEncerramentoFinal = LocalDate.parse(datas[1],formatter);
 		final Page<Contrato> contratos = 
 				this.contratoService.listContratoByFilters(null, 
 						                                   null, 
@@ -489,7 +481,7 @@ public class ContratoIntegrationTests extends AbstractIntegrationTests{
 	/**
 	 * Tenta remover contrato com um id inexistente
 	 */
-	@Test(expected = EmptyResultDataAccessException.class)
+	@Test(expected = IllegalArgumentException.class)
 	@WithUserDetails("admin@email.com")
 	@Sql({
 		"/dataset/account/users.sql",
