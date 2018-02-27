@@ -1,0 +1,21 @@
+.form-field-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+.form-field-container > * {
+    width: 100%;
+  }
+
+.form-control {
+      size: 30px;
+      width: 10%;
+      height: 15px;
+  }
+
+.form-control-cliente {
+    width: 600px;   
+}
+.div-mat-form-field-cliente{
+    display: inline-block;
+}

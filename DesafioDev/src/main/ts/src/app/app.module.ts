@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { GeneratedModule } from '../generated/generated.module';
 import { BROKER_CONFIGURATION } from '../generated/services-wrapper';
 import { ContratoComponent } from './contrato/contrato.component';
-import { InicialComponent } from './inicial/inicial.component';
 
 import { CovalentLayoutModule } from '@covalent/core/layout';
 import { CovalentStepsModule  } from '@covalent/core/steps';
@@ -19,16 +18,17 @@ import { CovalentHttpModule } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
 import { CovalentDynamicFormsModule } from '@covalent/dynamic-forms';
-import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule, MatIconModule, MatNavList, MatListModule, MatSelectModule, MatCardContent } from '@angular/material';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
+import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ContratoComponent,
-    InicialComponent,
+    OrdemdeservicoComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +52,10 @@ import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
     CovalentExpansionPanelModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule,
+    MatListModule,
+    MatSelectModule
   ],
   providers: [{
     provide: BROKER_CONFIGURATION,
