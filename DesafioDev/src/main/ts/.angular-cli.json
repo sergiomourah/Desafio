@@ -23,7 +23,7 @@
         "styles.css",
         "theme.scss",
         "../node_modules/@covalent/core/common/platform.scss"
-        ],
+      ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -45,7 +45,7 @@
     {
       "project": "src/tsconfig.spec.json",
       "exclude": "**/node_modules/**"
-    },<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet
+    },
     {
       "project": "e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**"

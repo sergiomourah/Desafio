@@ -19,7 +19,7 @@ import { CovalentHttpModule } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
 import { CovalentDynamicFormsModule } from '@covalent/dynamic-forms';
-import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule } from '@angular/material';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
 
@@ -51,7 +51,8 @@ import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
     CovalentDynamicFormsModule,
     CovalentExpansionPanelModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatCardModule
   ],
   providers: [{
     provide: BROKER_CONFIGURATION,

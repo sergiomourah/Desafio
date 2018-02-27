@@ -9,9 +9,8 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^5.2.6",
-    "@angular/cdk": "^5.2.2",
-    "@angular/core": "^5.1.1",
-    "@angular/material": "^5.2.2",
+    "@angular/cdk": "angular/cdk-builds",
+    "@angular/material": "angular/material2-builds",
     "@covalent/core": "^1.0.0",
     "@covalent/dynamic-forms": "^1.0.0",
     "@covalent/highlight": "^1.0.0",
@@ -20,8 +19,7 @@
     "copy-webpack-plugin": "^4.3.1",
     "eits-ng-starter-2018-01": "^0.6.0",
     "hammerjs": "^2.0.8",
-    "node-sass": "^4.7.2",
-    "typescript": "^2.4.2"
+    "node-sass": "^4.7.2"
   },
   "devDependencies": {
     "eits-ng-starter-2018-01-dev": "^0.6.0"
