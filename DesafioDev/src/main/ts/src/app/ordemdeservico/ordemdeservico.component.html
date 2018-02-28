@@ -1,31 +1,131 @@
-<div class="form-field-container" >
+<div class="form-field-container">
   <div>
     <mat-card>
-      <mat-card-content>               
+      <mat-card-content>
+        <div class="div-mat-form-field-inline">
           <mat-form-field>
             <input class="form-control" matInput placeholder="Nº OS" type="text">
-           </mat-form-field>
+          </mat-form-field>
           <mat-form-field>
             <input class="form-control" matInput placeholder="Nº Contrato" type="text">
           </mat-form-field>
-           <div class="div-mat-form-field-cliente">
-              <mat-form-field class="form-control-cliente">
-                <input class="form-control-cliente" matInput placeholder="Nome do Cliente" type="text">
-              </mat-form-field>
-              <div class="button-row div-mat-form-field-cliente">
-                <button mat-button color="primary">Inserir OS</button> 
+          <mat-form-field class="form-control-cliente">
+            <input class="form-control-cliente" matInput placeholder="Nome do Cliente" type="text">
+          </mat-form-field>
+          <button routerLink="/ordemdeservico/inserir" mat-button color="primary">Inserir OS
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <div class="div-mat-form-field-inline">
+          <mat-form-field>
+            <mat-select placeholder="Status">
+              <mat-option *ngFor="let s of status" [value]="s.value">
+                {{ s.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Prioridade">
+              <mat-option *ngFor="let p of prioridadevalues" [value]="p">
+                {{ p }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input class="form-control" matInput placeholder="Valor Inicial" type="text">
+          </mat-form-field>
+          <span> entre </span>
+          <mat-form-field>
+            <input class="form-control" matInput placeholder="Valor Final" type="text">
+          </mat-form-field>
+          <button mat-button color="primary">Limpar
+            <mat-icon>clear</mat-icon>
+          </button>
+          <button mat-button color="primary">Buscar
+              <mat-icon>search</mat-icon>
+          </button>
+        </div>
+        <div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataAberturaIni" placeholder="Data Abertura Inicial">
+            <mat-datepicker-toggle matSuffix [for]="dataAberturaIni"></mat-datepicker-toggle>
+            <mat-datepicker #dataAberturaIni></mat-datepicker>
+          </mat-form-field>
+          <span> à </span>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataAberturaFin" placeholder="Data Abertura Final">
+            <mat-datepicker-toggle matSuffix [for]="dataAberturaFin"></mat-datepicker-toggle>
+            <mat-datepicker #dataAberturaFin></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataConclusaoIni" placeholder="Data Conclusão Inicial">
+            <mat-datepicker-toggle matSuffix [for]="dataConclusaoIni"></mat-datepicker-toggle>
+            <mat-datepicker #dataConclusaoIni></mat-datepicker>
+          </mat-form-field>
+          <span> à </span>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataConclusaoFin" placeholder="Data Conclusão Final">
+            <mat-datepicker-toggle matSuffix [for]="dataConclusaoFin"></mat-datepicker-toggle>
+            <mat-datepicker #dataConclusaoFin></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <div>
+            <div class="table-container mat-elevation-z8">
+                <mat-table #table [dataSource]="dataSource">
+              
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.status}} </mat-cell>
+                  </ng-container>
+              
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="numeroOrdemDeServico">
+                    <mat-header-cell *matHeaderCellDef> Nº OS </mat-header-cell>
+                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.numeroOrdemDeServico}} </mat-cell>
+                  </ng-container>
+              
+                  <!-- Weight Column -->
+                  <ng-container matColumnDef="numeroContrato">
+                    <mat-header-cell *matHeaderCellDef> Nº Contrato </mat-header-cell>
+                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.contrato.numeroContrato}} </mat-cell>
+                  </ng-container>
+              
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="dataAbertura">
+                    <mat-header-cell *matHeaderCellDef> Data Abertura </mat-header-cell>
+                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.dataAbertura}} </mat-cell>
+                  </ng-container>
+
+                   <!-- Symbol Column -->
+                   <ng-container matColumnDef="dataConclusao">
+                      <mat-header-cell *matHeaderCellDef> Data Conclusão </mat-header-cell>
+                      <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.dataConclusao}} </mat-cell>
+                    </ng-container>
+
+                     <!-- Symbol Column -->
+                  <ng-container matColumnDef="valorOrdemDeServico">
+                      <mat-header-cell *matHeaderCellDef> Valor OS </mat-header-cell>
+                      <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.valorOrdemDeServico}} </mat-cell>
+                    </ng-container>
+              
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              
+                <mat-paginator #paginator
+                               [pageSize]="10"
+                               [pageSizeOptions]="[5, 10, 20]"
+                               [showFirstLastButtons]="true">
+                </mat-paginator>
               </div>
-           </div> 
-           <div>
-              <mat-form-field>
-                  <mat-select placeholder="Favorite food">
-                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                      {{ food.viewValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>               
-           </div>              
-    </mat-card-content>       
+              
+        </div>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

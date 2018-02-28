@@ -1,0 +1,79 @@
+<div fxLayout="row" and fxLayoutAlign="center">
+  <mat-card>
+    <mat-card-header>Cadastrar Ordem de Serviço</mat-card-header>
+    <mat-card-content>
+      <form #f="ngForm">
+        <div>
+          <mat-form-field>
+            <input class="form-control" matInput placeholder="Nº OS" 
+            required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.numeroOrdemDeServico" name="numeroOrdemDeServico">
+            <mat-error>Nº OS é obrigatório!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input class="form-control" matInput placeholder="Nº Contrato" 
+            required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.numeroContrato" name="numeroContrato">
+            <mat-error>Nº Contrato é obrigatório!</mat-error>
+          </mat-form-field>
+          <button mat-button color="primary">
+            <mat-icon>search</mat-icon>
+          </button>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataAbertura" placeholder="Data Abertura" 
+            required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.dataAbertura" name="dataAbertura">
+            <mat-datepicker-toggle matSuffix [for]="dataAbertura"></mat-datepicker-toggle>
+            <mat-datepicker #dataAbertura></mat-datepicker>
+            <mat-error>Data de Abertura é obrigatório!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataPrevisaoConclusao" placeholder="Data Previsão Conclusão" [(ngModel)]="ordemdeservico.dataPrevisaoConclusao" name="dataPrevisaoConclusao">
+            <mat-datepicker-toggle matSuffix [for]="dataPrevisaoConclusao"></mat-datepicker-toggle>
+            <mat-datepicker #dataConclusao></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-control-ordemdeservico">
+            <input class="form-control-ordemdeservico" matInput placeholder="Gestor" 
+            required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.Gestor" name="Gestor">
+            <mat-error>Gestor é obrigatório!</mat-error>
+          </mat-form-field>
+          <button mat-button color="primary">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+        <div>
+          <mat-form-field class="form-control-ordemdeservico">
+            <textarea class="form-control-ordemdeservico" matInput placeholder="Descrição do Problema" 
+            required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.descricaoProblema" name="descricaoProblema"></textarea>
+            <mat-error>Descrição do Problema é obrigatório!</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-control-ordemdeservico">
+            <textarea class="form-control-ordemdeservico" matInput placeholder="Descrição da Solução" [(ngModel)]="ordemdeservico.descricaoSolucao" name="descricaoSolucao"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-control-ordemdeservico">
+            <textarea class="form-control-ordemdeservico" matInput placeholder="Observação" [(ngModel)]="ordemdeservico.observacao" name="observacao"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <input class="form-control" matInput placeholder="Valor OS" type="text" [(ngModel)]="ordemdeservico.valorOrdemDeServico" name="valorOrdemDeServico">
+          </mat-form-field>
+        </div>
+        <div>
+          <button (click)="CallDialog()" class="button-confirmacao" mat-button color="primary">Cancelar
+            <mat-icon>save</mat-icon>
+          </button>
+          <button class="button-confirmacao" mat-button color="primary">Salvar
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+        <br/>
+        <br/>
+        <span class="campo-obrigatorio">Campos obrigatórios(*)</span>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>CallDialog()
