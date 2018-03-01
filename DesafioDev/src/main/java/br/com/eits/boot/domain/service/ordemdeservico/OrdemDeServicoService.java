@@ -61,6 +61,8 @@ public class OrdemDeServicoService {
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico insertOrdemDeServico(OrdemDeServico ordemdeservico )
 		{
+			//Seta o Status como aberto
+			ordemdeservico.setStatus(StatusOrdemDeServico.ABERTA);
 			Assert.notNull(ordemdeservico.getNumeroOrdemDeServico(), this.messageSource.getMessage("ordemdeservico.required.numeroOrdem", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getPrioridade(), this.messageSource.getMessage("ordemdeservico.required.prioridade", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getDataAbertura(), this.messageSource.getMessage("ordemdeservico.required.dataAbertura", null, LocaleContextHolder.getLocale()));

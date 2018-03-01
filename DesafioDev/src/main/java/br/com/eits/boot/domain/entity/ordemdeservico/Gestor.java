@@ -26,10 +26,6 @@ public class Gestor extends AbstractEntity implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 5392443927274071455L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	
 	@Column(length = 144)
 	private String nome;

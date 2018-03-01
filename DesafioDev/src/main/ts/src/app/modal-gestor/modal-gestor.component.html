@@ -1,0 +1,58 @@
+<div>
+    <mat-card>
+        <mat-card-content>
+            <h3>Selecionar Gestor</h3>
+            <div>
+                <mat-form-field>
+                    <input class="form-control-gestor" 
+                           matInput placeholder="Pesquisar por Gestor"
+                           [(ngModel)]="filtro.nomeCliente" name="nomeCliente">
+                </mat-form-field>
+            </div>
+            <div>
+                <div class="table-container mat-elevation-z8">
+                    <mat-table #table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue()" [indeterminate]="selection.hasValue()">
+                                </mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                                </mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+
+
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="id">[checked]="selection.isSelected(row)
+                            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+                            <mat-cell *matCellDef="let gestor"> {{gestor.id}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="nome">
+                            <mat-header-cell *matHeaderCellDef> Nome do Cliente </mat-header-cell>
+                            <mat-cell *matCellDef="let gestor"> {{gestor.nome}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
+                    </mat-table>
+
+                    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                    </mat-paginator>
+                </div>
+            </div>
+            <div>
+                <button class="button-confirmacao" mat-button color="primary">Cancelar
+                    <mat-icon>save</mat-icon>
+                </button>
+                <button (click)="InsertOrdemDeServico()" class="button-confirmacao" mat-button color="primary">Salvar
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

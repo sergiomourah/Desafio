@@ -4,67 +4,95 @@
       <mat-card-content>
         <div class="div-mat-form-field-inline">
           <mat-form-field>
-            <input class="form-control" matInput placeholder="Nº OS" type="text">
+            <input class="form-control" 
+                   matInput placeholder="Nº OS" 
+                   type="text"
+                   [(ngModel)]="filtro.numeroOs" name="numeroOs">
           </mat-form-field>
           <mat-form-field>
-            <input class="form-control" matInput placeholder="Nº Contrato" type="text">
+            <input class="form-control" 
+                   matInput placeholder="Nº Contrato" 
+                   type="text"
+                   [(ngModel)]="filtro.numeroContrato" 
+                   name="numeroContrato">
           </mat-form-field>
           <mat-form-field class="form-control-cliente">
-            <input class="form-control-cliente" matInput placeholder="Nome do Cliente" type="text">
+            <input class="form-control-cliente" 
+                   matInput placeholder="Nome do Cliente" 
+                   type="text" 
+                   [(ngModel)]="filtro.nomeCliente" name="nomeCliente">
           </mat-form-field>
-          <button routerLink="/ordemdeservico/inserir" mat-button color="primary">Inserir OS
+          <button routerLink="/ordemdeservico/inserir" 
+                  mat-button color="primary">Inserir OS
             <mat-icon>add</mat-icon>
           </button>
         </div>
         <div class="div-mat-form-field-inline">
           <mat-form-field>
-            <mat-select placeholder="Status">
-              <mat-option *ngFor="let s of status" [value]="s.value">
-                {{ s.viewValue }}
+            <mat-select placeholder="Status"
+                        [(ngModel)]="filtro.statusOrdem" name="statusOrdem">
+              <mat-option *ngFor="let s of statusvalues" [value]="s">
+                {{ s }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
-            <mat-select placeholder="Prioridade">
+            <mat-select placeholder="Prioridade"
+                        [(ngModel)]="filtro.prioridade" name="prioridade">
               <mat-option *ngFor="let p of prioridadevalues" [value]="p">
                 {{ p }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field>
-            <input class="form-control" matInput placeholder="Valor Inicial" type="text">
+            <input class="form-control" 
+                   matInput placeholder="Valor Inicial" 
+                   type="text"
+                   [(ngModel)]="filtro.valorIni" name="valorIni">
           </mat-form-field>
           <span> entre </span>
           <mat-form-field>
-            <input class="form-control" matInput placeholder="Valor Final" type="text">
+            <input class="form-control" 
+                   matInput placeholder="Valor Final" 
+                   type="text"
+                   [(ngModel)]="filtro.valorFin" name="valorFin">
           </mat-form-field>
-          <button mat-button color="primary">Limpar
+          <button (click)="LimparFiltros()" mat-button color="primary">Limpar
             <mat-icon>clear</mat-icon>
           </button>
-          <button mat-button color="primary">Buscar
+          <button (click)="ListarOrdemDeServico()" mat-button color="primary">Buscar
               <mat-icon>search</mat-icon>
           </button>
         </div>
         <div>
           <mat-form-field>
-            <input matInput [matDatepicker]="dataAberturaIni" placeholder="Data Abertura Inicial">
+            <input matInput [matDatepicker]="dataAberturaIni" 
+                   placeholder="Data Abertura Inicial"
+                   [(ngModel)]="filtro.dataAberturaIni" name="dataAberturaIni">
             <mat-datepicker-toggle matSuffix [for]="dataAberturaIni"></mat-datepicker-toggle>
             <mat-datepicker #dataAberturaIni></mat-datepicker>
           </mat-form-field>
           <span> à </span>
           <mat-form-field>
-            <input matInput [matDatepicker]="dataAberturaFin" placeholder="Data Abertura Final">
+            <input matInput [matDatepicker]="dataAberturaFin" 
+                   placeholder="Data Abertura Final"
+                   mat-reflect-format
+                   [(ngModel)]="filtro.dataAberturaFin" name="dataAberturaFin">
             <mat-datepicker-toggle matSuffix [for]="dataAberturaFin"></mat-datepicker-toggle>
             <mat-datepicker #dataAberturaFin></mat-datepicker>
           </mat-form-field>
           <mat-form-field>
-            <input matInput [matDatepicker]="dataConclusaoIni" placeholder="Data Conclusão Inicial">
+            <input matInput [matDatepicker]="dataCoappnclusaoIni" 
+                   placeholder="Data Conclusão Inicial"
+                   [(ngModel)]="filtro.dataConclusaoIni" name="dataConclusaoIni">
             <mat-datepicker-toggle matSuffix [for]="dataConclusaoIni"></mat-datepicker-toggle>
             <mat-datepicker #dataConclusaoIni></mat-datepicker>
           </mat-form-field>
           <span> à </span>
           <mat-form-field>
-            <input matInput [matDatepicker]="dataConclusaoFin" placeholder="Data Conclusão Final">
+            <input matInput [matDatepicker]="dataConclusaoFin" 
+                   placeholder="Data Conclusão Final"
+                   [(ngModel)]="filtro.dataConclusaoFin" name="dataConclusaoFin">
             <mat-datepicker-toggle matSuffix [for]="dataConclusaoFin"></mat-datepicker-toggle>
             <mat-datepicker #dataConclusaoFin></mat-datepicker>
           </mat-form-field>
@@ -98,13 +126,13 @@
                   <!-- Symbol Column -->
                   <ng-container matColumnDef="dataAbertura">
                     <mat-header-cell *matHeaderCellDef> Data Abertura </mat-header-cell>
-                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.dataAbertura}} </mat-cell>
+                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.dataAbertura | date:'dd/MM/yyyy'}} </mat-cell>
                   </ng-container>
 
                    <!-- Symbol Column -->
                    <ng-container matColumnDef="dataConclusao">
                       <mat-header-cell *matHeaderCellDef> Data Conclusão </mat-header-cell>
-                      <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.dataConclusao}} </mat-cell>
+                      <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.dataConclusao | date:'dd/MM/yyyy'}} </mat-cell>
                     </ng-container>
 
                      <!-- Symbol Column -->

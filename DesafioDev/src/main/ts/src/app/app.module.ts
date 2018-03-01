@@ -1,3 +1,4 @@
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { OrdemdeservicoInserirComponent } from './ordemdeservico/ordemdeservico-inserir/ordemdeservico-inserir.component';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,6 +25,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
 import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
 import { MsgDialogComponent } from './msg-dialog/msg-dialog.component';
+import { ModalGestorComponent } from './modal-gestor/modal-gestor.component';
 
 
 @NgModule({
@@ -32,10 +34,12 @@ import { MsgDialogComponent } from './msg-dialog/msg-dialog.component';
     ContratoComponent,
     OrdemdeservicoComponent,
     OrdemdeservicoInserirComponent,
-    MsgDialogComponent
+    MsgDialogComponent,
+    ModalGestorComponent
   ],
   entryComponents: [
-    MsgDialogComponent
+    MsgDialogComponent,
+    ModalGestorComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +79,8 @@ import { MsgDialogComponent } from './msg-dialog/msg-dialog.component';
       path: '/broker',
       realTime: false
     },   
-  }],
+  },
+  {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,10 @@
+import { OrdemDeServicoService } from './../../generated/services';
 import { MsgDialogComponent } from './../msg-dialog/msg-dialog.component';
-import { Prioridade, PrioridadeValues, OrdemDeServico } from './../../generated/entities';
+import { Prioridade, PrioridadeValues, OrdemDeServico, StatusOrdemDeServico, PageRequest, StatusOrdemDeServicoValues } from './../../generated/entities';
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatDialog, MatPaginator } from '@angular/material';
+import { Output } from '@angular/core/src/metadata/directives';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 @Component({
   selector: 'app-ordemdeservico',
@@ -10,26 +13,27 @@ import { MatTableDataSource, MatDialog } from '@angular/material';
 })
 export class OrdemdeservicoComponent implements OnInit {
 
+  //Fitros para busca
+  private filtro: any = {};
+  private dataSource: any[] = [];
+  private pageable: PageRequest;
   //Status Ordem de Serviço
-  public status: any[] = [];
+  private status: any[] = [];
 
-  public prioridadevalues: string[] = PrioridadeValues;
+  //Declara Valor Enum Prioridade
+  private prioridadevalues: string[] = PrioridadeValues;
+  //Declara Valor Enum Status
+  private statusvalues: string[] = StatusOrdemDeServicoValues;
+  //Cria array dos campos de display da table
+  private displayedColumns = ['status', 'numeroOrdemDeServico', 'numeroContrato', 'dataAbertura', 'dataConclusao', 'valorOrdemDeServico'];
 
-  public displayedColumns = ['status', 'numeroOrdemDeServico', 'numeroContrato', 'dataAbertura', 'dataConclusao', 'valorOrdemDeServico'];
+  private ordemdeservico: OrdemDeServico = {};
 
-  public ordemdeservico: OrdemDeServico = {};
-
-  constructor(public dialog: MatDialog) { }
+  constructor(private service : OrdemDeServicoService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    //Inicia Status Ordem de Serviço
-    this.status = [
-      { value: 0, viewValue: 'ABERTA' },
-      { value: 1, viewValue: 'APROVADA' },
-      { value: 2, viewValue: 'CANCELADA' },
-      { value: 3, viewValue: 'HOMOLOGADA' },
-      { value: 4, viewValue: 'CONCLUÍDA' }
-    ];
+    //Lista as Ordens de Serviço
+    this.ListarOrdemDeServico();
   }
 
   CallDialog() {
@@ -38,5 +42,38 @@ export class OrdemdeservicoComponent implements OnInit {
         animal: 'panda'
       }
     });
+  }
+   /**
+     * Executa a consulta da ordem de serviço e retorna a lista
+     */
+  private ListarOrdemDeServico() : void {
+    this.service.listOrdemDeServicosByFilters(this.filtro.numeroContrato,
+                                             this.filtro.numeroOs,
+                                             this.filtro.nomeCliente != null ?
+                                             "%" + this.filtro.nomeCliente + "%" :
+                                             this.filtro.nomeCliente,
+                                             this.filtro.statusOrdem,
+                                             this.filtro.valorIni,
+                                             this.filtro.valorFin,
+                                             this.filtro.dataAberturaIni,
+                                             this.filtro.dataAberturaFin,
+                                             this.filtro.dataConclusaoIni,
+                                             this.filtro.dataConclusaoFin,
+                                             this.filtro.prioridade,
+                                             this.pageable).subscribe((result) => {
+      this.dataSource = result.content;
+    }, (error) => {
+     alert(error.message);
+    });
+  }
+   /**
+     * Limpa os Filtros de busca
+     */
+  private LimparFiltros() : void
+  {
+    //Limpar Filtros
+     this.filtro = {};
+     //Listar Ordens de serviço novamente
+     this.ListarOrdemDeServico();
   }
 }
