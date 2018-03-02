@@ -1,52 +1,79 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { PaginationService } from './../pagination.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 
 import { Gestor, PageRequest } from './../../generated/entities';
 import { SelectionModel } from '@angular/cdk/collections';
 import { OrdemDeServicoService } from '../../generated/services';
+import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+
+interface Model {
+  pageRequest: any;
+  filters: Filters;
+}
+ 
+interface Filters {
+  nome: string | null;
+}
+
 
 @Component({
   selector: 'app-modal-gestor',
   templateUrl: './modal-gestor.component.html',
   styleUrls: ['./modal-gestor.component.css']
 })
-export class ModalGestorComponent implements OnInit {
+export class ModalGestorComponent implements OnInit, AfterViewInit {
 
-  private model: any = {
-    pageRequest: {
-      content: [],
-      pageable: {
-        page: 0,
-        size: 5,
-        sort: {
-          orders: [{
-            direction: "ASC",
-            property: "codigo",
-            nullHandlingHint: null
-          }]
-        }
-      }
-    },
-    filter: '',
-    gestorSelected: null
-  };
-  //Fitros para busca
-  private filtro: any = {};
+  //Cria a lista de elementos
+  ELEMENT_DATA: Gestor[] = [];
+
   //Pageable
   private pageable: PageRequest;
+
+  private model : Model =
+  {
+      pageRequest: {},
+      filters: {
+        nome : null
+      }
+  };
+
+
+
   //DataSource
-  private dataSource: any[] = [];
+  dataSource = new MatTableDataSource<Gestor>(this.ELEMENT_DATA);
   //Declara entidade gestor
   private gestor: Gestor = {};
-  constructor(public dialogRef: MatDialogRef<ModalGestorComponent>,
-             public service: OrdemDeServicoService) { }
+  constructor(private paginationService: PaginationService,
+              public dialogRef: MatDialogRef<ModalGestorComponent>,
+              public service: OrdemDeServicoService) { 
+
+    this.model.pageRequest = this.paginationService.pageRequest('nome', 'ASC');
+  }
 
   displayedColumns = ['select', 'id', 'nome'];
-  selection = new SelectionModel<Gestor>(true, []);
+  //SelectionModel<Entity>(const allowMultiSelect, const initialSelection)
+  selection = new SelectionModel<Gestor>(false, []);  //Pageable
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
 
   ngOnInit() {
     //Busca Lista de Gestores
-    this.ListarGestor();
+    this.onlistGestorByNome();
+  }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  /** 
+   * Aplica o Filtro de consulta
+  */
+  public applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
   /** 
    * Emite o para o solicitante o registro selecionado após a confirmação
@@ -59,7 +86,7 @@ export class ModalGestorComponent implements OnInit {
  */
   public isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.length;
+    const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
   /** 
@@ -67,18 +94,20 @@ export class ModalGestorComponent implements OnInit {
   */
   masterToggle() {
     if (this.isAllSelected()){
-      this.selection.clear(); 
-      this.dataSource.forEach(row => this.selection.select(row));
-    } 
-        
+      this.selection.clear(); <Gestor>(this.ELEMENT_DATA);
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    }        
   }
   /**
-   * Lista os Gestores
+   * Lista os   const initialSelection = [];
+  const allowMultiSelect = true;Gestores
    */
-  public ListarGestor() {
-    this.service.listGestorByNome(this.filtro.nomeCliente,
-      this.pageable).subscribe((result) => {
-        this.dataSource = result.content;
+  public onlistGestorByNome() {
+    this.service.listGestorByNome(null,
+      this.model.pageRequest).subscribe((result) => {
+        this.ELEMENT_DATA = result.content;
+        this.dataSource = new MatTableDataSource<Gestor>(this.ELEMENT_DATA)
+        this.ngAfterViewInit();
       }), (error) => {
         alert(error.message);
       }

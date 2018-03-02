@@ -10,6 +10,11 @@
     left: 750px;
 }
 
+.button-modal-dialog{
+    position: relative;
+    left: 430px;
+}
+
 .table-container {
     display: flex;
     flex-direction: column;

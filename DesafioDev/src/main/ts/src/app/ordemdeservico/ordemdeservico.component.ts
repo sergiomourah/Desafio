@@ -33,7 +33,7 @@ export class OrdemdeservicoComponent implements OnInit {
 
   ngOnInit() {
     //Lista as Ordens de Serviço
-    this.ListarOrdemDeServico();
+    this.onlistOrdemDeServicosByFilters();
   }
 
   CallDialog() {
@@ -46,7 +46,7 @@ export class OrdemdeservicoComponent implements OnInit {
    /**
      * Executa a consulta da ordem de serviço e retorna a lista
      */
-  private ListarOrdemDeServico() : void {
+  private onlistOrdemDeServicosByFilters() : void {
     this.service.listOrdemDeServicosByFilters(this.filtro.numeroContrato,
                                              this.filtro.numeroOs,
                                              this.filtro.nomeCliente != null ?
@@ -74,6 +74,6 @@ export class OrdemdeservicoComponent implements OnInit {
     //Limpar Filtros
      this.filtro = {};
      //Listar Ordens de serviço novamente
-     this.ListarOrdemDeServico();
+     this.onlistOrdemDeServicosByFilters();
   }
 }

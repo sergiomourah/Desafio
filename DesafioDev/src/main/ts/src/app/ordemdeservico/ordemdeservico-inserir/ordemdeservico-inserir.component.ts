@@ -1,8 +1,10 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { ModalGestorComponent } from './../../modal-gestor/modal-gestor.component';
-import { OrdemDeServico, PrioridadeValues } from './../../../generated/entities';
+import { OrdemDeServico, PrioridadeValues, Gestor } from './../../../generated/entities';
 import { Component, OnInit } from '@angular/core';
 import { OrdemDeServicoService } from '../../../generated/services';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-ordemdeservico-inserir',
@@ -13,24 +15,26 @@ export class OrdemdeservicoInserirComponent implements OnInit {
 
   public prioridadevalues: string[] = PrioridadeValues;
   ordemdeservico : OrdemDeServico = {};
-  constructor(private service : OrdemDeServicoService, public dialog: MatDialog) { }
+  constructor(private service : OrdemDeServicoService, 
+              public dialog: MatDialog,
+              public router: Router,
+              public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.ordemdeservico.gestor = {};
-    this.ordemdeservico.gestor.id = 1;
-    this.ordemdeservico.gestor.nome = "Sergio Moro";
     this.ordemdeservico.contrato = {};
     this.ordemdeservico.contrato.id = 10001;
     this.ordemdeservico.contrato.numeroContrato = "59230";
     this.ordemdeservico.contrato.descricao = "CONTRATO PARA TESTE";
   }
 
-  InsertOrdemDeServico()  {
+  onInsertOrdemDeServico()  {
     this.service.insertOrdemDeServico(this.ordemdeservico).subscribe((ordemdeservico) => {
       //sucesso
-      alert("Ordem de Serviço salva com sucesso!");
+      this.openSnackBar("Ordem de Serviço salva com sucesso!", "Mensagem");
+      this.router.navigate(['/ordemdeservico']);
     }, (error) => {
-     alert(error.message);
+      this.openSnackBar(error.message, "erro");
     });
   }
 
@@ -42,7 +46,14 @@ export class OrdemdeservicoInserirComponent implements OnInit {
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+      this.ordemdeservico.gestor = result.selected[0];
+    });
+  }
+
+ public openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+      direction: "ltr"
     });
   }
 }
