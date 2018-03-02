@@ -108,7 +108,7 @@
                   <!-- Position Column -->
                   <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                    <mat-cell *matCellDef="let ordemdeservico"> {{ordemdeservico.status}} </mat-cell>
+                    <mat-cell routerLink="/ordemdeservico/detail/ + ordemdeservico.id"  *matCellDef="let ordemdeservico"> {{ordemdeservico.status}} </mat-cell>
                   </ng-container>
               
                   <!-- Name Column -->

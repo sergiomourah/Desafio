@@ -16,9 +16,9 @@ export class OrdemdeservicoInserirComponent implements OnInit {
   public prioridadevalues: string[] = PrioridadeValues;
   ordemdeservico : OrdemDeServico = {};
   constructor(private service : OrdemDeServicoService, 
-              public dialog: MatDialog,
-              public router: Router,
-              public snackBar: MatSnackBar) { }
+              private dialog: MatDialog,
+              private router: Router,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.ordemdeservico.gestor = {};

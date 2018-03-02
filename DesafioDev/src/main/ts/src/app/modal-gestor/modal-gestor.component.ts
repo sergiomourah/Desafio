@@ -7,15 +7,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { OrdemDeServicoService } from '../../generated/services';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
-interface Model {
-  pageRequest: any;
-  filters: Filters;
-}
- 
-interface Filters {
-  nome: string | null;
-}
-
 
 @Component({
   selector: 'app-modal-gestor',
@@ -30,14 +21,6 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
   //Pageable
   private pageable: PageRequest;
 
-  private model : Model =
-  {
-      pageRequest: {},
-      filters: {
-        nome : null
-      }
-  };
-
 
 
   //DataSource
@@ -48,7 +31,7 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
               public dialogRef: MatDialogRef<ModalGestorComponent>,
               public service: OrdemDeServicoService) { 
 
-    this.model.pageRequest = this.paginationService.pageRequest('nome', 'ASC');
+    //this.pageable = this.paginationService.pageRequest('nome', 'ASC', 15);
   }
 
   displayedColumns = ['select', 'id', 'nome'];
@@ -58,10 +41,10 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-
+  PageRequest
   ngOnInit() {
     //Busca Lista de Gestores
-    this.onlistGestorByNome();
+    this.onListGestorByNome();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -76,7 +59,7 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
   /** 
-   * Emite o para o solicitante o registro selecionado após a confirmação
+   * Emite o para o solicitanteModel o registro selecionado após a confirmação
   */
   public emitter() {
     this.dialogRef.close(this.selection);
@@ -102,9 +85,9 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
    * Lista os   const initialSelection = [];
   const allowMultiSelect = true;Gestores
    */
-  public onlistGestorByNome() {
+  public onListGestorByNome() {
     this.service.listGestorByNome(null,
-      this.model.pageRequest).subscribe((result) => {
+      this.pageable).subscribe((result) => {
         this.ELEMENT_DATA = result.content;
         this.dataSource = new MatTableDataSource<Gestor>(this.ELEMENT_DATA)
         this.ngAfterViewInit();

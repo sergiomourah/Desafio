@@ -29,7 +29,8 @@ export class OrdemdeservicoComponent implements OnInit {
 
   private ordemdeservico: OrdemDeServico = {};
 
-  constructor(private service : OrdemDeServicoService, public dialog: MatDialog) { }
+  constructor(private service : OrdemDeServicoService, 
+              private dialog: MatDialog) { }
 
   ngOnInit() {
     //Lista as Ordens de Serviço

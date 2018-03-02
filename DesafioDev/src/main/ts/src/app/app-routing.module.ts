@@ -1,3 +1,4 @@
+import { OrdemDeServicoDetailComponent } from './ordemdeservico/ordem-de-servico-detail/ordem-de-servico-detail.component';
 import { OrdemdeservicoInserirComponent } from './ordemdeservico/ordemdeservico-inserir/ordemdeservico-inserir.component';
 import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
 import { NgModule } from '@angular/core';
@@ -25,6 +26,11 @@ const routes: Routes = [
     path: 'ordemdeservico/inserir',
     pathMatch: 'full',
     component: OrdemdeservicoInserirComponent
+  },
+  {
+    path: 'ordemdeservico/detail/:id',
+    pathMatch: 'full',
+    component: OrdemDeServicoDetailComponent
   }
 ];
 
