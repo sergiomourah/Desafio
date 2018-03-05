@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatDialog, MatPaginator } from '@angular/material';
 import { Output } from '@angular/core/src/metadata/directives';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/core';
 
 @Component({
   selector: 'app-ordemdeservico',
@@ -25,9 +26,7 @@ export class OrdemdeservicoComponent implements OnInit {
   //Declara Valor Enum Status
   private statusvalues: string[] = StatusOrdemDeServicoValues;
   //Cria array dos campos de display da table
-  private displayedColumns = ['status', 'numeroOrdemDeServico', 'numeroContrato', 'dataAbertura', 'dataConclusao', 'valorOrdemDeServico'];
-
-  private ordemdeservico: OrdemDeServico = {};
+  private displayedColumns = ['status', 'numeroOrdemDeServico', 'numeroContrato', 'dataAbertura', 'dataConclusao', 'valorOrdemDeServico', 'actionsColumn'];
 
   constructor(private service : OrdemDeServicoService, 
               private dialog: MatDialog) { }

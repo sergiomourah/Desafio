@@ -1,3 +1,5 @@
+import { OrdemDeServicoEditComponent } from './ordemdeservico/ordem-de-servico-edit/ordem-de-servico-edit.component';
+
 import { PaginationService } from './pagination.service';
 import { RouterModule } from '@angular/router';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
@@ -5,7 +7,7 @@ import { OrdemdeservicoInserirComponent } from './ordemdeservico/ordemdeservico-
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -22,7 +24,7 @@ import { CovalentHttpModule } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
 import { CovalentDynamicFormsModule } from '@covalent/dynamic-forms';
-import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule, MatIconModule, MatNavList, MatListModule, MatSelectModule, MatCardContent, MatDatepickerModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule, MatSortModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule, MatIconModule, MatNavList, MatListModule, MatSelectModule, MatCardContent, MatDatepickerModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule, MatSortModule, MatTabsModule, MatAutocompleteModule } from '@angular/material';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
 import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
@@ -30,6 +32,16 @@ import { MsgDialogComponent } from './msg-dialog/msg-dialog.component';
 import { ModalGestorComponent } from './modal-gestor/modal-gestor.component';
 import { OrdemDeServicoDetailComponent } from './ordemdeservico/ordem-de-servico-detail/ordem-de-servico-detail.component';
 import { ViewChild } from '@angular/core/src/metadata/di';
+import {
+  TdDataTableService,
+  TdDataTableSortingOrder,
+  ITdDataTableSortChangeEvent,
+  ITdDataTableColumn,
+  CovalentSearchModule,
+  CovalentDataTableModule,
+  CovalentPagingModule,
+  TdDialogService
+} from '@covalent/core';
 
 
 @NgModule({
@@ -40,7 +52,8 @@ import { ViewChild } from '@angular/core/src/metadata/di';
     OrdemdeservicoInserirComponent,
     MsgDialogComponent,
     ModalGestorComponent,
-    OrdemDeServicoDetailComponent
+    OrdemDeServicoDetailComponent,
+    OrdemDeServicoEditComponent
   ],
   entryComponents: [
     MsgDialogComponent,
@@ -49,7 +62,6 @@ import { ViewChild } from '@angular/core/src/metadata/di';
   imports: [
     BrowserModule,
     AppRoutingModule,    FormsModule,
-
     GeneratedModule,
     HttpModule,
     FormsModule,    
@@ -79,7 +91,19 @@ import { ViewChild } from '@angular/core/src/metadata/di';
     MatDialogModule,
     RouterModule,
     MatSnackBarModule,
-    MatSortModule    
+    MatSortModule,
+    MatFormFieldModule,
+    MatTabsModule,
+    MatIconModule,
+    MatCardModule,
+    MatSelectModule,
+    MatAutocompleteModule,
+    CovalentSearchModule,
+    CovalentDataTableModule,
+    CovalentPagingModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule    
   ],
   providers: [
     {

@@ -11,23 +11,9 @@ import { ContratoService } from './../../generated/services';
 export class ContratoComponent implements OnInit {
 
   constructor(private service : ContratoService) { }
-  contrato : Contrato = {};
   cliente : Cliente = { id: 1, nome: "Sérgio Moura"}
 
   ngOnInit() {
     
-  }
-
-
-  InsertContrato()  {
-    this.contrato.cliente = this.cliente;
-    this.contrato.descricao = "CONTRATO ABERTO";
-    console.log(this.contrato);
-    this.service.insertContrato(this.contrato).subscribe((contrato) => {
-      //sucesso
-      alert("Contrato salvo com sucesso!");
-    }, (error) => {
-      //erro
-    });
   }
 }

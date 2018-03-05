@@ -52,3 +52,11 @@
     color: #424242;
     margin-bottom: 5px;
 }
+
+.mat-divider {
+    display: block;
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin: 0;
+    border-top-color: rgba(0, 0, 0, 0.12);
+}
