@@ -1,4 +1,5 @@
-import { OrdemDeServicoEditComponent } from './ordemdeservico/ordem-de-servico-edit/ordem-de-servico-edit.component';
+import { OrdemDeServicoSolicitacaoPagamentoComponent } from './ordemdeservico/ordem-de-servico-solicitacao-pagamento/ordem-de-servico-solicitacao-pagamento.component';
+
 
 import { PaginationService } from './pagination.service';
 import { RouterModule } from '@angular/router';
@@ -53,7 +54,7 @@ import {
     MsgDialogComponent,
     ModalGestorComponent,
     OrdemDeServicoDetailComponent,
-    OrdemDeServicoEditComponent
+    OrdemDeServicoSolicitacaoPagamentoComponent    
   ],
   entryComponents: [
     MsgDialogComponent,

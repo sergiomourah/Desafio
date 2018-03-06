@@ -35,7 +35,7 @@ const routes: Routes = [
   {
     path: 'ordemdeservico/edit/:id',
     pathMatch: 'full',
-    component: OrdemDeServicoDetailComponent
+    component: OrdemdeservicoInserirComponent
   }
 ];
 

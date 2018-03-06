@@ -1,0 +1,27 @@
+<div>
+  <mat-card>
+    <h3>Solicitação de Pagamento</h3>
+    <mat-card-content>
+        <mat-form-field>
+            <input matInput [matDatepicker]="dataVencimento" placeholder="Data Vencimento" 
+            required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="solicitacaopagamento.dataVencimento" name="dataVencimento">
+            <mat-datepicker-toggle matSuffix [for]="dataVencimento"></mat-datepicker-toggle>
+            <mat-datepicker #dataVencimento></mat-datepicker>
+            <mat-error>Data de Vencimento é obrigatório!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+              <input class="form-control" matInput placeholder="Valor Pagamento" 
+              required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="solicitacaopagamento.valorPagamento" name="valorPagamento">
+              <mat-error>Valor Pagamento é obrigatório!</mat-error>
+            </mat-form-field>
+            <div>
+                <button class="button-modal-dialog" mat-button color="primary">Cancelar
+                    <mat-icon>save</mat-icon>
+                </button>
+                <button class="button-modal-dialog" (click)="emitter()" mat-button color="primary">Salvar
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </div>
+    </mat-card-content>
+  </mat-card>
+</div>

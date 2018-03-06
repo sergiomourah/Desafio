@@ -14,11 +14,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class OrdemdeservicoInserirComponent implements OnInit {
 
   public prioridadevalues: string[] = PrioridadeValues;
-  ordemdeservico : OrdemDeServico = {};
-  constructor(private service : OrdemDeServicoService, 
-              private dialog: MatDialog,
-              private router: Router,
-              private snackBar: MatSnackBar) { }
+  ordemdeservico: OrdemDeServico = {};
+  constructor(private service: OrdemDeServicoService,
+    private dialog: MatDialog,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    public activatedRouter: ActivatedRoute) {
+    let id = this.activatedRouter.snapshot.params["id"];
+    //Buscar Ordem de Serviço
+    this.service.findOrdemDeServicoById(id).subscribe((result) => {
+      this.ordemdeservico = result;
+    }, (error) => {
+      console.log("Inserindo dados");
+    });
+  }
 
   ngOnInit() {
     this.ordemdeservico.gestor = {};
@@ -28,7 +37,7 @@ export class OrdemdeservicoInserirComponent implements OnInit {
     this.ordemdeservico.contrato.descricao = "CONTRATO PARA TESTE";
   }
 
-  onInsertOrdemDeServico()  {
+  private onInsertOrdemDeServico() : void {
     this.service.insertOrdemDeServico(this.ordemdeservico).subscribe((ordemdeservico) => {
       //sucesso
       this.openSnackBar("Ordem de Serviço salva com sucesso!", "Mensagem");
@@ -38,19 +47,18 @@ export class OrdemdeservicoInserirComponent implements OnInit {
     });
   }
 
-  public openDialog()
-  {
+  private openDialog() : void {
     let dialogRef = this.dialog.open(ModalGestorComponent, {
       height: '600px',
       width: '800px'
     });
-    
+
     dialogRef.afterClosed().subscribe(result => {
       this.ordemdeservico.gestor = result.selected[0];
     });
   }
 
- public openSnackBar(message: string, action: string) {
+  private openSnackBar(message: string, action: string) : void {
     this.snackBar.open(message, action, {
       duration: 4000,
       direction: "ltr"

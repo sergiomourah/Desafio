@@ -111,8 +111,7 @@ public class OrdemDeServicoService {
 		 */
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServico(OrdemDeServico ordemdeservico )
-		{
-			
+		{			
 			Assert.notNull(ordemdeservico.getNumeroOrdemDeServico(), this.messageSource.getMessage("ordemdeservico.required.numeroOrdem", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getPrioridade(), this.messageSource.getMessage("ordemdeservico.required.prioridade", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getDataAbertura(), this.messageSource.getMessage("ordemdeservico.required.dataAbertura", null, LocaleContextHolder.getLocale()));
@@ -129,14 +128,16 @@ public class OrdemDeServicoService {
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToAprovar(OrdemDeServico ordemdeservico )
 		{	
+			//Buscar Ordem de Serviço
+			ordemdeservico = this.findOrdemDeServicoById(ordemdeservico.getId());
 			//Validar Status
-			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.aprovar", null, LocaleContextHolder.getLocale()), 
-					ordemdeservico.validarAprovarOrdemDeServico(ordemdeservico.getStatus()));
+			Assert.isTrue(ordemdeservico.validarAprovarOrdemDeServico(ordemdeservico.getStatus()), 
+					this.messageSource.getMessage("ordemdeservico.validation.aprovar", null, LocaleContextHolder.getLocale()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.APROVADA);// Aprovar
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);	
 			//Salvar Historico
-			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), "", StatusOrdemDeServico.APROVADA, ordemdeservico));
+			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), null, StatusOrdemDeServico.APROVADA, ordemdeservico));
 			return ordemdeservico;
 		}
 		/**
@@ -145,9 +146,11 @@ public class OrdemDeServicoService {
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToCancelar(OrdemDeServico ordemdeservico, String motivo )
 		{	
+			//Buscar Ordem de Serviço
+			ordemdeservico = this.findOrdemDeServicoById(ordemdeservico.getId());
 			//Validar Status
-			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.cancelar", null, LocaleContextHolder.getLocale()), 
-					ordemdeservico.validarCancelarOrdemDeServico(ordemdeservico.getStatus()));
+			Assert.isTrue(ordemdeservico.validarCancelarOrdemDeServico(ordemdeservico.getStatus()), 
+					this.messageSource.getMessage("ordemdeservico.validation.cancelar", null, LocaleContextHolder.getLocale()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.CANCELADA);// Cancelar
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);	
@@ -161,14 +164,16 @@ public class OrdemDeServicoService {
 		@PreAuthorize("hasAnyAuthority('" + UserRole.ADMINISTRATOR_VALUE + "','" + UserRole.MANAGER_VALUE + "')")
 		public OrdemDeServico updateOrdemDeServicoToHomologar(OrdemDeServico ordemdeservico )
 		{	
+			//Buscar Ordem de Serviço
+			ordemdeservico = this.findOrdemDeServicoById(ordemdeservico.getId());
 			//Validar Status
-			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.homologar", null, LocaleContextHolder.getLocale()), 
-					ordemdeservico.validarHomologacaoOrdemDeServico(ordemdeservico.getStatus()));
+			Assert.isTrue(ordemdeservico.validarHomologacaoOrdemDeServico(ordemdeservico.getStatus()), 
+					this.messageSource.getMessage("ordemdeservico.validation.homologar", null, LocaleContextHolder.getLocale()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.HOMOLOGADA);// Homologada
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);
 			//Salvar Historico
-			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), "", StatusOrdemDeServico.HOMOLOGADA, ordemdeservico));
+			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), null, StatusOrdemDeServico.HOMOLOGADA, ordemdeservico));
 			return ordemdeservico;
 		}
 		/**
@@ -180,13 +185,13 @@ public class OrdemDeServicoService {
 			Page<SolicitacaoPagamento> lista = this.listSolicitacaoPagamentoByOrdemDeServicoId(ordemdeservico.getId(), null);
 			ordemdeservico.setSolicitacoesPagamento(lista.getContent());
 			//Validar Status
-			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.conclusao", null, LocaleContextHolder.getLocale()), 
-					ordemdeservico.validarConclusaoOrdemDeServico(ordemdeservico.getSolicitacoesPagamento()));
+			Assert.isTrue(ordemdeservico.validarConclusaoOrdemDeServico(ordemdeservico.getSolicitacoesPagamento()), 
+					this.messageSource.getMessage("ordemdeservico.validation.conclusao", null, LocaleContextHolder.getLocale()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.CONCLUIDA);// Concluir
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);			
 			//Salvar Historico
-			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), "", StatusOrdemDeServico.CONCLUIDA, ordemdeservico));
+			this.insertHistoricoOrdemDeServico(new HistoricoOrdemDeServico(LocalDate.now(), null, StatusOrdemDeServico.CONCLUIDA, ordemdeservico));
 			return ordemdeservico;
 		}
 		/**
@@ -198,8 +203,8 @@ public class OrdemDeServicoService {
 			//Buscar Ordem de Serviço
 			final OrdemDeServico ordemdeservico = this.findOrdemDeServicoById(id);
 			//Validar Status
-			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.excluir", null, LocaleContextHolder.getLocale()), 
-					ordemdeservico.getStatus() == StatusOrdemDeServico.ABERTA);
+			Assert.isTrue(ordemdeservico.getStatus() == StatusOrdemDeServico.ABERTA,
+			this.messageSource.getMessage("ordemdeservico.validation.excluir", null, LocaleContextHolder.getLocale()));
 			Assert.notNull( id, this.messageSource.getMessage( "ordemdeservico.id", null, LocaleContextHolder.getLocale() ) );
 			this.ordemdeservicoRepository.deleteById(id);
 		}

@@ -1,17 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-msg-dialog',
   templateUrl: './msg-dialog.component.html',
   styleUrls: ['./msg-dialog.component.css']
 })
-export class MsgDialogComponent implements OnInit {
+export class MsgDialogComponent {
 
-  constructor() { }
+  constructor( public dialogRef: MatDialogRef<MsgDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) 
+    { 
 
-  ngOnInit() {
+    }
+
+      /** 
+   * Emite a resposta da confirmação
+  */
+  public emitter(retorno: boolean) {
+    this.dialogRef.close(retorno);
   }
-
 }

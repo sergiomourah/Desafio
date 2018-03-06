@@ -79,59 +79,71 @@
       <mat-card-content>
         <div>
           <div class="table-container mat-elevation-z8">
-            <mat-table #table [dataSource]="dataSource">
 
-              <!-- Position Column -->
-              <ng-container matColumnDef="status">
-                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-                <mat-cell [routerLink]="['/ordemdeservico/detail', ordemdeservico.id]" *matCellDef="let ordemdeservico"> {{ordemdeservico.status}} </mat-cell>
-              </ng-container>
 
-              <!-- Name Column -->
-              <ng-container matColumnDef="numeroOrdemDeServico">
-                <mat-header-cell *matHeaderCellDef> Nº OS </mat-header-cell>
-                <mat-cell [routerLink]="['/ordemdeservico/detail', ordemdeservico.id]" *matCellDef="let ordemdeservico"> {{ordemdeservico.numeroOrdemDeServico}} </mat-cell>
-              </ng-container>
+            <table td-data-table>
+              <thead>
+                <tr td-data-table-column-row>
+                  <th td-data-table-column *ngFor="let column of configWidthColumns" [sortable]="column.sortable" [name]="column.name">
+                    {{ column.label }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr td-data-table-row *ngFor="let ordemDeServico of this.dataSource" [routerLink]="['/ordemdeservico/detail', ordemDeServico.id]">
+                  <td td-data-table-cell>{{ ordemDeServico.status }}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.numeroOrdemDeServico }}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.contrato.numeroContrato }}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.dataAbertura | date:'dd/MM/yyyy'}}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.dataConclusao | date:'dd/MM/yyyy'}}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.valorOrdemDeServico }}</td>
+                  <td td-data-table-cell fxLayoutAlign="end">
+                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToConcluir(ordemDeServico); $event.stopPropagation()">
+                      <mat-icon>adjust</mat-icon>
+                    </button>
+                    <button mat-raised-button (click)="OnInsertSolicitacaoPagamento(ordemDeServico); $event.stopPropagation()">
+                      <mat-icon>reply</mat-icon>
+                    </button>
+                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToHomologar(ordemDeServico); $event.stopPropagation()">
+                      <mat-icon>description</mat-icon>
+                    </button>
+                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToAprovar(ordemDeServico.id); $event.stopPropagation()">
+                      <mat-icon>done</mat-icon>
+                    </button>
+                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToCancelar(ordemDeServico); $event.stopPropagation()">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                    <button mat-raised-button [routerLink]="['/ordemdeservico/edit', ordemDeServico.id]">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-raised-button (click)="OnRemoveOrdemDeServico(ordemDeServico.id); $event.stopPropagation()">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-              <!-- Weight Column -->
-              <ng-container matColumnDef="numeroContrato">
-                <mat-header-cell *matHeaderCellDef> Nº Contrato </mat-header-cell>
-                <mat-cell [routerLink]="['/ordemdeservico/detail', ordemdeservico.id]" *matCellDef="let ordemdeservico"> {{ordemdeservico.contrato.numeroContrato}} </mat-cell>
-              </ng-container>
 
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="dataAbertura">
-                <mat-header-cell *matHeaderCellDef> Data Abertura </mat-header-cell>
-                <mat-cell [routerLink]="['/ordemdeservico/detail', ordemdeservico.id]" *matCellDef="let ordemdeservico"> {{ordemdeservico.dataAbertura | date:'dd/MM/yyyy'}} </mat-cell>
-              </ng-container>
 
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="dataConclusao">
-                <mat-header-cell *matHeaderCellDef> Data Conclusão </mat-header-cell>
-                <mat-cell [routerLink]="['/ordemdeservico/detail', ordemdeservico.id]" *matCellDef="let ordemdeservico"> {{ordemdeservico.dataConclusao | date:'dd/MM/yyyy'}} </mat-cell>
-              </ng-container>
 
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="valorOrdemDeServico">
-                <mat-header-cell *matHeaderCellDef> Valor OS </mat-header-cell>
-                <mat-cell [routerLink]="['/ordemdeservico/detail', ordemdeservico.id]" *matCellDef="let ordemdeservico"> {{ordemdeservico.valorOrdemDeServico}} </mat-cell>
-              </ng-container>
 
-              <ng-container matColumnDef="actionsColumn">
-                <mat-header-cell *matHeaderCellDef>
-                    <button (click)="createNew()"><mat-icon>add</mat-icon></button>
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/ordemdeservico/edit', ordemdeservico.id]">Edit</button>
-                    <button (click)="cancelOrDelete()">Cancel</button>
-                </mat-cell>
-              </ng-container>
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </mat-table>
+            <!-- <td-data-table [data]="dataSource" [columns]="configWidthColumns">
 
-            <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
-            </mat-paginator>
+              <ng-template tdDataTableTemplate="acao" let-row="row">
+                <button mat-raised-button [routerLink]="['/ordemdeservico/edit', row.id]">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-raised-button (click)="OnUpdateOrdemDeServicoToCancelar()">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </ng-template>
+            </td-data-table>
+            <td-paging-bar #pagingBar [firstLast]="firstLast" [pageSize]="10" [total]="100" (change)="page($event)">
+
+            </td-paging-bar> -->
+
+
           </div>
 
         </div>
