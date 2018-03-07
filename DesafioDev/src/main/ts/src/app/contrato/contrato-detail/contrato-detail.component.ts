@@ -26,10 +26,10 @@ export class ContratoDetailComponent implements OnInit {
     this.service.findContratoById(id).subscribe((result) => {
       this.contrato = result;
     }, (error) => {
-        alert(error.message);
-      });
-      //Buscar Histórico
-      this.OnListHistoricoByContrato(id);
+      alert(error.message);
+    });
+    //Buscar Histórico
+    this.OnListHistoricoByContrato(id);
   }
 
   ngOnInit() {
@@ -37,31 +37,18 @@ export class ContratoDetailComponent implements OnInit {
 
   // colunas da tabela
   configWidthColumns: ITdDataTableColumn[] = [
-    { name: 'data',  label: 'Data', width: 200, format: (value) =>{ { return this.formatarData(value)}}},
-    { name: 'status',  label: 'Ação', width: 180 },
-    { name: 'user.name',  label: 'Usuário', width: 150 },
-    { name: 'observacao',  label: 'Observação', width: 150 },
-];
+    { name: 'data', label: 'Data', width: 200 },
+    { name: 'status', label: 'Ação', width: 180 },
+    { name: 'user.name', label: 'Usuário', width: 150 },
+    { name: 'observacao', label: 'Observação', width: 150 },
+  ];
 
-private OnListHistoricoByContrato(id: any): void {
-  this.service.listHistoricoContratoByContratoId(id, this.pageable).subscribe((result) => {
-    this.dataSource = result.content;
-    console.log(this.dataSource);
-  }), (error) => {
+  private OnListHistoricoByContrato(id: any): void {
+    this.service.listHistoricoContratoByContratoId(id, this.pageable).subscribe((result) => {
+      this.dataSource = result.content;
+      console.log(this.dataSource);
+    }), (error) => {
       alert(error.message);
-  };
-}
-
-// metodo para formatar a data
-public formatarData(data): String
-{
- var d = new Date(data),
-     mes = '' + (d.getMonth() + 1),
-     dia = '' + d.getDate(),
-     ano = d.getFullYear();
- if (mes.length < 2) mes = '0' + mes;
- if (dia.length < 2) dia = '0' + dia;
- return [dia, mes, ano].join('/'); // "join" é o caracter para separar a formatação da data, neste caso, a barra (/)
-}
-
+    };
+  }
 }

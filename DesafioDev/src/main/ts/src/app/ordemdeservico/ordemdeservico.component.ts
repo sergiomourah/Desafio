@@ -1,12 +1,14 @@
 import { OrdemDeServicoService } from './../../generated/services';
 import { MsgDialogComponent } from './../msg-dialog/msg-dialog.component';
 import { Prioridade, PrioridadeValues, OrdemDeServico, StatusOrdemDeServico, PageRequest, StatusOrdemDeServicoValues, SolicitacaoPagamento } from './../../generated/entities';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { MatTableDataSource, MatDialog, MatPaginator, MatSnackBar } from '@angular/material';
 import { Output } from '@angular/core/src/metadata/directives';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/core';
 import { OrdemDeServicoSolicitacaoPagamentoComponent } from './ordem-de-servico-solicitacao-pagamento/ordem-de-servico-solicitacao-pagamento.component';
+import { ModalMotivoComponent } from '../modal-motivo/modal-motivo.component';
+import { TdDialogService } from '@covalent/core';
 
 @Component({
   selector: 'app-ordemdeservico',
@@ -31,7 +33,9 @@ export class OrdemdeservicoComponent implements OnInit {
 
   constructor(private service: OrdemDeServicoService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private _dialogService: TdDialogService,
+    private _viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
     //Lista as Ordens de Serviço
@@ -51,16 +55,28 @@ export class OrdemdeservicoComponent implements OnInit {
   /**
       * Chama as caixa de mensagens
       */
-  private CallDialog(title: string, texto: string): void {
-    //Sempre inicia como false;
-    this.retorno = false;
-      let dialogRef = this.dialog.open(MsgDialogComponent, {
-        width: '250px',
-        data: { name: title, msg: texto }
-      });
-    dialogRef.afterClosed().subscribe(result=>
-    { this.retorno = result;});
-  }
+      private openConfirm(confirmacao: any): void {
+        this._dialogService.openConfirm({
+          message: confirmacao.msg,
+          disableClose: false, // defaults to false
+          viewContainerRef: this._viewContainerRef, //OPTIONAL
+          title: 'Confirmação', //OPTIONAL, hides if not provided
+          cancelButton: 'Não', //OPTIONAL, defaults to 'CANCEL'
+          acceptButton: 'Sim', //OPTIONAL, defaults to 'ACCEPT'
+          width: '500px', //OPTIONAL, defaults to 400px
+        }).afterClosed().subscribe((accept: boolean) => {
+          if (accept) {
+            if (confirmacao.method == 'CONCLUIR'){
+              this.service.updateOrdemDeServicoToConcluir(confirmacao.data).subscribe((ordemdeservico) => {
+                //sucessoclosed
+                this.openSnackBar(confirmacao.sucesso, "Mensagem");
+              }, (error) => {
+                this.openSnackBar(error.message, "erro");
+              });
+            }
+          }
+        });
+      }
   /**
     * Executa a consulta da ordem de serviço e retorna a lista
     */
@@ -87,47 +103,40 @@ export class OrdemdeservicoComponent implements OnInit {
   /**
     * Homologa Ordem de Serviço
     */
-    private OnUpdateOrdemDeServicoToConcluir(ordemDeServico: OrdemDeServico): void {
-      /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-      console.log(cancelar);    let retorno: boolean = true;
-      if (cancelar === true){
-        this.service.updateOrdemDeServicoToCancelar(this.ordemDeServico, "CONTRATO SUSPENSO");
-        //sucesso
-        this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-      } */
-      console.log(ordemDeServico);
-      this.service.updateOrdemDeServicoToConcluir(ordemDeServico).subscribe((ordemdeservico) => {
-        //sucessoclosed
-        this.openSnackBar("Ordem de Serviço concluída com sucesso!", "Mensagem");
-      }, (error) => {
-        this.openSnackBar(error.message, "erro");
-      });
-    }
+  private OnUpdateOrdemDeServicoToConcluir(ordemDeServico: OrdemDeServico): void {
+    let confirmacao: any = {
+      msg : 'Deseja concluir a OS selecionada?',
+      method: 'CONCLUIR',
+      sucesso: 'Ordem de Serviço concluída com sucesso!',
+      data: ordemDeServico     
+    };
+    this.openConfirm(confirmacao);
+  }
   /**
     * Solicitar Pagamento Ordem de Serviço
     */
-    private OnInsertSolicitacaoPagamento(ordemDeServico: OrdemDeServico): void {
+  private OnInsertSolicitacaoPagamento(ordemDeServico: OrdemDeServico): void {
 
-      let solicitacaopagamento: SolicitacaoPagamento = {};
-      //Abrir Dialog Solicitação de Pagamento
-      let dialogRef = this.dialog.open(OrdemDeServicoSolicitacaoPagamentoComponent, {
-        width: '350px',
-      });
-      //Receber retorno susbcribe da dialog
-      dialogRef.afterClosed().subscribe(result=>
-        { 
-          console.log(result);
-          solicitacaopagamento = result; 
-        });
+    let solicitacaopagamento: SolicitacaoPagamento = {};
+    //Abrir Dialog Solicitação de Pagamento
+    let dialogRef = this.dialog.open(OrdemDeServicoSolicitacaoPagamentoComponent, {
+      width: '350px',
+    });
+    //Receber retorno susbcribe da dialog
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result.selected[0]);
+      solicitacaopagamento = result.selected[0];
       //Inserir referencia da ordem de serviço
       solicitacaopagamento.ordemdeservico = ordemDeServico;
-      this.service.insertSolicitacaoPagamento(ordemDeServico).subscribe((ordemdeservico) => {
+      //Inserir Solicitação de Pagamento na Ordem de Serviço
+      this.service.insertSolicitacaoPagamento(solicitacaopagamento).subscribe((solicitacaopagamento) => {
         //sucesso
         this.openSnackBar("Solicitação de pagamento emitida com sucesso!", "Mensagem");
       }, (error) => {
         this.openSnackBar(error.message, "erro");
       });
-    }
+    });
+  }
   /**
     * Homologa Ordem de Serviço
     */
@@ -149,7 +158,7 @@ export class OrdemdeservicoComponent implements OnInit {
   }
   /**
     * Aprova Ordem de Serviçovar cancelar = 
-    */   
+    */
   private OnUpdateOrdemDeServicoToAprovar(ordemDeServico: OrdemDeServico): void {
     /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
     console.log(cancelar);
@@ -170,14 +179,25 @@ export class OrdemdeservicoComponent implements OnInit {
       * Cancela Ordem de Serviço
       */
   private OnUpdateOrdemDeServicoToCancelar(ordemDeServico: OrdemDeServico): void {
-    this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-    console.log(this.retorno);
-    if (true) {
-      this.service.updateOrdemDeServicoToCancelar(ordemDeServico, "CONTRATO SUSPENSO").subscribe((ordemdeservico) => {
-        //sucesso
-        this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-      }, (error) => {
-        this.openSnackBar(error.message, "erro");
+    //this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
+    if (this.openConfirm('Deseja cancelar a OS selecionada?')) {
+      //Abrir Dialog Motivo Cancelamento
+      let dialogRef = this.dialog.open(ModalMotivoComponent, {
+        width: '350px',
+        data: { title: 'Cancelamento'}
+      });
+      //Receber retorno susbcribe da dialog
+      dialogRef.afterClosed().subscribe(result => {
+        //Cancelar Ordem de Serviço
+        let motivo: string = result;
+        if (motivo != null) {
+          this.service.updateOrdemDeServicoToCancelar(ordemDeServico, motivo).subscribe((ordemdeservico) => {
+            //sucesso
+            this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
+          }, (error) => {
+            this.openSnackBar(error.message, "erro");
+          });
+        }
       });
     }
 

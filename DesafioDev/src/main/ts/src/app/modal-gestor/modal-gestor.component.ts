@@ -77,7 +77,7 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
   */
   masterToggle() {
     if (this.isAllSelected()){
-      this.selection.clear(); <Gestor>(this.ELEMENT_DATA);
+      this.selection.clear();
       this.dataSource.data.forEach(row => this.selection.select(row));
     }        
   }

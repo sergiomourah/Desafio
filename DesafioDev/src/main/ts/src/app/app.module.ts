@@ -46,6 +46,8 @@ import {
   TdDialogService
 } from '@covalent/core';
 import { ModalClienteComponent } from './modal-cliente/modal-cliente.component';
+import { ModalMotivoComponent } from './modal-motivo/modal-motivo.component';
+import { CovalentDialogsModule } from '@covalent/core';
 
 
 @NgModule({
@@ -60,13 +62,15 @@ import { ModalClienteComponent } from './modal-cliente/modal-cliente.component';
     OrdemDeServicoSolicitacaoPagamentoComponent,
     ContratoInserirComponent,
     ModalClienteComponent,
-    ContratoDetailComponent    
+    ContratoDetailComponent,
+    ModalMotivoComponent    
   ],
   entryComponents: [
     MsgDialogComponent,
     ModalGestorComponent,
     ModalClienteComponent,
-    OrdemDeServicoSolicitacaoPagamentoComponent
+    OrdemDeServicoSolicitacaoPagamentoComponent,
+    ModalMotivoComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +116,8 @@ import { ModalClienteComponent } from './modal-cliente/modal-cliente.component';
     CovalentPagingModule,
     ReactiveFormsModule,
     MatDatepickerModule,
-    MatNativeDateModule    
+    MatNativeDateModule,
+    CovalentDialogsModule    
   ],
   providers: [
     {

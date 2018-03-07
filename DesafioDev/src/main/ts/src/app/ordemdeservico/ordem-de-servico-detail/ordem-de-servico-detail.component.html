@@ -71,12 +71,47 @@
       <mat-card>
         <mat-card-header>Visualizar Ordem de Serviço</mat-card-header>
         <mat-card-content>
-          <td-data-table
-          [data]="dataSource"
-          [columns]="configWidthColumns">
-          </td-data-table>
+            <table td-data-table>
+                <thead>
+                  <tr td-data-table-column-row>
+                    <th td-data-table-column *ngFor="let column of configWidthColumns" [sortable]="column.sortable" [name]="column.name">
+                      {{ column.label }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr td-data-table-row *ngFor="let historico of this.dataSource">
+                    <td td-data-table-cell>{{ historico.data | date:'dd/MM/yyyy'}}</td>
+                    <td td-data-table-cell>{{ historico.status }}</td>
+                    <td td-data-table-cell>{{ historico.user.name }}</td>
+                    <td td-data-table-cell>{{ historico.observacao}}</td>
+                  </tr>
+                </tbody>
+              </table>
         </mat-card-content>
       </mat-card>
     </mat-tab>
+    <mat-tab class="form-control" label="Solicitação de Pagamento">
+        <mat-card>
+          <mat-card-header>Visualizar Ordem de Serviço</mat-card-header>
+          <mat-card-content>
+              <table td-data-table>
+                  <thead>
+                    <tr td-data-table-column-row>
+                      <th td-data-table-column *ngFor="let column of configWidthColumns1" [sortable]="column.sortable" [name]="column.name">
+                        {{ column.label }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr td-data-table-row *ngFor="let solicitacao of this.solicitacaoPagamentoDataSource">
+                      <td td-data-table-cell>{{ solicitacao.dataVencimento | date:'dd/MM/yyyy'}}</td>
+                      <td td-data-table-cell>{{ solicitacao.valorPagamento}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
   </mat-tab-group>
 </div>

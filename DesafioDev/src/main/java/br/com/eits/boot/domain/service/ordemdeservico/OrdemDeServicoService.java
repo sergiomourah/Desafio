@@ -82,8 +82,8 @@ public class OrdemDeServicoService {
 		public SolicitacaoPagamento insertSolicitacaoPagamento(SolicitacaoPagamento solicitacaopagamento )
 		{
 			//Validar Status
-			assertTrue(this.messageSource.getMessage("ordemdeservico.validation.solicitarpagamento", null, LocaleContextHolder.getLocale()), 
-					solicitacaopagamento.getOrdemdeservico().validarSolicitacaoDePagamento(solicitacaopagamento.getOrdemdeservico().getStatus()));
+			Assert.isTrue(solicitacaopagamento.getOrdemdeservico().validarSolicitacaoDePagamento(solicitacaopagamento.getOrdemdeservico().getStatus()), 
+					this.messageSource.getMessage("ordemdeservico.validation.solicitarpagamento", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(solicitacaopagamento.getValorPagamento(), this.messageSource.getMessage("solicitacaoPagamento.required.valorPagamento", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(solicitacaopagamento.getDataVencimento(), this.messageSource.getMessage("solicitacaoPagamento.required.dataVencimento", null, LocaleContextHolder.getLocale()));
 			solicitacaopagamento = this.solicitacaopagamentoRepository.save( solicitacaopagamento );

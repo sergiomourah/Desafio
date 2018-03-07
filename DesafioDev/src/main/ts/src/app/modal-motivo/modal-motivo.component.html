@@ -1,0 +1,20 @@
+<div>
+  <mat-card>
+    <mat-card-content>
+      <div>
+        <mat-form-field class="form-control-ordemdeservico">
+          <textarea class="form-control-ordemdeservico" matInput placeholder="Motivo" 
+          [(ngModel)]="motivo" name="motivo"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <button (click)="emitter(null)" mat-button color="primary">Cancelar
+          <mat-icon>cancel</mat-icon>
+        </button>
+        <button (click)="emitter(motivo)" mat-button color="primary">Salvar
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

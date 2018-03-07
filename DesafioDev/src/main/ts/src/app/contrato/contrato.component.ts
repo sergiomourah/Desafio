@@ -1,3 +1,4 @@
+import { ModalMotivoComponent } from './../modal-motivo/modal-motivo.component';
 import { MsgDialogComponent } from './../msg-dialog/msg-dialog.component';
 import { ITdDataTableColumn } from '@covalent/core';
 import { Component, OnInit } from '@angular/core';
@@ -13,29 +14,28 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 })
 export class ContratoComponent implements OnInit {
 
-    //Fitros para busca
-    private filtro: any = {};
-    private dataSource: Contrato[];
-    private pageable: PageRequest;
-    //Declara Valor Enum Status
-    private statusvalues: string[] = StatusContratoValues;
-    contrato: Contrato = {};
-    //Retorno Mensagem Confirmação
-    private retorno: boolean;
+  //Fitros para busca
+  private filtro: any = {};
+  private dataSource: Contrato[];
+  private pageable: PageRequest;
+  //Declara Valor Enum Status
+  private statusvalues: string[] = StatusContratoValues;
+  contrato: Contrato = {};
+  //Retorno Mensagem Confirmação
+  private retorno: boolean;
   constructor(private service: ContratoService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar)
-  {
+    private snackBar: MatSnackBar) {
 
   }
 
   ngOnInit() {
-     //Lista as Ordens de Serviço
-     this.onlistContratoByFilters();
+    //Lista as Ordens de Serviço
+    this.onlistContratoByFilters();
   }
 
-   // colunas da tabela
-   configWidthColumns: ITdDataTableColumn[] = [
+  // colunas da tabela
+  configWidthColumns: ITdDataTableColumn[] = [
     { name: 'status', label: 'Status', width: 120 },
     { name: 'numeroContrato', label: 'Nº Contrato', width: 120 },
     { name: 'cliente.nome', label: 'Cliente', width: 120 },
@@ -49,12 +49,11 @@ export class ContratoComponent implements OnInit {
   private CallDialog(title: string, texto: string): void {
     //Sempre inicia como false;
     this.retorno = false;
-      let dialogRef = this.dialog.open(MsgDialogComponent, {
-        width: '250px',
-        data: { name: title, msg: texto }
-      });
-    dialogRef.afterClosed().subscribe(result=>
-    { this.retorno = result;});
+    let dialogRef = this.dialog.open(MsgDialogComponent, {
+      width: '250px',
+      data: { name: title, msg: texto }
+    });
+    dialogRef.afterClosed().subscribe(result => { this.retorno = result; });
   }
   /**
     * Executa a consulta da contrato e retorna a lista
@@ -64,11 +63,11 @@ export class ContratoComponent implements OnInit {
       this.filtro.nomeCliente != null ?
         "%" + this.filtro.nomeCliente + "%" :
         this.filtro.nomeCliente,
-        this.filtro.statusContrato,
-        this.filtro.dataAberturaIni,
-        this.filtro.dataAberturaFin,
-        this.filtro.dataEncerramentoIni,
-        this.filtro.dataEncerramentoFin,
+      this.filtro.statusContrato,
+      this.filtro.dataAberturaIni,
+      this.filtro.dataAberturaFin,
+      this.filtro.dataEncerramentoIni,
+      this.filtro.dataEncerramentoFin,
       this.pageable).subscribe((result) => {
         this.dataSource = result.content;
       }, (error) => {
@@ -78,25 +77,25 @@ export class ContratoComponent implements OnInit {
   /**
     * Homologa Ordem de Serviço
     */
-    private OnUpdateContratoToEncerrar(contrato: Contrato): void {
-      /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-      console.log(cancelar);    let retorno: boolean = true;
-      if (cancelar === true){
-        this.service.updateOrdemDeServicoToCancelar(this.ordemDeServico, "CONTRATO SUSPENSO");
-        //sucesso
-        this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-      } */
-      console.log(contrato);
-      this.service.updateContratoToEncerrar(contrato).subscribe((contrato) => {
-        //sucesso
-        this.openSnackBar("Contrato encerrado com sucesso!", "Mensagem");
-      }, (error) => {
-        this.openSnackBar(error.message, "erro");
-      });    
-    }
+  private OnUpdateContratoToEncerrar(contrato: Contrato): void {
+    /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
+    console.log(cancelar);    let retorno: boolean = true;
+    if (cancelar === true){
+      this.service.updateOrdemDeServicoToCancelar(this.ordemDeServico, "CONTRATO SUSPENSO");
+      //sucesso
+      this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
+    } */
+    console.log(contrato);
+    this.service.updateContratoToEncerrar(contrato).subscribe((contrato) => {
+      //sucesso
+      this.openSnackBar("Contrato encerrado com sucesso!", "Mensagem");
+    }, (error) => {
+      this.openSnackBar(error.message, "erro");
+    });
+  }
   /**
     * Suspender Contrato 
-    */   
+    */
   private OnUpdateContratoToReabrir(contrato: Contrato): void {
     /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
     console.log(cancelar);
@@ -126,6 +125,26 @@ export class ContratoComponent implements OnInit {
       }, (error) => {
         this.openSnackBar(error.message, "erro");
       });
+
+      //Abrir Dialog Motivo Cancelamento
+      let dialogRef = this.dialog.open(ModalMotivoComponent, {
+        width: '350px',
+        data: { title: 'Cancelamento' }
+      });
+      //Receber retorno susbcribe da dialog
+      dialogRef.afterClosed().subscribe(result => {
+        //Cancelar Ordem de Serviço
+        let motivo: string = result;
+        if (motivo != null) {
+          this.service.updateContratoToSuspender(contrato, motivo).subscribe((ordemdeservico) => {
+            //sucesso
+            this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
+          }, (error) => {
+            this.openSnackBar(error.message, "erro");
+          });
+        }
+      });
+
     }
   }
   /**
