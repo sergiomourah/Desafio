@@ -31,7 +31,7 @@ export class OrdemdeservicoComponent implements OnInit {
 
   constructor(private service: OrdemDeServicoService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar, ) { }
+    private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     //Lista as Ordens de Serviço
@@ -98,7 +98,7 @@ export class OrdemdeservicoComponent implements OnInit {
       console.log(ordemDeServico);
       this.service.updateOrdemDeServicoToConcluir(ordemDeServico).subscribe((ordemdeservico) => {
         //sucessoclosed
-        this.openSnackBar("Ordem de Serviço homologada com sucesso!", "Mensagem");
+        this.openSnackBar("Ordem de Serviço concluída com sucesso!", "Mensagem");
       }, (error) => {
         this.openSnackBar(error.message, "erro");
       });
@@ -115,12 +115,15 @@ export class OrdemdeservicoComponent implements OnInit {
       });
       //Receber retorno susbcribe da dialog
       dialogRef.afterClosed().subscribe(result=>
-        { solicitacaopagamento = result; });
+        { 
+          console.log(result);
+          solicitacaopagamento = result; 
+        });
       //Inserir referencia da ordem de serviço
       solicitacaopagamento.ordemdeservico = ordemDeServico;
       this.service.insertSolicitacaoPagamento(ordemDeServico).subscribe((ordemdeservico) => {
         //sucesso
-        this.openSnackBar("Ordem de Serviço homologada com sucesso!", "Mensagem");
+        this.openSnackBar("Solicitação de pagamento emitida com sucesso!", "Mensagem");
       }, (error) => {
         this.openSnackBar(error.message, "erro");
       });
@@ -193,6 +196,7 @@ export class OrdemdeservicoComponent implements OnInit {
     this.service.removeOrdemDeServico(id).subscribe(() => {
       //sucesso
       this.openSnackBar("Ordem de Serviço excluída com sucesso!", "Mensagem");
+      this.onlistOrdemDeServicosByFilters();
     }, (error) => {
       this.openSnackBar(error.message, "erro");
     });
@@ -206,7 +210,6 @@ export class OrdemdeservicoComponent implements OnInit {
     //Listar Ordens de serviço novamente
     this.onlistOrdemDeServicosByFilters();
   }
-  closed
   private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
       duration: 4000,

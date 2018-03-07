@@ -1,3 +1,127 @@
-
+      <div class="form-field-container">
+        <div>
+          <mat-card>
+            <mat-card-content>
+              <div class="div-mat-form-field-inline">
+                <mat-form-field>
+                  <input class="form-control" matInput placeholder="Nº Contrato" type="text" [(ngModel)]="filtro.numeroContrato" name="numeroContrato">
+                </mat-form-field>
+                <mat-form-field class="form-control-cliente">
+                  <input class="form-control-cliente" matInput placeholder="Nome do Cliente" type="text" [(ngModel)]="filtro.nomeCliente" name="nomeCliente">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-select placeholder="Status" [(ngModel)]="filtro.statusContrato" name="statusContrato">
+                    <mat-option *ngFor="let s of statusvalues" [value]="s">
+                      {{ s }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button routerLink="/contrato/inserir" mat-button color="primary">Inserir Contrato
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <div class="div-mat-form-field-inline">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="dataAberturaIni" placeholder="Data Contrato Inicial" [(ngModel)]="filtro.dataAberturaIni"
+                    name="dataAberturaIni">
+                  <mat-datepicker-toggle matSuffix [for]="dataAberturaIni"></mat-datepicker-toggle>
+                  <mat-datepicker #dataAberturaIni></mat-datepicker>
+                </mat-form-field>
+                <span> à </span>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="dataAberturaFin" placeholder="Data Contrato Final" mat-reflect-format [(ngModel)]="filtro.dataAberturaFin"
+                    name="dataAberturaFin">
+                  <mat-datepicker-toggle matSuffix [for]="dataAberturaFin"></mat-datepicker-toggle>
+                  <mat-datepicker #dataAberturaFin></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="dataEncerramentoIni" placeholder="Data Encerramento Inicial" [(ngModel)]="filtro.dataEncerramentoIni"
+                    name="dataEncerramentoIni">
+                  <mat-datepicker-toggle matSuffix [for]="dataEncerramentoIni"></mat-datepicker-toggle>
+                  <mat-datepicker #dataEncerramentoIni></mat-datepicker>
+                </mat-form-field>
+                <span> à </span>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="dataEncerramentoFin" placeholder="Data Encerramento Final" [(ngModel)]="filtro.dataEncerramentoFin"
+                    name="dataEncerramentoFin">
+                  <mat-datepicker-toggle matSuffix [for]="dataEncerramentoFin"></mat-datepicker-toggle>
+                  <mat-datepicker #dataEncerramentoFin></mat-datepicker>
+                </mat-form-field>
+                <button (click)="LimparFiltros()" mat-button color="primary">Limpar
+                  <mat-icon>clear</mat-icon>
+                </button>
+                <button (click)="onlistContratoByFilters()" mat-button color="primary">Buscar
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content>
+              <div>
+                <div class="table-container mat-elevation-z8">
       
       
+                  <table td-data-table>
+                    <thead>
+                      <tr td-data-table-column-row>
+                        <th td-data-table-column *ngFor="let column of configWidthColumns" [sortable]="column.sortable" [name]="column.name">
+                          {{ column.label }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr td-data-table-row *ngFor="let contrato of this.dataSource" [routerLink]="['/contrato/detail', contrato.id]">
+                        <td td-data-table-cell>{{ contrato.status }}</td>
+                        <td td-data-table-cell>{{ contrato.numeroContrato }}</td>
+                        <td td-data-table-cell>{{ contrato?.cliente?.nome }}</td>
+                        <td td-data-table-cell>{{ contrato.dataContrato | date:'dd/MM/yyyy'}}</td>
+                        <td td-data-table-cell>{{ contrato.dataEncerramento | date:'dd/MM/yyyy'}}</td>
+                        <td td-data-table-cell fxLayoutAlign="end">
+                          <button mat-icon-button (click)="OnUpdateContratoToEncerrar(contrato); $event.stopPropagation()">
+                            <mat-icon>adjust</mat-icon>
+                          </button>
+                          <button mat-icon-button (click)="OnUpdateContratoToReabrir(contrato); $event.stopPropagation()">
+                            <mat-icon>lock_open</mat-icon>
+                          </button>
+                          <button mat-icon-button (click)="OnUpdateContratoToSuspender(contrato); $event.stopPropagation()">
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                          <button mat-icon-button [routerLink]="['/contrato/editar', contrato.id]">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button (click)="OnRemoveContrato(contrato.id); $event.stopPropagation()">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+      
+      
+      
+      
+      
+                  <!-- <td-data-table [data]="dataSource" [columns]="configWidthColumns">
+      
+                    <ng-template tdDataTableTemplate="acao" let-row="row">
+                      <button mat-raised-button [routerLink]="['/ordemdeservico/edit', row.id]">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-raised-button (click)="OnUpdateOrdemDeServicoToCancelar()">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </ng-template>
+                  </td-data-table>
+                  <td-paging-bar #pagingBar [firstLast]="firstLast" [pageSize]="10" [total]="100" (change)="page($event)">
+      
+                  </td-paging-bar> -->
+      
+      
+                </div>
+      
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>

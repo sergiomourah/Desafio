@@ -187,6 +187,8 @@ public class OrdemDeServicoService {
 			//Validar Status
 			Assert.isTrue(ordemdeservico.validarConclusaoOrdemDeServico(ordemdeservico.getSolicitacoesPagamento()), 
 					this.messageSource.getMessage("ordemdeservico.validation.conclusao", null, LocaleContextHolder.getLocale()));
+			Assert.isTrue(ordemdeservico.getStatus() != StatusOrdemDeServico.CONCLUIDA, 
+					this.messageSource.getMessage("ordemdeservico.validation.conclusao2", null, LocaleContextHolder.getLocale()));
 			ordemdeservico.setStatus(StatusOrdemDeServico.CONCLUIDA);// Concluir
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);			

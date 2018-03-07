@@ -1,0 +1,56 @@
+<div fxLayout="row" and fxLayoutAlign="center">
+  <mat-card>
+    <div><span>Cadastrar Contrato</span></div>
+    <mat-card-content>
+      <form #f="ngForm">
+        <div>
+          <mat-form-field>
+            <input class="form-control" matInput placeholder="Nº Contrato" 
+            required [errorStateMatcher]="ContratoInserirComponent" [(ngModel)]="contrato.numeroContrato" name="numeroContrato">
+            <mat-error>Nº Contrato é obrigatório!</mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-control-gestor">
+            <input class="form-control-gestor" matInput placeholder="Cliente" 
+            required [errorStateMatcher]="ContratoInserirComponent" [(ngModel)]="contrato.cliente.nome" name="nome">
+            <mat-error>Cliente é obrigatório!</mat-error>
+          </mat-form-field>
+          <button mat-button color="primary" (click)="openDialog()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataContrato" placeholder="Data Contrato" 
+            required [errorStateMatcher]="ContratoInserirComponent" [(ngModel)]="contrato.dataContrato" name="dataContrato">
+            <mat-datepicker-toggle matSuffix [for]="dataContrato"></mat-datepicker-toggle>
+            <mat-datepicker #dataContrato></mat-datepicker>
+            <mat-error>Data do Contrato é obrigatório!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dataPrevisaoEncerramento" placeholder="Data Previsão Encerramento" [(ngModel)]="contrato.dataPrevisaoEncerramento" name="dataPrevisaoEncerramento">
+            <mat-datepicker-toggle matSuffix [for]="dataPrevisaoEncerramento"></mat-datepicker-toggle>
+            <mat-datepicker #dataPrevisaoEncerramento></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-control-contrato">
+            <textarea class="form-control-contrato" matInput placeholder="Descrição" 
+            [(ngModel)]="contrato.descricao" name="descricao"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <button class="button-confirmacao" mat-button color="primary">Cancelar
+            <mat-icon>save</mat-icon>
+          </button>
+          <button (click)="onInsertContrato()" 
+                 class="button-confirmacao" 
+                 mat-button color="primary"
+                 type="submit">Salvar
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+        <br/>
+        <br/>
+        <span class="campo-obrigatorio">Campos obrigatórios(*)</span>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

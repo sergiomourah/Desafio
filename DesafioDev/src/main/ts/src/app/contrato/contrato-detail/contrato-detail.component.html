@@ -1,0 +1,56 @@
+<div fxLayout="row" and fxLayoutAlign="center">
+    <mat-tab-group>
+      <mat-tab class="form-control" label="Detalhes">
+        <mat-card>
+          <mat-card-header class="form-control">Visualizar Contrato</mat-card-header>
+          <mat-card-content>
+            <form #f="ngForm">
+              <div flex="" layout="row" layout-padding="">
+                <div flex="30" layout="column">
+                  <label class="label-detail-field" type="text">Nº Contrato</label>
+                  <br>
+                  <label class="label-detail-value">{{contrato.numeroContrato}}</label>
+                </div>
+                <div flex="50" layout="column">
+                    <label class="label-detail-field" type="text">Cliente</label>
+                    <br>
+                    <label class="label-detail-value">{{contrato?.cliente?.nome}}</label>
+                  </div>
+              </div>
+              <mat-divider class="mat-divider"></mat-divider>
+              <div flex="" layout="row" layout-padding="">
+                <br>
+                <div flex="30" layout="column">
+                  <label class="label-detail-field" type="text">Data Contrato</label>
+                  <br>
+                  <label class="label-detail-value">{{contrato.dataContrato | date:'dd/MM/yyyy'}}</label>
+                </div>
+                <div flex="30" layout="column">
+                    <label class="label-detail-field" type="text">Data Previsão Encerramento</label>
+                    <br>
+                    <label class="label-detail-value">{{contrato.dataPrevisaoEncerramento | date:'dd/MM/yyyy'}}</label>
+                  </div>
+              </div>
+              <div flex="" layout="row" layout-padding="">
+                <div flex="50" layout="column">
+                  <label class="label-detail-field">Descrição</label>
+                  <label class="label-detail-value">{{contrato.descricao}}</label>
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab class="form-control" label="Histórico Contrato">
+        <mat-card>
+          <mat-card-header>Visualizar Contrato</mat-card-header>
+          <mat-card-content>
+            <td-data-table
+            [data]="dataSource"
+            [columns]="configWidthColumns">
+            </td-data-table>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </div>

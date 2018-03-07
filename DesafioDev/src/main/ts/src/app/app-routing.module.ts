@@ -1,3 +1,5 @@
+import { ContratoDetailComponent } from './contrato/contrato-detail/contrato-detail.component';
+import { ContratoInserirComponent } from './contrato/contrato-inserir/contrato-inserir.component';
 import { OrdemDeServicoDetailComponent } from './ordemdeservico/ordem-de-servico-detail/ordem-de-servico-detail.component';
 import { OrdemdeservicoInserirComponent } from './ordemdeservico/ordemdeservico-inserir/ordemdeservico-inserir.component';
 import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
@@ -18,6 +20,21 @@ const routes: Routes = [
     component: ContratoComponent
   },
   {
+    path: 'contrato/inserir',
+    pathMatch: 'full',
+    component: ContratoInserirComponent
+  },
+  {
+    path: 'contrato/editar/:id',
+    pathMatch: 'full',
+    component: ContratoInserirComponent
+  },
+  {
+    path: 'contrato/detail/:id',
+    pathMatch: 'full',
+    component: ContratoDetailComponent
+  },
+  {
     path: 'ordemdeservico',
     pathMatch: 'full',
     component: OrdemdeservicoComponent
@@ -33,7 +50,7 @@ const routes: Routes = [
     component: OrdemDeServicoDetailComponent
   },
   {
-    path: 'ordemdeservico/edit/:id',
+    path: 'ordemdeservico/editar/:id',
     pathMatch: 'full',
     component: OrdemdeservicoInserirComponent
   }

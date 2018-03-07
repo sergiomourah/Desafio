@@ -41,7 +41,7 @@
           <button (click)="LimparFiltros()" mat-button color="primary">Limpar
             <mat-icon>clear</mat-icon>
           </button>
-          <button (click)="ListarOrdemDeServico()" mat-button color="primary">Buscar
+          <button (click)="onlistOrdemDeServicosByFilters()" mat-button color="primary">Buscar
             <mat-icon>search</mat-icon>
           </button>
         </div>
@@ -60,7 +60,7 @@
             <mat-datepicker #dataAberturaFin></mat-datepicker>
           </mat-form-field>
           <mat-form-field>
-            <input matInput [matDatepicker]="dataCoappnclusaoIni" placeholder="Data Conclusão Inicial" [(ngModel)]="filtro.dataConclusaoIni"
+            <input matInput [matDatepicker]="dataConclusaoIni" placeholder="Data Conclusão Inicial" [(ngModel)]="filtro.dataConclusaoIni"
               name="dataConclusaoIni">
             <mat-datepicker-toggle matSuffix [for]="dataConclusaoIni"></mat-datepicker-toggle>
             <mat-datepicker #dataConclusaoIni></mat-datepicker>
@@ -98,25 +98,25 @@
                   <td td-data-table-cell>{{ ordemDeServico.dataConclusao | date:'dd/MM/yyyy'}}</td>
                   <td td-data-table-cell>{{ ordemDeServico.valorOrdemDeServico }}</td>
                   <td td-data-table-cell fxLayoutAlign="end">
-                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToConcluir(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button matTooltip="Concluir Ordem de Serviço" (click)="OnUpdateOrdemDeServicoToConcluir(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>adjust</mat-icon>
                     </button>
-                    <button mat-raised-button (click)="OnInsertSolicitacaoPagamento(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button (click)="OnInsertSolicitacaoPagamento(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>reply</mat-icon>
                     </button>
-                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToHomologar(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button (click)="OnUpdateOrdemDeServicoToHomologar(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>description</mat-icon>
                     </button>
-                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToAprovar(ordemDeServico.id); $event.stopPropagation()">
+                    <button mat-icon-button (click)="OnUpdateOrdemDeServicoToAprovar(ordemDeServico.id); $event.stopPropagation()">
                       <mat-icon>done</mat-icon>
                     </button>
-                    <button mat-raised-button (click)="OnUpdateOrdemDeServicoToCancelar(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button (click)="OnUpdateOrdemDeServicoToCancelar(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>cancel</mat-icon>
                     </button>
-                    <button mat-raised-button [routerLink]="['/ordemdeservico/edit', ordemDeServico.id]">
+                    <button mat-icon-button [routerLink]="['/ordemdeservico/editar', ordemDeServico.id]">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-raised-button (click)="OnRemoveOrdemDeServico(ordemDeServico.id); $event.stopPropagation()">
+                    <button mat-icon-button (click)="OnRemoveOrdemDeServico(ordemDeServico.id); $event.stopPropagation()">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>

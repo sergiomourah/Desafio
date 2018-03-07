@@ -1,3 +1,5 @@
+import { ContratoDetailComponent } from './contrato/contrato-detail/contrato-detail.component';
+import { ContratoInserirComponent } from './contrato/contrato-inserir/contrato-inserir.component';
 import { OrdemDeServicoSolicitacaoPagamentoComponent } from './ordemdeservico/ordem-de-servico-solicitacao-pagamento/ordem-de-servico-solicitacao-pagamento.component';
 
 
@@ -43,6 +45,7 @@ import {
   CovalentPagingModule,
   TdDialogService
 } from '@covalent/core';
+import { ModalClienteComponent } from './modal-cliente/modal-cliente.component';
 
 
 @NgModule({
@@ -54,11 +57,16 @@ import {
     MsgDialogComponent,
     ModalGestorComponent,
     OrdemDeServicoDetailComponent,
-    OrdemDeServicoSolicitacaoPagamentoComponent    
+    OrdemDeServicoSolicitacaoPagamentoComponent,
+    ContratoInserirComponent,
+    ModalClienteComponent,
+    ContratoDetailComponent    
   ],
   entryComponents: [
     MsgDialogComponent,
-    ModalGestorComponent
+    ModalGestorComponent,
+    ModalClienteComponent,
+    OrdemDeServicoSolicitacaoPagamentoComponent
   ],
   imports: [
     BrowserModule,

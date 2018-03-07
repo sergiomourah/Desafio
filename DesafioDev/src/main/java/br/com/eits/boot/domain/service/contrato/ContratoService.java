@@ -56,6 +56,8 @@ public class ContratoService {
 	 */
 	public Contrato insertContrato(Contrato contrato )
 	{
+		//Inserir o contrato com o status aberto
+		contrato.setStatus(StatusContrato.ABERTO);
 		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getNumeroContrato(), this.messageSource.getMessage("contrato.required.numeroContrato", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getDataContrato(), this.messageSource.getMessage("contrato.required.dataContrato", null, LocaleContextHolder.getLocale()));
@@ -107,8 +109,8 @@ public class ContratoService {
 	public Contrato updateContratoToEncerrar(Contrato contrato )
 	{	
 		//Validar Status
-		assertTrue(this.messageSource.getMessage("contrato.validation.encerrar", null, LocaleContextHolder.getLocale()), 
-				contrato.getStatus() == StatusContrato.ABERTO);
+		Assert.isTrue(contrato.getStatus() == StatusContrato.ABERTO, 
+		this.messageSource.getMessage("contrato.validation.encerrar", null, LocaleContextHolder.getLocale()));
 		contrato.setStatus(StatusContrato.ENCERRADO);//2 - Encerrar Contrato;
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);
@@ -122,8 +124,8 @@ public class ContratoService {
 	public Contrato updateContratoToSuspender(Contrato contrato , String motivo)
 	{
 		//Validar Status
-		assertTrue(this.messageSource.getMessage("contrato.validation.alterar", null, LocaleContextHolder.getLocale()), 
-				contrato.getStatus() == StatusContrato.ABERTO);
+		Assert.isTrue(contrato.getStatus() == StatusContrato.ABERTO, 
+		this.messageSource.getMessage("contrato.validation.alterar", null, LocaleContextHolder.getLocale()));
 		contrato.setStatus(StatusContrato.SUSPENSO);//2 - Suspender Contrato;
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);
@@ -137,8 +139,8 @@ public class ContratoService {
 	public Contrato updateContratoToReabrir(Contrato contrato )
 	{
 		//Validar Status
-		assertTrue(this.messageSource.getMessage("contrato.validation.reabrir", null, LocaleContextHolder.getLocale()), 
-				contrato.getStatus() == StatusContrato.SUSPENSO);
+		Assert.isTrue(contrato.getStatus() == StatusContrato.SUSPENSO, 
+		this.messageSource.getMessage("contrato.validation.reabrir", null, LocaleContextHolder.getLocale()));
 		contrato.setStatus(StatusContrato.ABERTO);//2 - Reabrir Contrato;
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);	
@@ -154,8 +156,8 @@ public class ContratoService {
 		//Buscar contrato
 		final Contrato contrato = this.findContratoById(id);
 		//Validar Status
-		assertTrue(this.messageSource.getMessage("contrato.validation.remover", null, LocaleContextHolder.getLocale()), 
-				contrato.getStatus() != StatusContrato.ENCERRADO);
+		Assert.isTrue(contrato.getStatus() != StatusContrato.ENCERRADO, 
+		this.messageSource.getMessage("contrato.validation.remover", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(id, this.messageSource.getMessage( "contrato.id", null, LocaleContextHolder.getLocale() ) );
 		this.contratoRepository.deleteById(id);
 	}
