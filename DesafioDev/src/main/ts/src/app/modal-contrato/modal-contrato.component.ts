@@ -1,22 +1,19 @@
-import { PaginationService } from './../pagination.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
-
-import { Gestor, PageRequest } from './../../generated/entities';
+import { ContratoService } from './../../generated/services';
 import { SelectionModel } from '@angular/cdk/collections';
-import { OrdemDeServicoService } from '../../generated/services';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
-
+import { PaginationService } from './../pagination.service';
+import { MatTableDataSource, MatDialogRef, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
+import { Contrato, PageRequest } from './../../generated/entities';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-modal-gestor',
-  templateUrl: './modal-gestor.component.html',
-  styleUrls: ['./modal-gestor.component.css']
+  selector: 'app-modal-contrato',
+  templateUrl: './modal-contrato.component.html',
+  styleUrls: ['./modal-contrato.component.css']
 })
-export class ModalGestorComponent implements OnInit, AfterViewInit {
+export class ModalContratoComponent implements OnInit {
 
   //Cria a lista de elementos
-  ELEMENT_DATA: Gestor[] = [];
+  ELEMENT_DATA: Contrato[] = [];
 
   //Pageable
   private pageable: PageRequest;
@@ -24,28 +21,24 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
 
 
   //DataSource
-  dataSource = new MatTableDataSource<Gestor>(this.ELEMENT_DATA);
+  dataSource = new MatTableDataSource<Contrato>(this.ELEMENT_DATA);
   //Declara entidade gestor
-  private gestor: Gestor = {};
+  private contrato: Contrato = {};
   constructor(private paginationService: PaginationService,
-              public dialogRef: MatDialogRef<ModalGestorComponent>,
-              public service: OrdemDeServicoService,
-              private snackBar: MatSnackBar) { 
+    public dialogRef: MatDialogRef<ModalContratoComponent>,
+    public service: ContratoService,
+    private snackBar: MatSnackBar) { }
 
-    //this.pageable = this.paginationService.pageRequest('nome', 'ASC', 15);
-  }
-
-  displayedColumns = ['select', 'id', 'nome'];
+  displayedColumns = ['select', 'numeroContrato', 'nome'];
   //SelectionModel<Entity>(const allowMultiSelect, const initialSelection)
-  selection = new SelectionModel<Gestor>(false, []);  //Pageable
+  selection = new SelectionModel<Contrato>(false, []);  //Pageable
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  PageRequest
   ngOnInit() {
-    //Busca Lista de Gestores
-    this.onListGestorByNome();
+    //Busca Lista de Contratos
+    this.onlistContratoByNumeroContrato();
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -68,8 +61,8 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
     } else if (!salvar){
       this.dialogRef.close();
     }else{
-      this.openSnackBar("Obrigatório selecionar gestor!", "Mensagem");
-    }
+      this.openSnackBar("Obrigatório selecionar contrato!", "Mensagem");
+    }    
   }
  /**
  * Retorna se o numero do elemento selecionado corresponde ao total de linhas
@@ -84,7 +77,7 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
   */
   masterToggle() {
     if (this.isAllSelected()){
-      this.selection.clear();
+      this.selection.clear(); 
       this.dataSource.data.forEach(row => this.selection.select(row));
     }        
   }
@@ -92,15 +85,21 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
    * Lista os   const initialSelection = [];
   const allowMultiSelect = true;Gestores
    */
-  public onListGestorByNome() {
-    this.service.listGestorByNome(null,
+  private onlistContratoByNumeroContrato(): void {
+    this.service.listContratoByFilters(null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       this.pageable).subscribe((result) => {
         this.ELEMENT_DATA = result.content;
-        this.dataSource = new MatTableDataSource<Gestor>(this.ELEMENT_DATA)
+        this.dataSource = new MatTableDataSource<Contrato>(this.ELEMENT_DATA)
         this.ngAfterViewInit();
-      }), (error) => {
+      }, (error) => {
         alert(error.message);
-      }
+      });
   }
 
   private openSnackBar(message: string, action: string): void {
@@ -110,3 +109,4 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
     });
   }
 }
+

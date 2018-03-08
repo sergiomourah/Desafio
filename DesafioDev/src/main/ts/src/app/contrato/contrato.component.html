@@ -78,19 +78,19 @@
                         <td td-data-table-cell>{{ contrato.dataContrato | date:'dd/MM/yyyy'}}</td>
                         <td td-data-table-cell>{{ contrato.dataEncerramento | date:'dd/MM/yyyy'}}</td>
                         <td td-data-table-cell fxLayoutAlign="end">
-                          <button mat-icon-button (click)="OnUpdateContratoToEncerrar(contrato); $event.stopPropagation()">
+                          <button mat-icon-button *ngIf="(contrato.status == 'ABERTO')" (click)="OnUpdateContratoToEncerrar(contrato); $event.stopPropagation()">
                             <mat-icon>adjust</mat-icon>
                           </button>
-                          <button mat-icon-button (click)="OnUpdateContratoToReabrir(contrato); $event.stopPropagation()">
+                          <button mat-icon-button *ngIf="(contrato.status == 'SUSPENSO')" (click)="OnUpdateContratoToReabrir(contrato); $event.stopPropagation()">
                             <mat-icon>lock_open</mat-icon>
                           </button>
-                          <button mat-icon-button (click)="OnUpdateContratoToSuspender(contrato); $event.stopPropagation()">
+                          <button mat-icon-button *ngIf="(contrato.status == 'ABERTO')" (click)="OnUpdateContratoToSuspender(contrato); $event.stopPropagation()">
                             <mat-icon>cancel</mat-icon>
                           </button>
-                          <button mat-icon-button [routerLink]="['/contrato/editar', contrato.id]">
+                          <button mat-icon-button *ngIf="(contrato.status != 'ENCERRADO') && (contrato.status != 'SUSPENSO')" [routerLink]="['/contrato/editar', contrato.id]">
                             <mat-icon>edit</mat-icon>
                           </button>
-                          <button mat-icon-button (click)="OnRemoveContrato(contrato.id); $event.stopPropagation()">
+                          <button mat-icon-button *ngIf="(contrato.status == 'ABERTO')" (click)="OnRemoveContrato(contrato.id); $event.stopPropagation()">
                             <mat-icon>delete</mat-icon>
                           </button>
                         </td>

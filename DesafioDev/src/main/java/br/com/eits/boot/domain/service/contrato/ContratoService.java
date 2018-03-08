@@ -61,7 +61,7 @@ public class ContratoService {
 		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getNumeroContrato(), this.messageSource.getMessage("contrato.required.numeroContrato", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getDataContrato(), this.messageSource.getMessage("contrato.required.dataContrato", null, LocaleContextHolder.getLocale()));
-		Assert.notNull(contrato.getCliente(), this.messageSource.getMessage("contrato.required.cliente", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getCliente().getId(), this.messageSource.getMessage("contrato.required.cliente", null, LocaleContextHolder.getLocale()));
 		//Salvar Contrato
 		contrato = this.contratoRepository.save( contrato );		
 		//Salvar Historico
@@ -98,7 +98,7 @@ public class ContratoService {
 		Assert.notNull(contrato.getStatus(), this.messageSource.getMessage("contrato.required.status", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getNumeroContrato(), this.messageSource.getMessage("contrato.required.numeroContrato", null, LocaleContextHolder.getLocale()));
 		Assert.notNull(contrato.getDataContrato(), this.messageSource.getMessage("contrato.required.dataContrato", null, LocaleContextHolder.getLocale()));
-		Assert.notNull(contrato.getCliente(), this.messageSource.getMessage("contrato.required.cliente", null, LocaleContextHolder.getLocale()));
+		Assert.notNull(contrato.getCliente().getId(), this.messageSource.getMessage("contrato.required.cliente", null, LocaleContextHolder.getLocale()));
 		//Update Contrato
 		contrato = this.contratoRepository.save(contrato);
 		return contrato;

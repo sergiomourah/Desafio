@@ -1,7 +1,6 @@
 import { ModalMotivoComponent } from './../modal-motivo/modal-motivo.component';
-import { MsgDialogComponent } from './../msg-dialog/msg-dialog.component';
-import { ITdDataTableColumn } from '@covalent/core';
-import { Component, OnInit } from '@angular/core';
+import { ITdDataTableColumn, TdDialogService } from '@covalent/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
 import { Contrato, Cliente, PageRequest, StatusContratoValues } from './../../generated/entities';
 import { ContratoService } from './../../generated/services';
@@ -25,7 +24,9 @@ export class ContratoComponent implements OnInit {
   private retorno: boolean;
   constructor(private service: ContratoService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private _dialogService: TdDialogService,
+    private _viewContainerRef: ViewContainerRef) {
 
   }
 
@@ -43,17 +44,72 @@ export class ContratoComponent implements OnInit {
     { name: 'dataEncerramento', label: 'Data Encerramento', width: 150 },
     { name: 'acao', label: 'Ações', width: 350 },
   ];
-  /**
-      * Chama as caixa de mensagens
-      */
-  private CallDialog(title: string, texto: string): void {
-    //Sempre inicia como false;
-    this.retorno = false;
-    let dialogRef = this.dialog.open(MsgDialogComponent, {
-      width: '250px',
-      data: { name: title, msg: texto }
+  private openConfirm(confirmacao: any): void {
+    this._dialogService.openConfirm({
+      message: confirmacao.msg,
+      disableClose: false, // defaults to false
+      viewContainerRef: this._viewContainerRef, //OPTIONAL
+      title: 'Confirmação', //OPTIONAL, hides if not provided
+      cancelButton: 'Não', //OPTIONAL, defaults to 'CANCEL'
+      acceptButton: 'Sim', //OPTIONAL, defaults to 'ACCEPT'
+      width: '500px', //OPTIONAL, defaults to 400px
+    }).afterClosed().subscribe((accept: boolean) => {
+      if (accept) {
+        //Encerrar Contrato
+        if (confirmacao.method == 'ENCERRAR') {
+          this.service.updateContratoToEncerrar(confirmacao.data).subscribe((contrato) => {
+            //sucesso
+            this.openSnackBar(confirmacao.sucesso, "Mensagem");
+            //Atualiza a Table
+            this.onlistContratoByFilters();
+          }, (error) => {
+            this.openSnackBar(error.message, "erro");
+          });
+        } //Reabrir Contrato
+        else if (confirmacao.method == 'REABRIR') {
+          this.service.updateContratoToReabrir(confirmacao.data).subscribe((contrato) => {
+            //sucesso
+            this.openSnackBar(confirmacao.sucesso, "Mensagem");
+            //Atualiza a Table
+            this.onlistContratoByFilters();
+          }, (error) => {
+            this.openSnackBar(error.message, "erro");
+          });
+        }//Suspender Contrato
+        else if (confirmacao.method == 'SUSPENDER') {
+          //Abrir Dialog Motivo Cancelamento
+          let dialogRef = this.dialog.open(ModalMotivoComponent, {
+            width: '350px',
+            data: { title: 'Suspensão' }
+          });
+          //Receber retorno susbcribe da dialog
+          dialogRef.afterClosed().subscribe(result => {
+            //Cancelar Ordem de Serviço
+            let motivo: string = result;
+            if (motivo != null) {
+              this.service.updateContratoToSuspender(confirmacao.data, motivo).subscribe((contrato) => {
+                //sucesso
+                this.openSnackBar(confirmacao.sucesso, "Mensagem");
+                //Atualiza a Table
+                this.onlistContratoByFilters();
+              }, (error) => {
+                this.openSnackBar(error.message, "erro");
+              });
+            }
+          });
+        } //Remover Contrato
+        else if (confirmacao.method == 'EXCLUIR') {
+          this.service.removeContrato(confirmacao.id).subscribe(() => {
+            //sucesso
+            this.openSnackBar(confirmacao.sucesso, "Mensagem");
+            //Atualiza a Table
+            this.onlistContratoByFilters();
+          }, (error) => {
+            this.openSnackBar(error.message, "erro");
+          });
+        }
+      }
     });
-    dialogRef.afterClosed().subscribe(result => { this.retorno = result; });
   }
   /**
     * Executa a consulta da contrato e retorna a lista
@@ -78,93 +134,49 @@ export class ContratoComponent implements OnInit {
     * Homologa Ordem de Serviço
     */
   private OnUpdateContratoToEncerrar(contrato: Contrato): void {
-    /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-    console.log(cancelar);    let retorno: boolean = true;
-    if (cancelar === true){
-      this.service.updateOrdemDeServicoToCancelar(this.ordemDeServico, "CONTRATO SUSPENSO");
-      //sucesso
-      this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-    } */
-    console.log(contrato);
-    this.service.updateContratoToEncerrar(contrato).subscribe((contrato) => {
-      //sucesso
-      this.openSnackBar("Contrato encerrado com sucesso!", "Mensagem");
-    }, (error) => {
-      this.openSnackBar(error.message, "erro");
-    });
+    let confirmacao: any = {
+      msg: 'Deseja encerrar o contrato selecionado?',
+      method: 'ENCERRAR',
+      sucesso: 'Contrato encerrado com sucesso!',
+      data: contrato
+    };
+    this.openConfirm(confirmacao);
   }
   /**
     * Suspender Contrato 
     */
   private OnUpdateContratoToReabrir(contrato: Contrato): void {
-    /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-    console.log(cancelar);
-    if (cancelar === true){
-      this.service.updateOrdemDeServicoToCancelar(this.ordemDeServico, "CONTRATO SUSPENSO");
-      //sucesso
-      this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-    } */
-    console.log(contrato);
-    this.service.updateContratoToReabrir(contrato).subscribe((contrato) => {
-      //sucesso    
-      this.openSnackBar("Contrato reaberto com sucesso!", "Mensagem");
-    }, (error) => {
-      this.openSnackBar(error.message, "erro");
-    });
+    let confirmacao: any = {
+      msg: 'Deseja reabrir o contrato selecionado?',
+      method: 'REABRIR',
+      sucesso: 'Contrato reaberto com sucesso!',
+      data: contrato
+    };
+    this.openConfirm(confirmacao);
   }
   /**
       * Cancela Ordem de Serviço
       */
   private OnUpdateContratoToSuspender(contrato: Contrato): void {
-    this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-    console.log(this.retorno);
-    if (true) {
-      this.service.updateContratoToSuspender(contrato, "CONTRATO SUSPENSO").subscribe((ordemdeservico) => {
-        //sucesso
-        this.openSnackBar("Contrato suspenso com sucesso!", "Mensagem");
-      }, (error) => {
-        this.openSnackBar(error.message, "erro");
-      });
-
-      //Abrir Dialog Motivo Cancelamento
-      let dialogRef = this.dialog.open(ModalMotivoComponent, {
-        width: '350px',
-        data: { title: 'Cancelamento' }
-      });
-      //Receber retorno susbcribe da dialog
-      dialogRef.afterClosed().subscribe(result => {
-        //Cancelar Ordem de Serviço
-        let motivo: string = result;
-        if (motivo != null) {
-          this.service.updateContratoToSuspender(contrato, motivo).subscribe((ordemdeservico) => {
-            //sucesso
-            this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-          }, (error) => {
-            this.openSnackBar(error.message, "erro");
-          });
-        }
-      });
-
-    }
+    let confirmacao: any = {
+      msg: 'Deseja suspender o contrato selecionado?',
+      method: 'SUSPENDER',
+      sucesso: 'Contrato suspenso com sucesso!',
+      data: contrato
+    };
+    this.openConfirm(confirmacao);
   }
   /**
     * Remove Ordem de Serviço
     */
   private OnRemoveContrato(id: number): void {
-    /*var cancelar = this.CallDialog('Confirmação', 'Deseja cancelar a OS selecionada?');
-    console.log(cancelar);
-    if (cancelar === true){
-      this.service.updateOrdemDeServicoToCancelar(this.ordemDeServico, "CONTRATO SUSPENSO");
-      //sucesso
-      this.openSnackBar("Ordem de Serviço cancelada com sucesso!", "Mensagem");
-    } */
-    this.service.removeContrato(id).subscribe(() => {
-      //sucesso
-      this.openSnackBar("Contrato excluído com sucesso!", "Mensagem");
-      this.onlistContratoByFilters();
-    }, (error) => {
-      this.openSnackBar(error.message, "erro");
-    });
+    let confirmacao: any = {
+      msg: 'Deseja excluir o contrato selecionado?',
+      method: 'EXCLUIR',
+      sucesso: 'Contrato excluído com sucesso!',
+      id: id
+    };
+    this.openConfirm(confirmacao);
   }
   /**
     * Limpa os Filtros de busca

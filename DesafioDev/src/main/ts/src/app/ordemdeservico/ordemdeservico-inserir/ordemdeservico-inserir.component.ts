@@ -1,7 +1,9 @@
+import { TdDialogService } from '@covalent/core';
+import { ModalContratoComponent } from './../../modal-contrato/modal-contrato.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ModalGestorComponent } from './../../modal-gestor/modal-gestor.component';
 import { OrdemDeServico, PrioridadeValues, Gestor } from './../../../generated/entities';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { OrdemDeServicoService } from '../../../generated/services';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,7 +21,9 @@ export class OrdemdeservicoInserirComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private snackBar: MatSnackBar,
-    public activatedRouter: ActivatedRoute) {
+    public activatedRouter: ActivatedRoute,
+    private _dialogService: TdDialogService,
+    private _viewContainerRef: ViewContainerRef) {
     let id = this.activatedRouter.snapshot.params["id"];
     //Buscar Ordem de Serviço
     this.service.findOrdemDeServicoById(id).subscribe((result) => {
@@ -32,22 +36,53 @@ export class OrdemdeservicoInserirComponent implements OnInit {
   ngOnInit() {
     this.ordemdeservico.gestor = {};
     this.ordemdeservico.contrato = {};
-    this.ordemdeservico.contrato.id = 10001;
-    this.ordemdeservico.contrato.numeroContrato = "59230";
-    this.ordemdeservico.contrato.descricao = "CONTRATO PARA TESTE";
   }
 
-  private onInsertOrdemDeServico() : void {
-    this.service.insertOrdemDeServico(this.ordemdeservico).subscribe((ordemdeservico) => {
-      //sucesso
-      this.openSnackBar("Ordem de Serviço salva com sucesso!", "Mensagem");
-      this.router.navigate(['/ordemdeservico']);
-    }, (error) => {
-      this.openSnackBar(error.message, "erro");
-    });
+  private onInsertOrdemDeServico(): void {
+    if (this.ordemdeservico.numeroOrdemDeServico == null){
+      this.openSnackBar("Obrigatório informar Nº Ordem de Serviço!", "Mensagem");
+      return;
+    }
+    if (this.ordemdeservico.contrato.id == null){
+      this.openSnackBar("Obrigatório selecionar contrato cadastrado!", "Mensagem");
+      return;
+    }
+    if (this.ordemdeservico.dataAbertura == null){
+      this.openSnackBar("Obrigatório informar Data de Abertura!", "Mensagem");
+      return;
+    }
+    if (this.ordemdeservico.gestor.id == null){
+      this.openSnackBar("Obrigatório selecionar gestor cadastrado!", "Mensagem");
+      return;
+    }
+    if (this.ordemdeservico.prioridade == null){
+      this.openSnackBar("Obrigatório informar Prioridade!", "Mensagem");
+      return;
+    }
+    if (this.ordemdeservico.descricaoProblema == null){
+      this.openSnackBar("Obrigatório informar Descrição do Problema!", "Mensagem");
+      return;
+    }
+    if (this.ordemdeservico.id == null) {
+      this.service.insertOrdemDeServico(this.ordemdeservico).subscribe((ordemdeservico) => {
+        //sucesso
+        this.openSnackBar("Ordem de Serviço salva com sucesso!", "Mensagem");
+        this.router.navigate(['/ordemdeservico']);
+      }, (error) => {
+        this.openSnackBar(error.message, "erro");
+      });
+    } else {
+      this.service.updateOrdemDeServico(this.ordemdeservico).subscribe((ordemdeservico) => {
+        //sucesso
+        this.openSnackBar("Ordem de Serviço alterada com sucesso!", "Mensagem");
+        this.router.navigate(['/ordemdeservico']);
+      }, (error) => {
+        this.openSnackBar(error.message, "erro");
+      });
+    }
   }
 
-  private openDialog() : void {
+  private openDialogGestor(): void {
     let dialogRef = this.dialog.open(ModalGestorComponent, {
       height: '600px',
       width: '800px'
@@ -58,10 +93,57 @@ export class OrdemdeservicoInserirComponent implements OnInit {
     });
   }
 
-  private openSnackBar(message: string, action: string) : void {
+  private openDialogContrato(): void {
+    let dialogRef = this.dialog.open(ModalContratoComponent, {
+      height: '600px',
+      width: '800px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.ordemdeservico.contrato = result.selected[0];
+    });
+  }
+
+  private onCancel() : void {
+   if (this.ordemdeservico.contrato.id != null ||
+       this.ordemdeservico.numeroOrdemDeServico != null ||
+       this.ordemdeservico.dataAbertura != null ||
+       this.ordemdeservico.dataPrevisaoConclusao != null ||
+       this.ordemdeservico.descricaoProblema != null ||
+       this.ordemdeservico.descricaoSolucao != null ||
+       this.ordemdeservico.observacao != null ||
+       this.ordemdeservico.valorOrdemDeServico != null ||
+       this.ordemdeservico.prioridade != null ||
+       this.ordemdeservico.gestor.id){
+       this.openConfirm();
+       }
+       else{
+        this.router.navigate(['/ordemdeservico']);
+       }
+  }
+
+  private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
       duration: 4000,
       direction: "ltr"
+    });
+  }
+  
+  private openConfirm(): void {
+    this._dialogService.openConfirm({
+      message: 'Existem dados não salvos!\n ' + 
+               'Algumas informações poderão ser perdidas.\n '  + 
+               'Confirma o cancelamento do Ordem de Serviço?',
+      disableClose: false, 
+      viewContainerRef: this._viewContainerRef, 
+      title: 'Confirmação', 
+      cancelButton: 'Não', 
+      acceptButton: 'Sim', 
+      width: '500px', 
+    }).afterClosed().subscribe((accept: boolean) => {
+      if (accept) {
+        this.router.navigate(['/ordemdeservico']);
+      }   
     });
   }
 }

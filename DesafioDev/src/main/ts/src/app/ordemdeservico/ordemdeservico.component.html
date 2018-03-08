@@ -96,54 +96,42 @@
                   <td td-data-table-cell>{{ ordemDeServico.contrato.numeroContrato }}</td>
                   <td td-data-table-cell>{{ ordemDeServico.dataAbertura | date:'dd/MM/yyyy'}}</td>
                   <td td-data-table-cell>{{ ordemDeServico.dataConclusao | date:'dd/MM/yyyy'}}</td>
-                  <td td-data-table-cell>{{ ordemDeServico.valorOrdemDeServico }}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.valorOrdemDeServico | number : '1.2-2' }}</td>
                   <td td-data-table-cell fxLayoutAlign="end">
-                    <button mat-icon-button matTooltip="Concluir Ordem de Serviço" (click)="OnUpdateOrdemDeServicoToConcluir(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button matTooltip="Concluir Ordem de Serviço" *ngIf="(ordemDeServico.status == 'HOMOLOGADA')" (click)="OnUpdateOrdemDeServicoToConcluir(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>adjust</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="OnInsertSolicitacaoPagamento(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button *ngIf="(ordemDeServico.status == 'HOMOLOGADA')" (click)="OnInsertSolicitacaoPagamento(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>reply</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="OnUpdateOrdemDeServicoToHomologar(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button  *ngIf="(ordemDeServico.status == 'APROVADA')" (click)="OnUpdateOrdemDeServicoToHomologar(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>description</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="OnUpdateOrdemDeServicoToAprovar(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button *ngIf="(ordemDeServico.status == 'ABERTA')" (click)="OnUpdateOrdemDeServicoToAprovar(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>done</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="OnUpdateOrdemDeServicoToCancelar(ordemDeServico); $event.stopPropagation()">
+                    <button mat-icon-button *ngIf="(ordemDeServico.status != 'CONCLUIDA') && (ordemDeServico.status != 'CANCELADA')" (click)="OnUpdateOrdemDeServicoToCancelar(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>cancel</mat-icon>
                     </button>
-                    <button mat-icon-button [routerLink]="['/ordemdeservico/editar', ordemDeServico.id]">
+                    <button mat-icon-button *ngIf="(ordemDeServico.status != 'CONCLUIDA') && (ordemDeServico.status != 'CANCELADA')" [routerLink]="['/ordemdeservico/editar', ordemDeServico.id]">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="OnRemoveOrdemDeServico(ordemDeServico.id); $event.stopPropagation()">
+                    <button mat-icon-button *ngIf="(ordemDeServico.status == 'ABERTA')" (click)="OnRemoveOrdemDeServico(ordemDeServico.id); $event.stopPropagation()">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
-
-
-
-
-
-            <!-- <td-data-table [data]="dataSource" [columns]="configWidthColumns">
-
-              <ng-template tdDataTableTemplate="acao" let-row="row">
-                <button mat-raised-button [routerLink]="['/ordemdeservico/edit', row.id]">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-raised-button (click)="OnUpdateOrdemDeServicoToCancelar()">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </ng-template>
-            </td-data-table>
-            <td-paging-bar #pagingBar [firstLast]="firstLast" [pageSize]="10" [total]="100" (change)="page($event)">
-
-            </td-paging-bar> -->
-
-
+            <td-paging-bar #pagingBar [pageSize]="pageSize" [total]="filteredTotal" (change)="page($event)">
+                <span hide-xs>Linhas por página:</span>
+                <mat-select [style.width.px]="50" [(ngModel)]="pageSize">
+                  <mat-option *ngFor="let size of [5,10,15,20]" [value]="size">
+                    {{size}}
+                  </mat-option>
+                </mat-select>
+                {{pagingBar.range}} <span hide-xs>of {{pagingBar.total}}</span>
+              </td-paging-bar>
           </div>
 
         </div>

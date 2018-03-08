@@ -31,7 +31,6 @@ import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule,
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
 import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
-import { MsgDialogComponent } from './msg-dialog/msg-dialog.component';
 import { ModalGestorComponent } from './modal-gestor/modal-gestor.component';
 import { OrdemDeServicoDetailComponent } from './ordemdeservico/ordem-de-servico-detail/ordem-de-servico-detail.component';
 import { ViewChild } from '@angular/core/src/metadata/di';
@@ -48,6 +47,7 @@ import {
 import { ModalClienteComponent } from './modal-cliente/modal-cliente.component';
 import { ModalMotivoComponent } from './modal-motivo/modal-motivo.component';
 import { CovalentDialogsModule } from '@covalent/core';
+import { ModalContratoComponent } from './modal-contrato/modal-contrato.component';
 
 
 @NgModule({
@@ -56,21 +56,21 @@ import { CovalentDialogsModule } from '@covalent/core';
     ContratoComponent,
     OrdemdeservicoComponent,
     OrdemdeservicoInserirComponent,
-    MsgDialogComponent,
     ModalGestorComponent,
     OrdemDeServicoDetailComponent,
     OrdemDeServicoSolicitacaoPagamentoComponent,
     ContratoInserirComponent,
     ModalClienteComponent,
     ContratoDetailComponent,
-    ModalMotivoComponent    
+    ModalMotivoComponent,
+    ModalContratoComponent    
   ],
   entryComponents: [
-    MsgDialogComponent,
     ModalGestorComponent,
     ModalClienteComponent,
     OrdemDeServicoSolicitacaoPagamentoComponent,
-    ModalMotivoComponent
+    ModalMotivoComponent,
+    ModalContratoComponent
   ],
   imports: [
     BrowserModule,

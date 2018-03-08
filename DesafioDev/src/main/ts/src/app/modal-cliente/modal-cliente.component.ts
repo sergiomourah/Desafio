@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ContratoService } from './../../generated/services';
 import { PaginationService } from './../pagination.service';
-import { MatTableDataSource, MatDialogRef, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatDialogRef, MatPaginator, MatSort, MatSnackBar } from '@angular/material';
 import { Cliente, PageRequest } from './../../generated/entities';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
@@ -22,11 +22,12 @@ export class ModalClienteComponent implements OnInit {
 
   //DataSource
   dataSource = new MatTableDataSource<Cliente>(this.ELEMENT_DATA);
-  //Declara entidade gestor
+  //Declara entidade cliente
   private cliente: Cliente = {};
   constructor(private paginationService: PaginationService,
     public dialogRef: MatDialogRef<ModalClienteComponent>,
-    public service: ContratoService) { }
+    public service: ContratoService,
+    private snackBar: MatSnackBar) { }
 
   displayedColumns = ['select', 'id', 'nome'];
   //SelectionModel<Entity>(const allowMultiSelect, const initialSelection)
@@ -36,7 +37,7 @@ export class ModalClienteComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit() {
-    //Busca Lista de Gestores
+    //Busca Lista de Clientes
     this.onListClienteByNome();
   }
   ngAfterViewInit() {
@@ -54,8 +55,14 @@ export class ModalClienteComponent implements OnInit {
   /** 
    * Emite o para o solicitanteModel o registro selecionado após a confirmação
   */
-  public emitter() {
-    this.dialogRef.close(this.selection);
+  public emitter(salvar: boolean) {
+    if (salvar && this.selection.selected.length > 0){
+      this.dialogRef.close(this.selection);
+    } else if (!salvar){
+      this.dialogRef.close();
+    }else{
+      this.openSnackBar("Obrigatório selecionar cliente!", "Mensagem");
+    }    
   }
  /**
  * Retorna se o numero do elemento selecionado corresponde ao total de linhas
@@ -75,8 +82,7 @@ export class ModalClienteComponent implements OnInit {
     }        
   }
   /**
-   * Lista os   const initialSelection = [];
-  const allowMultiSelect = true;Gestores
+   * Lista os Clientes
    */
   public onListClienteByNome() {
     this.service.listClienteByNome(null,
@@ -87,5 +93,12 @@ export class ModalClienteComponent implements OnInit {
       }), (error) => {
         alert(error.message);
       }
+  }
+
+  private openSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+      direction: "ltr"
+    });
   }
 }

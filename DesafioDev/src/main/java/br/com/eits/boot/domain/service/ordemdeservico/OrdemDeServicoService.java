@@ -68,7 +68,8 @@ public class OrdemDeServicoService {
 			Assert.notNull(ordemdeservico.getDataAbertura(), this.messageSource.getMessage("ordemdeservico.required.dataAbertura", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getDescricaoProblema(), this.messageSource.getMessage("ordemdeservico.required.descricaoProblema", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getStatus(), this.messageSource.getMessage("ordemdeservico.required.status", null, LocaleContextHolder.getLocale()));
-			Assert.notNull(ordemdeservico.getGestor(), this.messageSource.getMessage("ordemdeservico.required.gestor", null, LocaleContextHolder.getLocale()));
+			Assert.notNull(ordemdeservico.getGestor().getId(), this.messageSource.getMessage("ordemdeservico.required.gestor", null, LocaleContextHolder.getLocale()));
+			Assert.notNull(ordemdeservico.getContrato().getId(), this.messageSource.getMessage("ordemdeservico.required.contrato", null, LocaleContextHolder.getLocale()));
 			//Salvar Ordem de Serviço
 			ordemdeservico = this.ordemdeservicoRepository.save( ordemdeservico );
 			//Salvar Historico
@@ -117,7 +118,8 @@ public class OrdemDeServicoService {
 			Assert.notNull(ordemdeservico.getDataAbertura(), this.messageSource.getMessage("ordemdeservico.required.dataAbertura", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getDescricaoProblema(), this.messageSource.getMessage("ordemdeservico.required.descricaoProblema", null, LocaleContextHolder.getLocale()));
 			Assert.notNull(ordemdeservico.getStatus(), this.messageSource.getMessage("ordemdeservico.required.status", null, LocaleContextHolder.getLocale()));
-			Assert.notNull(ordemdeservico.getGestor(), this.messageSource.getMessage("ordemdeservico.required.gestor", null, LocaleContextHolder.getLocale()));
+			Assert.notNull(ordemdeservico.getGestor().getId(), this.messageSource.getMessage("ordemdeservico.required.gestor", null, LocaleContextHolder.getLocale()));
+			Assert.notNull(ordemdeservico.getContrato().getId(), this.messageSource.getMessage("ordemdeservico.required.contrato", null, LocaleContextHolder.getLocale()));
 			//Update Ordem
 			ordemdeservico = this.ordemdeservicoRepository.save(ordemdeservico);
 			return ordemdeservico;

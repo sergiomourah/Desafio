@@ -51,10 +51,10 @@
           </div>
       </div>
       <div>
-          <button class="button-modal-dialog" mat-button color="primary">Cancelar
+          <button class="button-modal-dialog" (click)="emitter(false)" mat-button color="primary">Cancelar
               <mat-icon>cancel</mat-icon>
           </button>
-          <button class="button-modal-dialog" (click)="emitter()" mat-button color="primary">Salvar
+          <button class="button-modal-dialog" (click)="emitter(true)" mat-button color="primary">Salvar
               <mat-icon>save</mat-icon>
           </button>
       </div>
