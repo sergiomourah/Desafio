@@ -70,11 +70,13 @@
         </div>
         <div>
           <mat-form-field>
-            <input type="number" 
+            <input class="form-control"  
+                   matInput placeholder="Valor Ordem de Serviço"
+                   type="number" 
                    step="0.01" 
                    (ngModelChange)="ordemdeservico.valorOrdemDeServico=$event" 
-                   [ngModel]="ordemdeservico.valorOrdemDeServico | number:'1.2-2'">
-          </mat-form-field>
+                   [ngModel]="ordemdeservico.valorOrdemDeServico | number:'1.2-2'" name="valorOrdemDeServico">
+          </mat-form-field>    
         </div>
         <div>
           <button (click)="onCancel()" class="button-confirmacao" mat-button color="primary">Cancelar

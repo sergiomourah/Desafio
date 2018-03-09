@@ -51,7 +51,7 @@ export class OrdemDeServicoDetailComponent implements OnInit {
   // colunas da tabela
   configWidthColumns1: ITdDataTableColumn[] = [
     { name: 'dataVencimento',  label: 'Data Vencimento', width: 200 },
-    { name: 'valorPagamento',  label: 'valorPagamento', width: 180 },
+    { name: 'valorPagamento',  label: 'Valor Pagamento', width: 180 },
 ];
 
   private OnListHistoricoByOrdemDeServico(id: any): void {

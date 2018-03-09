@@ -33,6 +33,7 @@ export class ContratoComponent implements OnInit {
   ngOnInit() {
     //Lista as Ordens de Serviço
     this.onlistContratoByFilters();
+    this.contrato.status
   }
 
   // colunas da tabela
@@ -115,6 +116,32 @@ export class ContratoComponent implements OnInit {
     * Executa a consulta da contrato e retorna a lista
     */
   private onlistContratoByFilters(): void {
+    if ( this.filtro.dataAberturaIni != null && this.filtro.dataAberturaIni != undefined )
+    {
+      this.filtro.dataAberturaIni.setHours( 0 );
+      this.filtro.dataAberturaIni.setMinutes( 0 );
+      this.filtro.dataAberturaIni.setSeconds( 0 );
+    }
+
+    if (this.filtro.dataAberturaFin && this.filtro.dataAberturaFin != undefined )
+    {
+      this.filtro.dataAberturaFin.setHours( 23 );
+      this.filtro.dataAberturaFin.setMinutes( 59 );
+      this.filtro.dataAberturaFin.setSeconds( 59 );
+    }
+    if ( this.filtro.dataEncerramentoIni != null && this.filtro.dataEncerramentoIni != undefined )
+    {
+      this.filtro.dataEncerramentoIni.setHours( 0 );
+      this.filtro.dataEncerramentoIni.setMinutes( 0 );
+      this.filtro.dataEncerramentoIni.setSeconds( 0 );
+    }
+
+    if (this.filtro.dataEncerramentoFin && this.filtro.dataEncerramentoFin != undefined )
+    {
+      this.filtro.dataEncerramentoFin.setHours( 23 );
+      this.filtro.dataEncerramentoFin.setMinutes( 59 );
+      this.filtro.dataEncerramentoFin.setSeconds( 59 );
+    }
     this.service.listContratoByFilters(this.filtro.numeroContrato,
       this.filtro.nomeCliente != null ?
         "%" + this.filtro.nomeCliente + "%" :

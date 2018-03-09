@@ -32,7 +32,7 @@ export class ModalGestorComponent implements OnInit, AfterViewInit {
               public service: OrdemDeServicoService,
               private snackBar: MatSnackBar) { 
 
-    //this.pageable = this.paginationService.pageRequest('nome', 'ASC', 15);
+    //this.pageable = this.paginationService.pageRequest('nome', 'ASC', 5);
   }
 
   displayedColumns = ['select', 'id', 'nome'];

@@ -27,7 +27,7 @@ import { CovalentHttpModule } from '@covalent/http';
 import { CovalentHighlightModule } from '@covalent/highlight';
 import { CovalentMarkdownModule } from '@covalent/markdown';
 import { CovalentDynamicFormsModule } from '@covalent/dynamic-forms';
-import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule, MatIconModule, MatNavList, MatListModule, MatSelectModule, MatCardContent, MatDatepickerModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule, MatSortModule, MatTabsModule, MatAutocompleteModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatButtonModule, MatCardModule, MatIconModule, MatNavList, MatListModule, MatSelectModule, MatCardContent, MatDatepickerModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule, MatSortModule, MatTabsModule, MatAutocompleteModule, MatTooltipModule } from '@angular/material';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CovalentExpansionPanelModule } from '@covalent/core/expansion-panel';
 import { OrdemdeservicoComponent } from './ordemdeservico/ordemdeservico.component';
@@ -102,6 +102,7 @@ import { ModalContratoComponent } from './modal-contrato/modal-contrato.componen
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatTooltipModule,
     RouterModule,
     MatSnackBarModule,
     MatSortModule,

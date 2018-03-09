@@ -143,7 +143,6 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 		ordemdeservico = this.ordemDeServicoService.insertOrdemDeServico(ordemdeservico);
 		
 		Assert.fail("O sistema deveria infomar ao usuário que o gestor não pode ser nulo.");
-
 	}
 	/**
 	 * Testa o inserir solicitação de pagamento no banco de dados, com todos os campos obrigatórios preenchidos.
@@ -319,7 +318,7 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 	})
 	public void updateOrdemDeServicoToConcluirMustPass()
 	{
-		OrdemDeServico ordemdeservico = this.ordemDeServicoService.findOrdemDeServicoById(5005);
+		OrdemDeServico ordemdeservico = this.ordemDeServicoService.findOrdemDeServicoById(5003);
 		ordemdeservico = this.ordemDeServicoService.updateOrdemDeServicoToConcluir(ordemdeservico);
 		Assert.assertEquals(StatusOrdemDeServico.CONCLUIDA, ordemdeservico.getStatus());
 	}
@@ -430,7 +429,7 @@ public class OrdemDeServicoIntegrationTests extends AbstractIntegrationTests{
 	public void listSolicitacaoPagamentoByOrdemDeServicoIdMustPass()
 	{
 		final Page<SolicitacaoPagamento> solicitacao = 
-				this.ordemDeServicoService.listSolicitacaoPagamentoByOrdemDeServicoId(5005L, null);
+				this.ordemDeServicoService.listSolicitacaoPagamentoByOrdemDeServicoId(5003L, null);
 		
 		Assert.assertEquals(1, solicitacao.getContent().size()); 
 	}

@@ -106,7 +106,7 @@
                   <tbody>
                     <tr td-data-table-row *ngFor="let solicitacao of this.solicitacaoPagamentoDataSource">
                       <td td-data-table-cell>{{ solicitacao.dataVencimento | date:'dd/MM/yyyy'}}</td>
-                      <td td-data-table-cell>{{ solicitacao.valorPagamento}}</td>
+                      <td td-data-table-cell>{{ solicitacao.valorPagamento | number : '1.2-2'}}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -1,10 +1,11 @@
+import { PaginationService } from './../pagination.service';
 import { OrdemDeServicoService } from './../../generated/services';
-import { Prioridade, PrioridadeValues, OrdemDeServico, StatusOrdemDeServico, PageRequest, StatusOrdemDeServicoValues, SolicitacaoPagamento } from './../../generated/entities';
+import { Prioridade, PrioridadeValues, OrdemDeServico, StatusOrdemDeServico, PageRequest, StatusOrdemDeServicoValues, SolicitacaoPagamento, Pageable, Page } from './../../generated/entities';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { MatTableDataSource, MatDialog, MatPaginator, MatSnackBar } from '@angular/material';
 import { Output } from '@angular/core/src/metadata/directives';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn } from '@covalent/core';
+import { TdDataTableService, TdDataTableSortingOrder, ITdDataTableSortChangeEvent, ITdDataTableColumn, IPageChangeEvent } from '@covalent/core';
 import { OrdemDeServicoSolicitacaoPagamentoComponent } from './ordem-de-servico-solicitacao-pagamento/ordem-de-servico-solicitacao-pagamento.component';
 import { ModalMotivoComponent } from '../modal-motivo/modal-motivo.component';
 import { TdDialogService } from '@covalent/core';
@@ -16,10 +17,12 @@ import { TdDialogService } from '@covalent/core';
 })
 export class OrdemdeservicoComponent implements OnInit {
 
+  // Objeto pageable
+  private pageable: Page<OrdemDeServico>;
+
   //Fitros para busca
   private filtro: any = {};
   private dataSource: OrdemDeServico[];
-  private pageable: PageRequest;
   //Status Ordem de Serviço
   private status: any[] = [];
   //Declara Valor Enum Prioridade
@@ -30,11 +33,18 @@ export class OrdemdeservicoComponent implements OnInit {
   //Retorno Mensagem Confirmação
   private retorno: boolean;
 
-  constructor(private service: OrdemDeServicoService,
+  private sortOrder: TdDataTableSortingOrder = TdDataTableSortingOrder.Descending;
+  private sortBy: string = 'dataAbertura';
+
+  constructor(
+    private paginationService: PaginationService,
+    private service: OrdemDeServicoService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private _dialogService: TdDialogService,
-    private _viewContainerRef: ViewContainerRef) { }
+    private _viewContainerRef: ViewContainerRef) {
+    this.pageable = this.paginationService.pageRequest('dataAbertura', 'ASC', 15);
+  }
 
   ngOnInit() {
     //Lista as Ordens de Serviço
@@ -43,14 +53,27 @@ export class OrdemdeservicoComponent implements OnInit {
 
   // colunas da tabela
   configWidthColumns: ITdDataTableColumn[] = [
-    { name: 'status', label: 'Status', width: 120 },
-    { name: 'numeroOrdemDeServico', label: 'Nº OS', width: 80 },
-    { name: 'contrato.numeroContrato', label: 'Nº Contrato', width: 120 },
-    { name: 'dataAbertura', label: 'Data Abertura', width: 150 },
-    { name: 'dataConclusao', label: 'Data Conclusão', width: 150 },
-    { name: 'valorOrdemDeServico', label: 'Valor OS', width: 90 },
+    { name: 'status', label: 'Status', sortable: true, width: 120 },
+    { name: 'numeroOrdemDeServico', label: 'Nº OS', sortable: true, width: 80 },
+    { name: 'contrato.numeroContrato', label: 'Nº Contrato', sortable: true, width: 120 },
+    { name: 'dataAbertura', label: 'Data Abertura', sortable: true, width: 150 },
+    { name: 'dataConclusao', label: 'Data Conclusão', sortable: true, width: 150 },
+    { name: 'valorOrdemDeServico', label: 'Valor OS', sortable: true, width: 90 },
     { name: 'acao', label: 'Ações', width: 350 },
   ];
+
+  page(pagingEvent: IPageChangeEvent): void {
+    console.log(pagingEvent)
+    this.pageable.pageable.page = pagingEvent.page - 1;
+    this.pageable.pageable.size = pagingEvent.pageSize;
+    this.onlistOrdemDeServicosByFilters();
+  }
+
+  sort(event ){
+    this.pageable.pageable.sort = this.paginationService.sort(event);
+    this.onlistOrdemDeServicosByFilters();
+  }
+
   /**
       * Chama as caixa de mensagens
       */
@@ -135,6 +158,32 @@ export class OrdemdeservicoComponent implements OnInit {
     * Executa a consulta da ordem de serviço e retorna a lista
     */
   private onlistOrdemDeServicosByFilters(): void {
+    if ( this.filtro.dataAberturaIni != null && this.filtro.dataAberturaIni != undefined )
+    {
+      this.filtro.dataAberturaIni.setHours( 0 );
+      this.filtro.dataAberturaIni.setMinutes( 0 );
+      this.filtro.dataAberturaIni.setSeconds( 0 );
+    }
+
+    if (this.filtro.dataAberturaFin && this.filtro.dataAberturaFin != undefined )
+    {
+      this.filtro.dataAberturaFin.setHours( 23 );
+      this.filtro.dataAberturaFin.setMinutes( 59 );
+      this.filtro.dataAberturaFin.setSeconds( 59 );
+    }
+    if ( this.filtro.dataConclusaoIni != null && this.filtro.dataConclusaoIni != undefined )
+    {
+      this.filtro.dataConclusaoIni.setHours( 0 );
+      this.filtro.dataConclusaoIni.setMinutes( 0 );
+      this.filtro.dataConclusaoIni.setSeconds( 0 );
+    }
+
+    if (this.filtro.dataConclusaoFin && this.filtro.dataConclusaoFin != undefined )
+    {
+      this.filtro.dataConclusaoFin.setHours( 23 );
+      this.filtro.dataConclusaoFin.setMinutes( 59 );
+      this.filtro.dataConclusaoFin.setSeconds( 59 );
+    }
     this.service.listOrdemDeServicosByFilters(this.filtro.numeroContrato,
       this.filtro.numeroOs,
       this.filtro.nomeCliente != null ?
@@ -143,16 +192,17 @@ export class OrdemdeservicoComponent implements OnInit {
       this.filtro.statusOrdem,
       this.filtro.valorIni,
       this.filtro.valorFin,
-      this.filtro.dataAberturaIncancelari,
+      this.filtro.dataAberturaIni,
       this.filtro.dataAberturaFin,
       this.filtro.dataConclusaoIni,
       this.filtro.dataConclusaoFin,
       this.filtro.prioridade,
-      this.pageable).subscribe((result) => {
+      this.pageable.pageable).subscribe((result) => {
         "Ordem de Serviço excluída com sucesso!"
         this.dataSource = result.content;
+        console.log(this.pageable);
       }, (error) => {
-        alert(error.message);
+        console.log(error.message);
       });
   }
   /**"Ordem de Serviço excluída com sucesso!"

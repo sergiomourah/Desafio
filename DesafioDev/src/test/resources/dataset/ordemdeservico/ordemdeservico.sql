@@ -29,5 +29,5 @@ insert into historico_ordem_de_servico (id, user_id, ordemdeservico_id, data, ac
 
 insert into historico_ordem_de_servico (id, user_id, ordemdeservico_id, data, acao) values (500, 9999, 5005, '20180225', 4);
 
-insert into solicitacao_pagamento (id, ordemdeservico_id, data_vencimento, valor_pagamento) values (900, 5005, '20180323', 1500);
+insert into solicitacao_pagamento (id, ordemdeservico_id, data_vencimento, valor_pagamento) values (900, 5003, '20180323', 1500);
 

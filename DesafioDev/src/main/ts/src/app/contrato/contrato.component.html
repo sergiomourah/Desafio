@@ -76,21 +76,21 @@
                         <td td-data-table-cell>{{ contrato.numeroContrato }}</td>
                         <td td-data-table-cell>{{ contrato?.cliente?.nome }}</td>
                         <td td-data-table-cell>{{ contrato.dataContrato | date:'dd/MM/yyyy'}}</td>
-                        <td td-data-table-cell>{{ contrato.dataEncerramento | date:'dd/MM/yyyy'}}</td>
+                        <td td-data-table-cell>{{ (contrato.status == 'ENCERRADO') ? (contrato.updated | date:'dd/MM/yyyy') : ''}}</td>
                         <td td-data-table-cell fxLayoutAlign="end">
-                          <button mat-icon-button *ngIf="(contrato.status == 'ABERTO')" (click)="OnUpdateContratoToEncerrar(contrato); $event.stopPropagation()">
+                          <button mat-icon-button matTooltip="Encerrar Contrato" *ngIf="(contrato.status == 'ABERTO')" (click)="OnUpdateContratoToEncerrar(contrato); $event.stopPropagation()">
                             <mat-icon>adjust</mat-icon>
                           </button>
-                          <button mat-icon-button *ngIf="(contrato.status == 'SUSPENSO')" (click)="OnUpdateContratoToReabrir(contrato); $event.stopPropagation()">
+                          <button mat-icon-button matTooltip="Reabrir Contrato" *ngIf="(contrato.status == 'SUSPENSO')" (click)="OnUpdateContratoToReabrir(contrato); $event.stopPropagation()">
                             <mat-icon>lock_open</mat-icon>
                           </button>
-                          <button mat-icon-button *ngIf="(contrato.status == 'ABERTO')" (click)="OnUpdateContratoToSuspender(contrato); $event.stopPropagation()">
+                          <button mat-icon-button matTooltip="Suspender Contrato" *ngIf="(contrato.status == 'ABERTO')" (click)="OnUpdateContratoToSuspender(contrato); $event.stopPropagation()">
                             <mat-icon>cancel</mat-icon>
                           </button>
-                          <button mat-icon-button *ngIf="(contrato.status != 'ENCERRADO') && (contrato.status != 'SUSPENSO')" [routerLink]="['/contrato/editar', contrato.id]">
+                          <button mat-icon-button matTooltip="Editar Contrato Contrato" *ngIf="(contrato.status != 'ENCERRADO') && (contrato.status != 'SUSPENSO')" [routerLink]="['/contrato/editar', contrato.id]">
                             <mat-icon>edit</mat-icon>
                           </button>
-                          <button mat-icon-button *ngIf="(contrato.status == 'ABERTO')" (click)="OnRemoveContrato(contrato.id); $event.stopPropagation()">
+                          <button mat-icon-button matTooltip="Excluir Contrato" *ngIf="(contrato.status == 'ABERTO')" (click)="OnRemoveContrato(contrato.id); $event.stopPropagation()">
                             <mat-icon>delete</mat-icon>
                           </button>
                         </td>
