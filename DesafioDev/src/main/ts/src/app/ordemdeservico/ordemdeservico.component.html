@@ -99,8 +99,8 @@
                   <td td-data-table-cell>{{ ordemDeServico.numeroOrdemDeServico }}</td>
                   <td td-data-table-cell>{{ ordemDeServico.contrato.numeroContrato }}</td>
                   <td td-data-table-cell>{{ ordemDeServico.dataAbertura | date:'dd/MM/yyyy'}}</td>
-                  <td td-data-table-cell>{{ (ordemDeServico.status == 'CONCLUIDA') ? (ordemDeServico.updated | date:'dd/MM/yyyy') : '' }}</td>
-                  <td td-data-table-cell>{{ ordemDeServico.valorOrdemDeServico | number : '1.2-2' }}</td>
+                  <td td-data-table-cell>{{ (ordemDeServico.status == 'CONCLUIDA') ? (ordemDeServico.updated | date:'dd/MM/yyyy') : null }}</td>
+                  <td td-data-table-cell>{{ ordemDeServico.valorOrdemDeServico | currency:'BRL':true:'1.2-2' }}</td>
                   <td td-data-table-cell fxLayoutAlign="end">
                     <button mat-icon-button matTooltip="Concluir Ordem de Serviço" *ngIf="(ordemDeServico.status == 'HOMOLOGADA')" (click)="OnUpdateOrdemDeServicoToConcluir(ordemDeServico); $event.stopPropagation()">
                       <mat-icon>adjust</mat-icon>

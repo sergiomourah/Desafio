@@ -61,14 +61,18 @@ export class OrdemdeservicoComponent implements OnInit {
     { name: 'valorOrdemDeServico', label: 'Valor OS', sortable: true, width: 90 },
     { name: 'acao', label: 'Ações', width: 350 },
   ];
-
+/**
+      * Faz a navegação pela paginas
+      */
   page(pagingEvent: IPageChangeEvent): void {
     console.log(pagingEvent)
     this.pageable.pageable.page = pagingEvent.page - 1;
     this.pageable.pageable.size = pagingEvent.pageSize;
     this.onlistOrdemDeServicosByFilters();
   }
-
+/**
+      * Reordena a lista da table ao clicar na coluna
+      */
   sort(event ){
     this.pageable.pageable.sort = this.paginationService.sort(event);
     this.onlistOrdemDeServicosByFilters();

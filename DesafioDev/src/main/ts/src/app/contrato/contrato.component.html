@@ -65,7 +65,12 @@
                   <table td-data-table>
                     <thead>
                       <tr td-data-table-column-row>
-                        <th td-data-table-column *ngFor="let column of configWidthColumns" [sortable]="column.sortable" [name]="column.name">
+                        <th td-data-table-column *ngFor="let column of configWidthColumns" 
+                        [sortable]="column.sortable" 
+                        [sortOrder]="pageable.pageable.sort.orders[0].direction"
+                        [active]="column.name == pageable.pageable.sort.orders[0].property"
+                        (sortChange)="sort($event)"
+                        [name]="column.name">
                           {{ column.label }}
                         </th>
                       </tr>
@@ -96,28 +101,16 @@
                         </td>
                       </tr>
                     </tbody>
+                    <td-paging-bar #pagingBar [pageSize]="this.pageable.pageable.size" [total]="this.pageable.totalElements" (change)="page($event)">
+                        <span hide-xs>Linhas por página:</span>
+                        <mat-select [style.width.px]="50" [(ngModel)]="this.pageable.pageable.size" name="size">
+                        <mat-option *ngFor="let size of [5,10,15,20,30]" [value]="size">
+                        {{size}}
+                        </mat-option>
+                        </mat-select>
+                        {{pagingBar.range}} <span hide-xs>of {{pagingBar.total}}</span>
+                        </td-paging-bar>
                   </table>
-      
-      
-      
-      
-      
-                  <!-- <td-data-table [data]="dataSource" [columns]="configWidthColumns">
-      
-                    <ng-template tdDataTableTemplate="acao" let-row="row">
-                      <button mat-raised-button [routerLink]="['/ordemdeservico/edit', row.id]">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-raised-button (click)="OnUpdateOrdemDeServicoToCancelar()">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </ng-template>
-                  </td-data-table>
-                  <td-paging-bar #pagingBar [firstLast]="firstLast" [pageSize]="10" [total]="100" (change)="page($event)">
-      
-                  </td-paging-bar> -->
-      
-      
                 </div>
       
               </div>

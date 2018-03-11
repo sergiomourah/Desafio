@@ -2,9 +2,11 @@ import { ModalMotivoComponent } from './../modal-motivo/modal-motivo.component';
 import { ITdDataTableColumn, TdDialogService } from '@covalent/core';
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
-import { Contrato, Cliente, PageRequest, StatusContratoValues } from './../../generated/entities';
+import { Contrato, Cliente, PageRequest, StatusContratoValues, Page } from './../../generated/entities';
 import { ContratoService } from './../../generated/services';
 import { MatDialog, MatSnackBar } from '@angular/material';
+import { PaginationService } from '../pagination.service';
+import { IPageChangeEvent } from '@covalent/core';
 
 @Component({
   selector: 'app-contrato',
@@ -13,21 +15,24 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 })
 export class ContratoComponent implements OnInit {
 
+  // Objeto pageable
+  private pageable: Page<Contrato>;
   //Fitros para busca
   private filtro: any = {};
   private dataSource: Contrato[];
-  private pageable: PageRequest;
   //Declara Valor Enum Status
   private statusvalues: string[] = StatusContratoValues;
   contrato: Contrato = {};
   //Retorno Mensagem Confirmação
   private retorno: boolean;
-  constructor(private service: ContratoService,
+  constructor(
+    private paginationService: PaginationService,
+    private service: ContratoService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private _dialogService: TdDialogService,
     private _viewContainerRef: ViewContainerRef) {
-
+    this.pageable = this.paginationService.pageRequest('dataContrato', 'ASC', 15);
   }
 
   ngOnInit() {
@@ -38,13 +43,31 @@ export class ContratoComponent implements OnInit {
 
   // colunas da tabela
   configWidthColumns: ITdDataTableColumn[] = [
-    { name: 'status', label: 'Status', width: 120 },
-    { name: 'numeroContrato', label: 'Nº Contrato', width: 120 },
-    { name: 'cliente.nome', label: 'Cliente', width: 120 },
-    { name: 'dataContrato', label: 'Data Contrato', width: 150 },
-    { name: 'dataEncerramento', label: 'Data Encerramento', width: 150 },
+    { name: 'status', label: 'Status', width: 120, sortable: true },
+    { name: 'numeroContrato', label: 'Nº Contrato', width: 120, sortable: true },
+    { name: 'cliente.nome', label: 'Cliente', width: 120, sortable: true },
+    { name: 'dataContrato', label: 'Data Contrato', width: 150, sortable: true },
+    { name: 'dataEncerramento', label: 'Data Encerramento', width: 150, sortable: true },
     { name: 'acao', label: 'Ações', width: 350 },
   ];
+
+/**
+      * Faz a navegação pela paginas
+      */
+     page(pagingEvent: IPageChangeEvent): void {
+      console.log(pagingEvent)
+      this.pageable.pageable.page = pagingEvent.page - 1;
+      this.pageable.pageable.size = pagingEvent.pageSize;
+      this.onlistContratoByFilters();
+    }
+  /**
+        * Reordena a lista da table ao clicar na coluna
+        */
+    sort(event ){
+      this.pageable.pageable.sort = this.paginationService.sort(event);
+      this.onlistContratoByFilters();
+    }
+
   private openConfirm(confirmacao: any): void {
     this._dialogService.openConfirm({
       message: confirmacao.msg,
@@ -151,10 +174,10 @@ export class ContratoComponent implements OnInit {
       this.filtro.dataAberturaFin,
       this.filtro.dataEncerramentoIni,
       this.filtro.dataEncerramentoFin,
-      this.pageable).subscribe((result) => {
+      this.pageable.pageable).subscribe((result) => {
         this.dataSource = result.content;
       }, (error) => {
-        alert(error.message);
+        console.log(error.message);
       });
   }
   /**

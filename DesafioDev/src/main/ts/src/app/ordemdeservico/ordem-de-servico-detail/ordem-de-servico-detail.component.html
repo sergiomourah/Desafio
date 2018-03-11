@@ -60,7 +60,7 @@
             <div flex="" layout="row" layout-padding="">
               <div flex="80" layout="column">
                 <label class="label-detail-field">Valor Ordem De Serviço</label>
-                <label class="label-detail-value">{{ordemdeservico.valorOrdemDeServico}}</label>
+                <label class="label-detail-value">{{ordemdeservico.valorOrdemDeServico | currency:'BRL':true:'1.2-2'}}</label>
               </div>
             </div>
           </form>
@@ -106,7 +106,7 @@
                   <tbody>
                     <tr td-data-table-row *ngFor="let solicitacao of this.solicitacaoPagamentoDataSource">
                       <td td-data-table-cell>{{ solicitacao.dataVencimento | date:'dd/MM/yyyy'}}</td>
-                      <td td-data-table-cell>{{ solicitacao.valorPagamento | number : '1.2-2'}}</td>
+                      <td td-data-table-cell>{{ solicitacao.valorPagamento | currency:'BRL':true:'1.2-2'}}</td>
                     </tr>
                   </tbody>
                 </table>
