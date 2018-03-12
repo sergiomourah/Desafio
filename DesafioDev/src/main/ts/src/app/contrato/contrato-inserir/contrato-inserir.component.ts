@@ -33,7 +33,9 @@ export class ContratoInserirComponent implements OnInit {
   ngOnInit() {
     this.contrato.cliente = {};
   }
-
+/**
+    * Inseri o contrato
+    */
   private onInsertContrato(): void {
     if (this.contrato.numeroContrato == null){
       this.openSnackBar("Obrigatório informar Nº Contrato!", "Mensagem");
@@ -65,7 +67,9 @@ export class ContratoInserirComponent implements OnInit {
       });
     }
   }
-
+/**
+    * Abre dialog para chamar o cliente
+    */
   private openDialog(): void {
     let dialogRef = this.dialog.open(ModalClienteComponent, {
       height: '600px',
@@ -77,7 +81,9 @@ export class ContratoInserirComponent implements OnInit {
         this.contrato.cliente = result.selected[0];
     });
   }
-
+/**
+    * Método para cancelar operação
+    */
   private onCancel() : void {
     if (this.contrato.numeroContrato != null ||
         this.contrato.descricao != null ||
@@ -90,14 +96,18 @@ export class ContratoInserirComponent implements OnInit {
          this.router.navigate(['/contrato']);
         }
    }
-
+/**
+    * Mensagem sucesso/erro
+    */
   private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
       duration: 4000,
       direction: "ltr"
     });
   }
-
+/**
+    * Mensagem de confirmação doc cancelamento da operação
+    */
   private openConfirm(): void {
     this._dialogService.openConfirm({
       message: 'Existem dados não salvos!\n ' + 

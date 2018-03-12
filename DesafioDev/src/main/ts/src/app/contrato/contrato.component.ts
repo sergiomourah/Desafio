@@ -176,6 +176,7 @@ export class ContratoComponent implements OnInit {
       this.filtro.dataEncerramentoFin,
       this.pageable.pageable).subscribe((result) => {
         this.dataSource = result.content;
+        this.pageable.totalElements = result.totalElements;
       }, (error) => {
         console.log(error.message);
       });

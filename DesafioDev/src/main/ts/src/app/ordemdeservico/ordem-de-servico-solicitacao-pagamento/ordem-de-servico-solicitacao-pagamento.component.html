@@ -12,7 +12,9 @@
           <mat-form-field>
               <input class="form-control" matInput placeholder="Valor Pagamento" 
               required [errorStateMatcher]="OrdemdeservicoInserirComponent" 
-              (ngModelChange)="solicitacaopagamento.valorPagamento=$event" 
+              (ngModelChange)="solicitacaopagamento.valorPagamento=$event"
+              type="number" 
+              step="1.00"
               [ngModel]="solicitacaopagamento.valorPagamento | number:'1.2-2'" name="valorPagamento">
               <mat-error>Valor Pagamento é obrigatório!</mat-error>
             </mat-form-field>

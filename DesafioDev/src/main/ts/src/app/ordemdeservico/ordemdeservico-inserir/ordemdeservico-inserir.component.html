@@ -5,9 +5,9 @@
       <form #f="ngForm">
         <div>
           <mat-form-field>
-            <input class="form-control" matInput placeholder="Nº OS" required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.numeroOrdemDeServico"
+            <input class="form-control" matInput placeholder="Nº Ordem de Serviço" required [errorStateMatcher]="OrdemdeservicoInserirComponent" [(ngModel)]="ordemdeservico.numeroOrdemDeServico"
               name="numeroOrdemDeServico">
-            <mat-error>Informe o Nº OS!</mat-error>
+            <mat-error>Informe o Nº Ordem de Serviço!</mat-error>
           </mat-form-field>
           <mat-form-field>
             <input class="form-control" matInput placeholder="Nº Contrato" required [errorStateMatcher]="OrdemdeservicoInserirComponent"
@@ -73,7 +73,7 @@
             <input class="form-control"  
                    matInput placeholder="Valor Ordem de Serviço"
                    type="number" 
-                   step="0.01" 
+                   step="1.00" 
                    (ngModelChange)="ordemdeservico.valorOrdemDeServico=$event" 
                    [ngModel]="ordemdeservico.valorOrdemDeServico | number:'1.2-2'" name="valorOrdemDeServico">
           </mat-form-field>    

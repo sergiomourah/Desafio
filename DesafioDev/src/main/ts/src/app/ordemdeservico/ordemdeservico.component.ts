@@ -54,11 +54,11 @@ export class OrdemdeservicoComponent implements OnInit {
   // colunas da tabela
   configWidthColumns: ITdDataTableColumn[] = [
     { name: 'status', label: 'Status', sortable: true, width: 120 },
-    { name: 'numeroOrdemDeServico', label: 'Nº OS', sortable: true, width: 80 },
+    { name: 'numeroOrdemDeServico', label: 'Nº Ordem de Serviço', sortable: true, width: 80 },
     { name: 'contrato.numeroContrato', label: 'Nº Contrato', sortable: true, width: 120 },
     { name: 'dataAbertura', label: 'Data Abertura', sortable: true, width: 150 },
     { name: 'dataConclusao', label: 'Data Conclusão', sortable: true, width: 150 },
-    { name: 'valorOrdemDeServico', label: 'Valor OS', sortable: true, width: 90 },
+    { name: 'valorOrdemDeServico', label: 'Valor Ordem de Serviço', sortable: true, width: 90 },
     { name: 'acao', label: 'Ações', width: 350 },
   ];
 /**
@@ -204,17 +204,18 @@ export class OrdemdeservicoComponent implements OnInit {
       this.pageable.pageable).subscribe((result) => {
         "Ordem de Serviço excluída com sucesso!"
         this.dataSource = result.content;
-        console.log(this.pageable);
+        this.pageable.totalElements = result.totalElements;
+        console.log(result.totalElements);
       }, (error) => {
         console.log(error.message);
       });
   }
-  /**"Ordem de Serviço excluída com sucesso!"
+  /**
     * Homologa Ordem de Serviço
     */
   private OnUpdateOrdemDeServicoToConcluir(ordemDeServico: OrdemDeServico): void {
     let confirmacao: any = {
-      msg: 'Deseja concluir a OS selecionada?',
+      msg: 'Deseja concluir a Ordem de Serviço selecionada?',
       method: 'CONCLUIR',
       sucesso: 'Ordem de Serviço concluída com sucesso!',
       data: ordemDeServico
@@ -251,7 +252,7 @@ export class OrdemdeservicoComponent implements OnInit {
     */
   private OnUpdateOrdemDeServicoToHomologar(ordemDeServico: OrdemDeServico): void {
     let confirmacao: any = {
-      msg: 'Deseja homologar a OS selecionada?',
+      msg: 'Deseja homologar a Ordem de Serviço selecionada?',
       method: 'HOMOLOGAR',
       sucesso: 'Ordem de Serviço homologada com sucesso!',
       data: ordemDeServico
@@ -263,7 +264,7 @@ export class OrdemdeservicoComponent implements OnInit {
     */
   private OnUpdateOrdemDeServicoToAprovar(ordemDeServico: OrdemDeServico): void {
     let confirmacao: any = {
-      msg: 'Deseja aprovar a OS selecionada?',
+      msg: 'Deseja aprovar a Ordem de Serviço selecionada?',
       method: 'APROVAR',
       sucesso: 'Ordem de Serviço aprovada com sucesso!',
       data: ordemDeServico
@@ -275,7 +276,7 @@ export class OrdemdeservicoComponent implements OnInit {
       */
   private OnUpdateOrdemDeServicoToCancelar(ordemDeServico: OrdemDeServico): void {
     let confirmacao: any = {
-      msg: 'Deseja cancelar a OS selecionada?',
+      msg: 'Deseja cancelar a Ordem de Serviço selecionada?',
       method: 'CANCELAR',
       sucesso: 'Ordem de Serviço cancelada com sucesso!',
       data: ordemDeServico
@@ -287,7 +288,7 @@ export class OrdemdeservicoComponent implements OnInit {
     */
   private OnRemoveOrdemDeServico(id: number): void {
     let confirmacao: any = {
-      msg: 'Deseja excluir a OS selecionada?',
+      msg: 'Deseja excluir a Ordem de Serviço selecionada?',
       method: 'EXCLUIR',
       sucesso: 'Ordem de Serviço excluída com sucesso!',
       id: id
@@ -303,6 +304,9 @@ export class OrdemdeservicoComponent implements OnInit {
     //Listar Ordens de serviço novamente
     this.onlistOrdemDeServicosByFilters();
   }
+  /**
+    * Exibe a mensagem de sucesso/erro na snackbar
+    */
   private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
       duration: 4000,

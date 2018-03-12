@@ -37,7 +37,9 @@ export class OrdemdeservicoInserirComponent implements OnInit {
     this.ordemdeservico.gestor = {};
     this.ordemdeservico.contrato = {};
   }
-
+/**
+    * Inseri a ordem de serviço
+    */
   private onInsertOrdemDeServico(): void {
     if (this.ordemdeservico.numeroOrdemDeServico == null){
       this.openSnackBar("Obrigatório informar Nº Ordem de Serviço!", "Mensagem");
@@ -81,7 +83,9 @@ export class OrdemdeservicoInserirComponent implements OnInit {
       });
     }
   }
-
+/**
+    * Abre a dialog para selecionar o gestor
+    */
   private openDialogGestor(): void {
     let dialogRef = this.dialog.open(ModalGestorComponent, {
       height: '600px',
@@ -92,7 +96,9 @@ export class OrdemdeservicoInserirComponent implements OnInit {
       this.ordemdeservico.gestor = result.selected[0];
     });
   }
-
+/**
+    * Abre a dialog para selecionar o contrato
+    */
   private openDialogContrato(): void {
     let dialogRef = this.dialog.open(ModalContratoComponent, {
       height: '600px',
@@ -103,7 +109,9 @@ export class OrdemdeservicoInserirComponent implements OnInit {
       this.ordemdeservico.contrato = result.selected[0];
     });
   }
-
+/**
+    * Método para cancelar a operação
+    */
   private onCancel() : void {
    if (this.ordemdeservico.contrato.id != null ||
        this.ordemdeservico.numeroOrdemDeServico != null ||
@@ -121,14 +129,18 @@ export class OrdemdeservicoInserirComponent implements OnInit {
         this.router.navigate(['/ordemdeservico']);
        }
   }
-
+/**
+    * Mesangem sucesso/erro
+    */
   private openSnackBar(message: string, action: string): void {
     this.snackBar.open(message, action, {
       duration: 4000,
       direction: "ltr"
     });
   }
-  
+  /**
+    * Chama mesnagem de confirmação doc ancelamento da operação
+    */
   private openConfirm(): void {
     this._dialogService.openConfirm({
       message: 'Existem dados não salvos!\n ' + 
